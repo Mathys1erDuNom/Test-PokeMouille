@@ -1,0 +1,547 @@
+import os
+import json
+import discord
+import psycopg2
+from psycopg2.extras import Json
+from dotenv import load_dotenv
+from discord.ext import commands
+from utils import is_croco
+
+# Charge les variables d'environnement
+load_dotenv()
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Chemin absolu vers le dossier json
+script_dir = os.path.dirname(os.path.abspath(__file__))
+json_dir   = os.path.join(script_dir, "json")
+
+# Connexion globale à la base
+conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+cur = conn.cursor()
+
+cur.execute("DROP TABLE IF EXISTS new_captures")
+conn.commit()
+
+# Crée la table si elle n'existe pas
+cur.execute("""
+CREATE TABLE IF NOT EXISTS new_captures (
+    user_id     TEXT,
+    name        TEXT,
+    ivs         JSONB,
+    stats       JSONB,
+    image       TEXT,
+    type        JSONB,
+    attacks     JSONB,
+    current_xp  INT DEFAULT 0,
+    xp_evo      INT DEFAULT 0,
+    evo         JSONB DEFAULT '{"name": "pas evo", "file": "pas evo"}'::jsonb
+);
+""")
+conn.commit()
+
+
+
+
+
+# ──────────────────────────────────────────────
+# FONCTIONS BASE DE DONNÉES
+# ──────────────────────────────────────────────
+
+def save_new_capture(user_id, pokemon_name, ivs, final_stats, pokemon):
+    """
+    Enregistre une nouvelle capture et invalide le cache du pokédex pour cet utilisateur.
+
+    pokemon peut contenir les clés optionnelles :
+        - current_xp (int)
+        - xp_evo     (int)
+        - evo        (dict {"name": ..., "file": ...} ou "pas evo")
+    """
+    user_id = str(user_id)
+
+    evo = pokemon.get("evo", {"name": "pas evo", "file": "pas evo"})
+    if evo in (None, "pas evo", ""):
+        evo = {"name": "pas evo", "file": "pas evo"}
+
+    cur.execute("""
+        SELECT COUNT(*) FROM new_captures
+        WHERE user_id = %s AND name LIKE %s || '%%'
+    """, (user_id, pokemon_name))
+    existing_count = cur.fetchone()[0]
+
+    if existing_count == 0:
+        cur.execute("""
+            INSERT INTO new_captures
+                (user_id, name, ivs, stats, image, type, attacks, current_xp, xp_evo, evo)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (
+            user_id,
+            pokemon_name,
+            Json(ivs),
+            Json(final_stats),
+            pokemon.get("image", ""),
+            Json(pokemon.get("type", [])),
+            Json(pokemon.get("attacks", [])),
+            pokemon.get("current_xp", 0),
+            pokemon.get("xp_evo", 0),
+            Json(evo),
+        ))
+        conn.commit()
+        print(f"[INFO] Pokémon {pokemon_name} enregistré pour l'utilisateur {user_id}")
+    else:
+        increase_pokemon_iv(user_id, pokemon_name, 4)
+        print(f"[INFO] Pokémon {pokemon_name} a eu ses IVs augmentés de 3 pour {user_id}")
+
+    try:
+        from new_pokedex import invalidate_new_pokedex_cache
+        invalidate_new_pokedex_cache(user_id)
+        print(f"[CACHE] Cache du pokédex invalidé pour {user_id}")
+    except ImportError:
+        print("[WARNING] Impossible d'importer invalidate_new_pokedex_cache")
+
+
+def get_new_captures(user_id):
+    """Récupère toutes les captures d'un utilisateur."""
+    cur.execute("""
+        SELECT name, ivs, stats, image, type, attacks, current_xp, xp_evo, evo
+        FROM new_captures
+        WHERE user_id = %s
+    """, (str(user_id),))
+    rows = cur.fetchall()
+
+    captures = []
+    for row in rows:
+        captures.append({
+            "name":       row[0],
+            "ivs":        row[1],
+            "stats":      row[2],
+            "image":      row[3],
+            "type":       row[4],
+            "attacks":    row[5],
+            "current_xp": row[6],
+            "xp_evo":     row[7],
+            "evo":        row[8],
+        })
+
+    return captures
+
+
+def delete_capture(user_id, pokemon_name):
+    """Supprime un Pokémon capturé pour un utilisateur et invalide le cache du Pokédex."""
+    user_id = str(user_id)
+
+    cur.execute("""
+        DELETE FROM new_captures
+        WHERE user_id = %s AND name = %s
+    """, (user_id, pokemon_name))
+    conn.commit()
+
+    print(f"[INFO] Pokémon {pokemon_name} supprimé pour l'utilisateur {user_id}")
+
+    try:
+        from new_pokedex import invalidate_new_pokedex_cache
+        invalidate_new_pokedex_cache(user_id)
+        print(f"[CACHE] Cache du pokédex invalidé pour {user_id}")
+    except ImportError:
+        print("[WARNING] Impossible d'importer invalidate_new_pokedex_cache")
+
+
+def increase_pokemon_iv(user_id, pokemon_name, iv_increase, stat_name=None):
+    """
+    Augmente les IV d'un Pokémon pour un utilisateur.
+    Les IV sont plafonnés à 31, et les stats sont mises à jour en conséquence.
+
+    Paramètres :
+    - iv_increase : nombre de points à ajouter
+    - stat_name   : (optionnel) nom de la stat ciblée (ex: "attack", "speed")
+                    Si None, tous les IV sont augmentés.
+    """
+    user_id = str(user_id)
+
+    cur.execute("""
+        SELECT ivs, stats FROM new_captures
+        WHERE user_id = %s AND name = %s
+    """, (user_id, pokemon_name))
+    row = cur.fetchone()
+
+    if not row:
+        print(f"[WARNING] Pokémon {pokemon_name} non trouvé pour {user_id}")
+        return False
+
+    ivs   = row[0]
+    stats = row[1]
+
+    if stat_name is not None:
+        if stat_name not in ivs:
+            print(f"[WARNING] Stat '{stat_name}' introuvable pour {pokemon_name} "
+                  f"(stats disponibles : {list(ivs.keys())})")
+            return False
+        old_iv = ivs[stat_name]
+        ivs[stat_name]   = min(31, ivs[stat_name] + iv_increase)
+        stats[stat_name] = stats.get(stat_name, 0) + (ivs[stat_name] - old_iv)
+        print(f"[INFO] IV '{stat_name}' du Pokémon {pokemon_name} de {user_id} augmenté de {iv_increase}")
+    else:
+        for stat in ivs:
+            old_iv = ivs[stat]
+            ivs[stat]   = min(31, ivs[stat] + iv_increase)
+            stats[stat] = stats.get(stat, 0) + (ivs[stat] - old_iv)
+        print(f"[INFO] Tous les IV du Pokémon {pokemon_name} de {user_id} augmentés de {iv_increase}")
+
+    cur.execute("""
+        UPDATE new_captures
+        SET ivs = %s, stats = %s
+        WHERE user_id = %s AND name = %s
+    """, (Json(ivs), Json(stats), user_id, pokemon_name))
+    conn.commit()
+
+    try:
+        from new_pokedex import invalidate_new_pokedex_cache
+        invalidate_new_pokedex_cache(user_id)
+        print(f"[CACHE] Cache du pokédex invalidé pour {user_id}")
+    except ImportError:
+        print("[WARNING] Impossible d'importer invalidate_new_pokedex_cache")
+
+    return True
+
+
+def add_xp(user_id, pokemon_name, xp_gained):
+    user_id = str(user_id)
+
+    cur.execute("""
+        SELECT current_xp, xp_evo FROM new_captures
+        WHERE user_id = %s AND name = %s
+    """, (user_id, pokemon_name))
+    row = cur.fetchone()
+
+    if not row:
+        print(f"[WARNING] Pokémon {pokemon_name} non trouvé pour {user_id}")
+        return False
+
+    current_xp, xp_evo = row
+
+    # ── Bloqué définitivement ────────────────────────────────────────────────
+    if xp_evo == -1:
+        print(f"[INFO] {pokemon_name} ne peut plus gagner d'XP (bloqué).")
+        return "blocked"
+
+    new_xp = current_xp + xp_gained
+
+    cur.execute("""
+        UPDATE new_captures
+        SET current_xp = %s
+        WHERE user_id = %s AND name = %s
+    """, (new_xp, user_id, pokemon_name))
+    conn.commit()
+
+    print(f"[INFO] {pokemon_name} a maintenant {new_xp} XP (seuil évolution : {xp_evo})")
+
+    can_evolve = xp_evo > 0 and new_xp >= xp_evo
+    return can_evolve
+
+# ──────────────────────────────────────────────
+# ÉVOLUTION
+# ──────────────────────────────────────────────
+
+def evolve_pokemon(user_id, pokemon):
+    """
+    Fait évoluer un Pokémon vers sa prochaine forme.
+
+    Paramètres :
+    - user_id : ID de l'utilisateur (str ou int)
+    - pokemon : dict du Pokémon actuel (tel que retourné par get_new_captures)
+
+    Retourne :
+    - {"success": True,  "evo_name": str}  si l'évolution a réussi
+    - {"success": False, "reason": str}    si l'évolution est impossible
+    """
+    user_id  = str(user_id)
+    evo      = pokemon.get("evo", {})
+    evo_name = evo.get("name", "pas evo")
+    evo_file = evo.get("file", "pas evo")
+
+    # Vérifie qu'une évolution existe
+    if evo_name == "pas evo" or evo_file == "pas evo":
+        return {"success": False, "reason": "Ce Pokémon n'a pas d'évolution."}
+
+    # Charge le fichier JSON de l'évolution
+    try:
+        with open(os.path.join(json_dir, evo_file), "r", encoding="utf-8") as f:
+            all_pokemons = json.load(f)
+    except FileNotFoundError:
+        return {"success": False, "reason": f"Fichier `json/{evo_file}` introuvable."}
+
+    evo_data = next(
+        (p for p in all_pokemons if p["name"].lower() == evo_name.lower()),
+        None
+    )
+    if not evo_data:
+        return {"success": False, "reason": f"**{evo_name}** introuvable dans `json/{evo_file}`."}
+
+    # Nouveaux IV : IV actuels + 4, plafonnés à 31
+    old_ivs  = pokemon.get("ivs", {})
+    new_ivs  = {stat: min(31, val + 4) for stat, val in old_ivs.items()}
+
+    # Stats finales = stats de base de l'évolution + nouveaux IV
+    base_stats = evo_data.get("stats", {})
+    new_stats  = {stat: base_stats.get(stat, 0) + new_ivs.get(stat, 0) for stat in base_stats}
+
+    # Dict du nouveau Pokémon à enregistrer
+    new_pokemon = {
+        "image":      evo_data.get("image", ""),
+        "type":       evo_data.get("type", []),
+        "attacks":    evo_data.get("attacks", []),
+        "current_xp": 0,
+        "xp_evo":     evo_data.get("xp_evo", 0),
+        "evo":        evo_data.get("evo", {"name": "pas evo", "file": "pas evo"}),
+    }
+
+    # Supprime l'ancienne forme puis enregistre la nouvelle
+    delete_capture(user_id, pokemon["name"])
+    save_new_capture(user_id, evo_name, new_ivs, new_stats, new_pokemon)
+
+    print(f"[EVO] {pokemon['name']} → {evo_name} pour l'utilisateur {user_id}")
+    return {"success": True, "evo_name": evo_name}
+
+
+# ──────────────────────────────────────────────
+# SETUP DISCORD
+# ──────────────────────────────────────────────
+
+def setupxp(bot):
+
+
+    is_croco()
+    @bot.command(name="setevo")
+    @commands.has_permissions(administrator=True)
+    async def setevo(ctx, member: discord.Member, pokemon_name: str, evo_name: str, evo_file: str):
+        """
+        !setevo @utilisateur <nom_pokemon> <nom_evolution> <fichier.json>
+        Modifie l'évolution d'un Pokémon et le fichier JSON dans lequel elle se trouve.
+        Utilise "pas_evo" comme nom et fichier pour supprimer l'évolution.
+        """
+        user_id  = str(member.id)
+        captures = get_new_captures(user_id)
+        pokemon  = next((p for p in captures if p["name"].lower() == pokemon_name.lower()), None)
+
+        if not pokemon:
+            await ctx.send(f"❌ **{pokemon_name}** introuvable dans la collection de {member.display_name}.")
+            return
+
+        # "pas_evo" → supprime l'évolution
+        if evo_name.lower() == "pas_evo":
+            new_evo = {"name": "pas evo", "file": "pas evo"}
+        else:
+            # ── Vérifie que le fichier JSON existe ──────────────────────────────
+            json_path = os.path.join(json_dir, evo_file)
+            if not os.path.isfile(json_path):
+                await ctx.send(
+                    f"❌ Fichier `json/{evo_file}` introuvable.\n"
+                    f"📁 Fichiers disponibles : `{', '.join(os.listdir(json_dir))}`"
+                )
+                return
+
+            # ── Vérifie que le Pokémon existe dans ce fichier ───────────────────
+            with open(json_path, "r", encoding="utf-8") as f:
+                all_pokemons = json.load(f)
+
+            evo_data = next((p for p in all_pokemons if p["name"].lower() == evo_name.lower()), None)
+            if not evo_data:
+                noms = [p["name"] for p in all_pokemons]
+                await ctx.send(
+                    f"❌ **{evo_name}** introuvable dans `json/{evo_file}`.\n"
+                    f"📋 Pokémon disponibles : `{', '.join(noms)}`"
+                )
+                return
+
+            new_evo = {"name": evo_name, "file": evo_file}
+
+        cur.execute("""
+            UPDATE new_captures
+            SET evo = %s
+            WHERE user_id = %s AND name = %s
+        """, (Json(new_evo), user_id, pokemon["name"]))
+        conn.commit()
+
+        try:
+            from new_pokedex import invalidate_new_pokedex_cache
+            invalidate_new_pokedex_cache(user_id)
+        except ImportError:
+            pass
+
+        if evo_name.lower() == "pas_evo":
+            await ctx.send(
+                f"✅ L'évolution de **{pokemon['name']}** ({member.mention}) a été supprimée."
+            )
+        else:
+            await ctx.send(
+                f"✅ Évolution de **{pokemon['name']}** ({member.mention}) mise à jour !\n"
+                f"➡️ Évolue en **{evo_name}** (fichier : `{evo_file}`)"
+            )
+    is_croco()
+    @bot.command(name="addattack")
+    @commands.has_permissions(administrator=True)
+    async def addattack(ctx, member: discord.Member, pokemon_name: str, *, attack_name: str):
+        """
+        !addattack @utilisateur <nom_pokemon> <nom_attaque>
+        Ajoute une attaque à un Pokémon. Si le Pokémon a déjà 4 attaques,
+        demande laquelle remplacer.
+        """
+        user_id  = str(member.id)
+        captures = get_new_captures(user_id)
+        pokemon  = next((p for p in captures if p["name"].lower() == pokemon_name.lower()), None)
+
+        if not pokemon:
+            await ctx.send(f"❌ **{pokemon_name}** introuvable dans la collection de {member.display_name}.")
+            return
+
+        attacks = pokemon.get("attacks", [])
+
+        # ── Moins de 4 attaques : ajout direct ──────────────────────────────────
+        if len(attacks) < 4:
+            attacks.append(attack_name)
+            cur.execute("""
+                UPDATE new_captures
+                SET attacks = %s
+                WHERE user_id = %s AND name = %s
+            """, (Json(attacks), user_id, pokemon["name"]))
+            conn.commit()
+
+            try:
+                from new_pokedex import invalidate_new_pokedex_cache
+                invalidate_new_pokedex_cache(user_id)
+            except ImportError:
+                pass
+
+            await ctx.send(
+                f"✅ L'attaque **{attack_name}** a été ajoutée à **{pokemon['name']}** "
+                f"de {member.mention} ! ({len(attacks)}/4 attaques)"
+            )
+            return
+
+        # ── 4 attaques : demande laquelle remplacer ──────────────────────────────
+        attack_list = "\n".join(f"{i+1}️⃣ {atk}" for i, atk in enumerate(attacks))
+        prompt_msg  = await ctx.send(
+            f"⚔️ **{pokemon['name']}** de {member.mention} possède déjà 4 attaques :\n"
+            f"{attack_list}\n\n"
+            f"Réponds avec le **numéro** (1-4) de l'attaque à remplacer par **{attack_name}**, "
+            f"ou `annuler` pour abandonner."
+        )
+
+        def check(m):
+            return (
+                m.author == ctx.author
+                and m.channel == ctx.channel
+                and (m.content.strip().lower() == "annuler" or m.content.strip() in ("1", "2", "3", "4"))
+            )
+
+        try:
+            reply = await bot.wait_for("message", check=check, timeout=30.0)
+        except Exception:
+            await ctx.send("⏰ Temps écoulé. Aucune modification effectuée.")
+            return
+
+        if reply.content.strip().lower() == "annuler":
+            await ctx.send("❌ Opération annulée.")
+            return
+
+        slot          = int(reply.content.strip()) - 1   # index 0-3
+        replaced      = attacks[slot]
+        attacks[slot] = attack_name
+
+        cur.execute("""
+            UPDATE new_captures
+            SET attacks = %s
+            WHERE user_id = %s AND name = %s
+        """, (Json(attacks), user_id, pokemon["name"]))
+        conn.commit()
+
+        try:
+            from new_pokedex import invalidate_new_pokedex_cache
+            invalidate_new_pokedex_cache(user_id)
+        except ImportError:
+            pass
+
+        await ctx.send(
+            f"✅ L'attaque **{replaced}** de **{pokemon['name']}** ({member.mention}) "
+            f"a été remplacée par **{attack_name}** !"
+        )
+    is_croco()
+    @bot.command(name="addxp")
+    @commands.has_permissions(administrator=True)
+    async def addxp(ctx, member: discord.Member, pokemon_name: str, xp: int):
+        user_id = str(member.id)
+
+        captures = get_new_captures(user_id)
+        pokemon  = next((p for p in captures if p["name"].lower() == pokemon_name.lower()), None)
+
+        if not pokemon:
+            await ctx.send(f"❌ **{pokemon_name}** introuvable dans la collection de {member.display_name}.")
+            return
+
+        can_evolve = add_xp(user_id, pokemon["name"], xp)
+
+        # ── Bloqué définitivement ────────────────────────────────────────────────
+        if can_evolve == "blocked":
+            await ctx.send(f"🔒 **{pokemon['name']}** de {member.mention} ne peut plus gagner d'XP.")
+            return
+
+        # ── Seuil pas encore atteint ─────────────────────────────────────────────
+        if not can_evolve:
+            updated    = next((p for p in get_new_captures(user_id) if p["name"] == pokemon["name"]), None)
+            current_xp = updated["current_xp"] if updated else "?"
+            xp_evo     = updated["xp_evo"]     if updated else "?"
+            await ctx.send(
+                f"✅ **+{xp} XP** ajouté à **{pokemon['name']}** de {member.mention} !\n"
+                f"📊 XP actuel : `{current_xp} / {xp_evo}`"
+            )
+            return
+
+        # ── Seuil atteint → tente l'évolution ───────────────────────────────────
+        result = evolve_pokemon(user_id, pokemon)
+
+        if not result["success"]:
+            increase_pokemon_iv(user_id, pokemon["name"], 4)
+            cur.execute("""
+                UPDATE new_captures
+                SET xp_evo = -1
+                WHERE user_id = %s AND name = %s
+            """, (user_id, pokemon["name"]))
+            conn.commit()
+            await ctx.send(
+                f"⚡ **{pokemon['name']}** de {member.mention} n'a pas d'évolution → **+4 IV** sur toutes les stats !\n"
+                f"🔒 **{pokemon['name']}** ne peut plus gagner d'XP."
+            )
+            return
+
+        await ctx.send(
+            f"🎉 **{pokemon['name']}** de {member.mention} a évolué en **{result['evo_name']}** !\n"
+            f"✨ IV hérités **+4** sur toutes les stats.\n"
+            f"🗑️ **{pokemon['name']}** a été retiré de la collection."
+        )
+
+    is_croco()    
+    @bot.command(name="setxpevo")
+    @commands.has_permissions(administrator=True)
+    async def setxpevo(ctx, member: discord.Member, pokemon_name: str, xp_evo: int):
+        """
+        !setxpevo @utilisateur <nom_pokemon> <xp_evo>
+        Définit le seuil d'XP pour l'évolution d'un Pokémon.
+        """
+        user_id = str(member.id)
+
+        captures = get_new_captures(user_id)
+        pokemon  = next((p for p in captures if p["name"].lower() == pokemon_name.lower()), None)
+
+        if not pokemon:
+            await ctx.send(f"❌ **{pokemon_name}** introuvable dans la collection de {member.display_name}.")
+            return
+
+        cur.execute("""
+            UPDATE new_captures
+            SET xp_evo = %s, current_xp = 0
+            WHERE user_id = %s AND name = %s
+        """, (xp_evo, user_id, pokemon["name"]))
+        conn.commit()
+
+        await ctx.send(
+            f"✅ Seuil XP de **{pokemon['name']}** ({member.mention}) mis à jour : `0 / {xp_evo}`"
+        )    
