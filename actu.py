@@ -270,11 +270,11 @@ def setup_actu(bot: commands.Bot, cur):
 
     check_actu_time._published_today = False
 
-    @check_actu_time.before_loop
-    async def before_check():
-        await bot.wait_until_ready()
-
-    check_actu_time.start()
+    @bot.listen("on_ready")
+    async def start_actu_task():
+        if not check_actu_time.is_running():
+            check_actu_time.start()
+            print("[ACTU] Tâche d'actu démarrée.")
 
     # ---- Envoi de l'actu (par ID de salon) ----
     async def send_daily_actu(bot: commands.Bot, channel_override: discord.TextChannel = None):
