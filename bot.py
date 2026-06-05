@@ -1147,7 +1147,7 @@ with open(badges_file, "r", encoding="utf-8") as f:
 setup_badges(bot, full_badge_data)
 
 from actu import setup_actu
-setup_actu(bot)
+setup_actu(bot,cur)
 
 
 setupxp(bot)
