@@ -1,0 +1,50 @@
+[
+  {
+    "item_name": "Tableau de la Vieille Dame",
+    "probabilité": 0.30,
+    "rarity": "rare",
+    "description": "Un portrait poussiéreux d'une femme mystérieuse. Son regard semble te suivre…",
+    "image": "",
+    "price": 500
+  },
+  {
+    "item_name": "Clé Rouillée",
+    "probabilité": 0.25,
+    "rarity": "commun",
+    "description": "Une vieille clé qui ouvre peut-être une porte secrète du manoir.",
+    "image": "",
+    "price": 100
+  },
+  {
+    "item_name": "Journal du Propriétaire",
+    "probabilité": 0.15,
+    "rarity": "rare",
+    "description": "Un journal intime tâché d'humidité. Les dernières pages évoquent une présence.",
+    "image": "",
+    "price": 750
+  },
+  {
+    "item_name": "Chandelier Brisé",
+    "probabilité": 0.15,
+    "rarity": "commun",
+    "description": "Un chandelier en argent noir de suie. Il a dû illuminer de nombreux dîners sinistres.",
+    "image": "",
+    "price": 200
+  },
+  {
+    "item_name": "Pierre Tombale Miniature",
+    "probabilité": 0.10,
+    "rarity": "épique",
+    "description": "Une réplique de pierre tombale sculptée à la main. On y lit une inscription effacée.",
+    "image": "",
+    "price": 1200
+  },
+  {
+    "item_name": "Fiole de Brume Pourpre",
+    "probabilité": 0.05,
+    "rarity": "légendaire",
+    "description": "Un flacon contenant une brume violacée qui semble vivante. Origine inconnue.",
+    "image": "",
+    "price": 3000
+  }
+]
