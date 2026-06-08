@@ -268,6 +268,7 @@ def setup_actu(bot: commands.Bot, cur):
     # ---- Tâche quotidienne d'actu ----
     @tasks.loop(minutes=1)
     async def check_actu_time():
+        global actu_lieu_du_jour
         if not actu_enabled:
             return
         now = datetime.now()
@@ -277,8 +278,7 @@ def setup_actu(bot: commands.Bot, cur):
                 await send_daily_actu(bot)
         else:
             check_actu_time._published_today = False
-
-    check_actu_time._published_today = False
+            actu_lieu_du_jour = None  # ← reset à minuit, plus aucun lieu accessible
 
     @bot.listen("on_ready")
     async def start_actu_task():
@@ -288,6 +288,8 @@ def setup_actu(bot: commands.Bot, cur):
 
     # ---- Envoi de l'actu (par ID de salon) ----
     async def send_daily_actu(bot: commands.Bot, channel_override: discord.TextChannel = None):
+        global actu_lieu_du_jour  # ← ajout
+
         messages = load_actu_messages()
         if not messages:
             return
@@ -295,6 +297,8 @@ def setup_actu(bot: commands.Bot, cur):
         actu     = random.choice(messages)
         lieu_key = actu.get("lieu")
         lieu_cfg = LIEUX.get(lieu_key, {})
+
+        actu_lieu_du_jour = lieu_key  # ← ajout : débloque le bon lieu
 
         embed = discord.Embed(
             title=f"📰 {actu.get('titre', 'Nouvelle du jour')}",
@@ -311,7 +315,6 @@ def setup_actu(bot: commands.Bot, cur):
             )
             embed.set_footer(text=f"💡 Utilise !{lieu_cfg['command']} pour explorer ce lieu !")
 
-        # Canal cible : override (pour !actu_test) ou canal configuré
         channel = channel_override or bot.get_channel(ACTU_CHANNEL_ID)
         if channel:
             await channel.send(embed=embed)
@@ -382,7 +385,7 @@ def setup_actu(bot: commands.Bot, cur):
     exploring: dict[int, str]      = {}
     explored_today: dict[int, str] = {}
     actu_lieu_du_jour: str | None  = None
-    
+
     for lieu_key, cfg in LIEUX.items():
 
         def make_command(lk, lcfg):
