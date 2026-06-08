@@ -23,6 +23,12 @@ SHINY_RATE   = 1 / 64
 JSON_DIR  = os.path.join(os.path.dirname(__file__), "json")
 ACTU_DIR  = os.path.join(JSON_DIR, "actu")
 
+
+exploring: dict[int, str]      = {}
+explored_today: dict[int, str] = {}
+actu_lieu_du_jour: str | None  = None
+
+
 # Dictionnaire des lieux : command_name -> config
 LIEUX = {
     "manoir": {
@@ -382,11 +388,10 @@ def setup_actu(bot: commands.Bot, cur):
     # -----------------------------------------------
     # COMMANDES D'EXPLORATION (générées dynamiquement)
     # -----------------------------------------------
-    exploring: dict[int, str]      = {}
-    explored_today: dict[int, str] = {}
-    actu_lieu_du_jour: str | None  = None
+
 
     for lieu_key, cfg in LIEUX.items():
+        make_command(lieu_key, cfg)
 
         def make_command(lk, lcfg):
             @bot.command(name=lcfg["command"])
