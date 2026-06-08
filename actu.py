@@ -36,13 +36,13 @@ LIEUX = {
         "description":    "Un vieux manoir délabré aux abords de Lavanville… Des bruits étranges s'en échappent.",
     },
     "foret": {
-        "name":    "Forest Vestegion",
+        "name":    "Forest Vestigion",
         "emoji":   "🌲",
         "command": "foret",
-        "region":  "Kanto",
-        "pokemon_normal": os.path.join(ACTU_DIR, "manoir", "pokemon_manoir_normal.json"),
-        "pokemon_shiny":  os.path.join(ACTU_DIR, "manoir", "pokemon_manoir_shinny.json"),
-        "objets":         os.path.join(ACTU_DIR, "manoir", "objet_manoir.json"),
+        "region":  "Sinnoh",
+        "pokemon_normal": os.path.join(ACTU_DIR, "foret_vestigion", "pokemon_foret_vestigion_normal.json"),
+        "pokemon_shiny":  os.path.join(ACTU_DIR, "foret_vestigion", "pokemon_foret_vestigion_shinny.json"),
+        "objets":         os.path.join(ACTU_DIR, "foret_vestigion", "objet_foret_vestigion.json"),
         "description":    "La forêt de Vestegion",
     },
 }
@@ -110,6 +110,12 @@ def weighted_choice(pool: list[dict]) -> dict | None:
         return None
     weights = [p.get("probabilité", p.get("weight", 1)) for p in pool]
     return random.choices(pool, weights=weights, k=1)[0]
+
+def get_user_item_names(user_id: str) -> set[str]:
+    """Retourne l'ensemble des noms d'objets que le joueur possède déjà."""
+    from inventory_db import get_items
+    items = get_items(user_id)  # adapte selon ta fonction réelle
+    return {item["name"] for item in items}
 
 
 STAT_LABELS = {
@@ -235,15 +241,28 @@ async def run_exploration(dm: discord.DMChannel, user_id: str, lieu_key: str, du
         # --- Objet ---
         elif roll < POKEMON_RATE + ITEM_RATE:
             objets = load_lieu_objets(lieu_key)
-            item   = weighted_choice(objets)
-            if item:
-                add_item_to_inventory(user_id, item)
-                embed     = item_embed(item, lieu_name)
+            owned = get_user_item_names(user_id)
+            objets_dispo = [o for o in objets if o["item_name"] not in owned]
+
+            if not objets_dispo:
                 time_left = f"{remaining // 60}min {remaining % 60}s"
-                await dm.send(
-                    f"🔦 *Tu fouilles le {lieu_name}…* (encore {time_left})",
-                    embed=embed,
-                )
+                msgs = [
+                    f"🕯️ *Un courant d'air froid traverse le {lieu_name}…* (encore {time_left})",
+                    f"🦇 *Des chauves-souris s'envolent dans l'obscurité…* (encore {time_left})",
+                    f"🌫️ *Un silence pesant règne dans le {lieu_name}…* (encore {time_left})",
+                    f"👣 *Tu entends des pas… mais personne n'est là.* (encore {time_left})",
+                ]
+                await dm.send(random.choice(msgs))
+            else:
+                item = weighted_choice(objets_dispo)
+                if item:
+                    add_item_to_inventory(user_id, item)
+                    embed     = item_embed(item, lieu_name)
+                    time_left = f"{remaining // 60}min {remaining % 60}s"
+                    await dm.send(
+                        f"🔦 *Tu fouilles le {lieu_name}…* (encore {time_left})",
+                        embed=embed,
+                    )
 
         # --- Rien ---
         else:

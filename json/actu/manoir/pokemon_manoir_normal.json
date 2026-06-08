@@ -1,5 +1,6 @@
 [ {
         "name": "Fantominus",
+        "probabilité": 0.45,
         "type": [
             "spectre",
             "poison"
@@ -25,6 +26,7 @@
     },
     {
         "name": "Spectrum",
+        "probabilité": 0.20,
         "type": [
             "spectre",
             "poison"
@@ -50,6 +52,7 @@
     },
     {
         "name": "Ectoplasma",
+        "probabilité": 0.15,
         "type": [
             "spectre",
             "poison"
@@ -70,6 +73,34 @@
         },
         "current_xp": 0,
         "xp_evo": 535,
+        "evo": {
+            "name": "pas evo",
+            "file": "pas evo"
+        }
+    },
+    {
+        "name": "Motisma",
+         "probabilité": 0.10,
+        "type": [
+            "electrique",
+            "spectre"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/479.png",
+        "attacks": [
+            "Eclair",
+            "Tonnerre",
+            "Balle Ombre"
+        ],
+        "stats": {
+            "hp": 50,
+            "attack": 50,
+            "defense": 77,
+            "special_attack": 95,
+            "special_defense": 77,
+            "speed": 91
+        },
+        "current_xp": 0,
+        "xp_evo": 440,
         "evo": {
             "name": "pas evo",
             "file": "pas evo"
