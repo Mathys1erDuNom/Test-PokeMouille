@@ -436,13 +436,13 @@ def setup_actu(bot: commands.Bot, cur):
                 return
 
             # Vérif déjà exploré aujourd'hui
-            today = now.date().isoformat()
-            if explored_today.get(user_id) == today:
-                await ctx.send(
-                    f"{ctx.author.mention} 📅 Tu as déjà exploré un lieu aujourd'hui. Reviens demain !",
-                    delete_after=6,
-                )
-                return
+            #today = now.date().isoformat()
+            #if explored_today.get(user_id) == today:
+             #   await ctx.send(
+              #      f"{ctx.author.mention} 📅 Tu as déjà exploré un lieu aujourd'hui. Reviens demain !",
+               #     delete_after=6,
+                #)
+                #return
 
             # Déjà en exploration active ?
             if user_id in exploring:

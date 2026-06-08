@@ -1,0 +1,18 @@
+[
+  {
+    "item_name": "Tableau de la Vieille Dame",
+    "probabilité": 0.30,
+    "rarity": "rare",
+    "description": "Un portrait poussiéreux d'une femme mystérieuse. Son regard semble te suivre…",
+    "image": "images/actu/portrait_veille_dame.png",
+    "price": 500
+  },
+  {
+    "item_name": "Clé Rouillée",
+    "probabilité": 0.25,
+    "rarity": "commun",
+    "description": "Une vieille clé qui ouvre peut-être une porte secrète du manoir.",
+    "image": "images/actu/portrait_veille_dame.png",
+    "price": 100
+  }
+]
