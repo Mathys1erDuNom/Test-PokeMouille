@@ -75,10 +75,15 @@ BADGES_ADVERSAIRES = {
 }
 
 
-async def handle_victory(interaction, adversaire_name, repliques=None):
+async def handle_victory(interaction, adversaire_name, state, repliques=None):
     repliques = repliques or {}
     badge_id = BADGES_ADVERSAIRES.get(adversaire_name)
     user_id = str(interaction.user.id)
+    
+    # Incrémenter les victoires quotidiennes
+    from combat.battle_limit import increment_daily_victories
+    new_count = increment_daily_victories(user_id)
+    
     if badge_id:
         user_badges = get_user_badges(user_id)
         badge_info = next((b for b in BADGE_DATA if b["id"] == badge_id), None)
@@ -104,10 +109,9 @@ async def handle_victory(interaction, adversaire_name, repliques=None):
                     f"💰 Tu reçois **{reward}** Croco dollars."
                 )
 
-    # ── XP de victoire pour tous les Pokémons ────────────────────────
+    # ── XP de victoire pour les Pokémons du combat ────────────────────────
     xp_victoire = 20
-    captures = get_new_captures(user_id)
-    for pokemon in captures:
+    for pokemon in state.player_team:
         can_evolve = add_xp(user_id, pokemon["name"], xp_victoire)
         await interaction.channel.send(f"⚔️ **+{xp_victoire} XP** pour **{pokemon['name']}** !")
         if can_evolve:
@@ -117,6 +121,8 @@ async def handle_victory(interaction, adversaire_name, repliques=None):
             else:
                 await interaction.channel.send(f"⚠️ Évolution impossible pour **{pokemon['name']}** : {result['reason']}")
 
+   
+    
     if repliques.get("lose"):
         await interaction.channel.send(f"🧑‍🎤 **{adversaire_name}** : {repliques['lose']}")
     await interaction.channel.send("🎉 **Victoire du joueur !**")
@@ -257,7 +263,7 @@ async def start_battle_turn_based(interaction, player_team, bot_team, adversaire
                         
                             # -----------------------
 
-                            await handle_victory(interaction, adversaire_name, repliques)
+                            await handle_victory(interaction, adversaire_name, state, repliques)
                             return
                         else:
                                 fields.append((
@@ -357,7 +363,7 @@ async def start_battle_turn_based(interaction, player_team, bot_team, adversaire
                             embed = build_turn_embed(state, tour, fields,  adversaire_name)
                             await interaction.channel.send(embed=embed)
                             
-                            await handle_victory(interaction, adversaire_name, repliques)
+                            await handle_victory(interaction, adversaire_name, state, repliques)
                             return
                         else:
                             fields.append((
