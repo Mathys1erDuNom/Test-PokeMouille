@@ -23,12 +23,6 @@ SHINY_RATE   = 1 / 64
 JSON_DIR  = os.path.join(os.path.dirname(__file__), "json")
 ACTU_DIR  = os.path.join(JSON_DIR, "actu")
 
-
-exploring: dict[int, str]      = {}
-explored_today: dict[int, str] = {}
-actu_lieu_du_jour: str | None  = None
-
-
 # Dictionnaire des lieux : command_name -> config
 LIEUX = {
     "manoir": {
@@ -43,18 +37,24 @@ LIEUX = {
     },
     "foret": {
         "name":    "Forest Vestegion",
-        "emoji":   "🏚️",
-        "command": "manoir",
+        "emoji":   "🌲",
+        "command": "foret",
         "region":  "Kanto",
         "pokemon_normal": os.path.join(ACTU_DIR, "manoir", "pokemon_manoir_normal.json"),
         "pokemon_shiny":  os.path.join(ACTU_DIR, "manoir", "pokemon_manoir_shinny.json"),
         "objets":         os.path.join(ACTU_DIR, "manoir", "objet_manoir.json"),
-        "description":    "La foret de Vestigion",
+        "description":    "La forêt de Vestegion",
     },
 }
 
 # Joueurs actuellement en exploration  { user_id: lieu_key }
 exploring: dict[int, str] = {}
+
+# Suivi de l'exploration par jour  { user_id: date_iso }
+explored_today: dict[int, str] = {}
+
+# Lieu débloqué par l'actu du jour
+actu_lieu_du_jour: str | None = None
 
 # Flag d'activation du système actu (géré par !actu_on / !actu_off)
 actu_enabled: bool = True
@@ -284,7 +284,9 @@ def setup_actu(bot: commands.Bot, cur):
                 await send_daily_actu(bot)
         else:
             check_actu_time._published_today = False
-            actu_lieu_du_jour = None  # ← reset à minuit, plus aucun lieu accessible
+            actu_lieu_du_jour = None  # reset à minuit, plus aucun lieu accessible
+
+    check_actu_time._published_today = False
 
     @bot.listen("on_ready")
     async def start_actu_task():
@@ -294,7 +296,7 @@ def setup_actu(bot: commands.Bot, cur):
 
     # ---- Envoi de l'actu (par ID de salon) ----
     async def send_daily_actu(bot: commands.Bot, channel_override: discord.TextChannel = None):
-        global actu_lieu_du_jour  # ← ajout
+        global actu_lieu_du_jour
 
         messages = load_actu_messages()
         if not messages:
@@ -304,7 +306,7 @@ def setup_actu(bot: commands.Bot, cur):
         lieu_key = actu.get("lieu")
         lieu_cfg = LIEUX.get(lieu_key, {})
 
-        actu_lieu_du_jour = lieu_key  # ← ajout : débloque le bon lieu
+        actu_lieu_du_jour = lieu_key  # débloque le bon lieu
 
         embed = discord.Embed(
             title=f"📰 {actu.get('titre', 'Nouvelle du jour')}",
@@ -340,7 +342,6 @@ def setup_actu(bot: commands.Bot, cur):
             await ctx.send("✅ Les actus sont déjà **activées**.", delete_after=6)
             return
         actu_enabled = True
-        # Reset du flag pour permettre une publication ce soir si on est dans la fenêtre
         check_actu_time._published_today = False
         await ctx.send("✅ Les actus automatiques sont maintenant **activées**.", delete_after=6)
 
@@ -376,7 +377,6 @@ def setup_actu(bot: commands.Bot, cur):
         await send_daily_actu(bot, channel_override=ctx.channel)
         await ctx.send("📨 Actu de test envoyée !", delete_after=4)
 
-    # Erreur de permissions pour toutes les commandes admin actu
     @actu_on.error
     @actu_off.error
     @actu_status.error
@@ -389,91 +389,94 @@ def setup_actu(bot: commands.Bot, cur):
     # COMMANDES D'EXPLORATION (générées dynamiquement)
     # -----------------------------------------------
 
+    # IMPORTANT : make_command doit être définie AVANT la boucle qui l'appelle
+    def make_command(lk, lcfg):
+        @bot.command(name=lcfg["command"])
+        async def explore_command(ctx, _lk=lk, _lcfg=lcfg):
+            global actu_lieu_du_jour, exploring, explored_today
 
-    for lieu_key, cfg in LIEUX.items():
-        make_command(lieu_key, cfg)
+            user_id     = ctx.author.id
+            user_id_str = str(user_id)
 
-        def make_command(lk, lcfg):
-            @bot.command(name=lcfg["command"])
-            async def explore_command(ctx, _lk=lk, _lcfg=lcfg):
-                user_id     = ctx.author.id
-                user_id_str = str(user_id)
-
-                # Vérif fenêtre horaire (20h–00h uniquement)
-                now = datetime.now()
-                if not (ACTU_HOUR_MIN <= now.hour < ACTU_HOUR_MAX):
-                    await ctx.send(
-                        f"{ctx.author.mention} ⏰ Ce lieu n'est accessible qu'entre "
-                        f"**{ACTU_HOUR_MIN}h et {ACTU_HOUR_MAX % 24:02d}h**.",
-                        delete_after=6,
-                    )
-                    return
-
-                # Vérif lieu de l'actu du jour
-                if _lk != actu_lieu_du_jour:
-                    await ctx.send(
-                        f"{ctx.author.mention} ❌ Ce lieu n'est pas évoqué dans l'actu d'aujourd'hui.",
-                        delete_after=6,
-                    )
-                    return
-
-                # Vérif déjà exploré aujourd'hui
-                today = now.date().isoformat()
-                if explored_today.get(user_id) == today:
-                    await ctx.send(
-                        f"{ctx.author.mention} 📅 Tu as déjà exploré un lieu aujourd'hui. Reviens demain !",
-                        delete_after=6,
-                    )
-                    return
-
-                # Déjà en exploration active ?
-                if user_id in exploring:
-                    current = LIEUX.get(exploring[user_id], {}).get("name", "un lieu")
-                    await ctx.send(
-                        f"{ctx.author.mention} 🚶 Tu explores déjà **{current}** ! Termine-le d'abord.",
-                        delete_after=6,
-                    )
-                    return
-
-                # Vérif DM
-                try:
-                    dm = await ctx.author.create_dm()
-                except discord.Forbidden:
-                    await ctx.send(
-                        f"{ctx.author.mention} ❌ Active tes DMs pour explorer !",
-                        delete_after=5,
-                    )
-                    return
-
-                # Vérif région
-                region   = get_user_region(cur, user_id_str)
-                required = _lcfg.get("region")
-                if required and region != required:
-                    await ctx.send(
-                        f"{ctx.author.mention} ❌ Ce lieu est en région **{required}**.\n"
-                        f"Ta région actuelle : **{region or 'aucune'}**.",
-                        delete_after=8,
-                    )
-                    return
-
-                duration = random.randint(EXPLORE_DURATION_MIN, EXPLORE_DURATION_MAX)
-                minutes  = duration // 60
-
-                # Enregistrement APRÈS toutes les vérifs
-                explored_today[user_id] = today
-                exploring[user_id]      = _lk
-
+            # Vérif fenêtre horaire (20h–00h uniquement)
+            now = datetime.now()
+            if not (ACTU_HOUR_MIN <= now.hour < ACTU_HOUR_MAX):
                 await ctx.send(
-                    f"{ctx.author.mention} 🚪 Tu pénètres dans **{_lcfg['name']}**… 📩 Suis l'aventure en DM !",
+                    f"{ctx.author.mention} ⏰ Ce lieu n'est accessible qu'entre "
+                    f"**{ACTU_HOUR_MIN}h et {ACTU_HOUR_MAX % 24:02d}h**.",
                     delete_after=6,
                 )
-                await dm.send(
-                    f"🏚️ **Tu entres dans le {_lcfg['name']}.**\n"
-                    f"_{_lcfg.get('description', '')}_\n\n"
-                    f"⏳ L'exploration durera environ **{minutes} minutes**.\n"
-                    f"Toutes les minutes, quelque chose pourrait se passer…"
+                return
+
+            # Vérif lieu de l'actu du jour
+            if _lk != actu_lieu_du_jour:
+                await ctx.send(
+                    f"{ctx.author.mention} ❌ Ce lieu n'est pas évoqué dans l'actu d'aujourd'hui.",
+                    delete_after=6,
                 )
+                return
 
-                asyncio.create_task(run_exploration(dm, user_id_str, _lk, duration))
+            # Vérif déjà exploré aujourd'hui
+            today = now.date().isoformat()
+            if explored_today.get(user_id) == today:
+                await ctx.send(
+                    f"{ctx.author.mention} 📅 Tu as déjà exploré un lieu aujourd'hui. Reviens demain !",
+                    delete_after=6,
+                )
+                return
 
-            return explore_command
+            # Déjà en exploration active ?
+            if user_id in exploring:
+                current = LIEUX.get(exploring[user_id], {}).get("name", "un lieu")
+                await ctx.send(
+                    f"{ctx.author.mention} 🚶 Tu explores déjà **{current}** ! Termine-le d'abord.",
+                    delete_after=6,
+                )
+                return
+
+            # Vérif DM
+            try:
+                dm = await ctx.author.create_dm()
+            except discord.Forbidden:
+                await ctx.send(
+                    f"{ctx.author.mention} ❌ Active tes DMs pour explorer !",
+                    delete_after=5,
+                )
+                return
+
+            # Vérif région
+            region   = get_user_region(cur, user_id_str)
+            required = _lcfg.get("region")
+            if required and region != required:
+                await ctx.send(
+                    f"{ctx.author.mention} ❌ Ce lieu est en région **{required}**.\n"
+                    f"Ta région actuelle : **{region or 'aucune'}**.",
+                    delete_after=8,
+                )
+                return
+
+            duration = random.randint(EXPLORE_DURATION_MIN, EXPLORE_DURATION_MAX)
+            minutes  = duration // 60
+
+            # Enregistrement APRÈS toutes les vérifs
+            explored_today[user_id] = today
+            exploring[user_id]      = _lk
+
+            await ctx.send(
+                f"{ctx.author.mention} 🚪 Tu pénètres dans **{_lcfg['name']}**… 📩 Suis l'aventure en DM !",
+                delete_after=6,
+            )
+            await dm.send(
+                f"🏚️ **Tu entres dans le {_lcfg['name']}.**\n"
+                f"_{_lcfg.get('description', '')}_\n\n"
+                f"⏳ L'exploration durera environ **{minutes} minutes**.\n"
+                f"Toutes les minutes, quelque chose pourrait se passer…"
+            )
+
+            asyncio.create_task(run_exploration(dm, user_id_str, _lk, duration))
+
+        return explore_command
+
+    # Enregistrement de toutes les commandes de lieu
+    for lieu_key, cfg in LIEUX.items():
+        make_command(lieu_key, cfg)
