@@ -183,17 +183,20 @@ def pokemon_embed(pokemon: dict, is_shiny: bool, lieu_name: str, ivs: dict, fina
     return embed
 
 
-def item_embed(item: dict, lieu_name: str) -> discord.Embed:
+def item_embed(item: dict, lieu_name: str) -> tuple[discord.Embed, discord.File | None]:
     embed = discord.Embed(
         title=f"🎁 Tu as trouvé **{item['item_name']}** !",
         description=item.get("description", ""),
         color=discord.Color.green(),
     )
-    if item.get("image"):
-        embed.set_thumbnail(url=item["image"])
+    file = None
+    if item.get("image") and os.path.exists(item["image"]):
+        filename = os.path.basename(item["image"])
+        file = discord.File(item["image"], filename=filename)
+        embed.set_image(url=f"attachment://{filename}")
     embed.add_field(name="Rareté", value=item.get("rarity", "commun").capitalize(), inline=True)
     embed.set_footer(text=f"Lieu : {lieu_name}")
-    return embed
+    return embed, file
 
 
 # -----------------------
@@ -257,11 +260,12 @@ async def run_exploration(dm: discord.DMChannel, user_id: str, lieu_key: str, du
                 item = weighted_choice(objets_dispo)
                 if item:
                     add_item_to_inventory(user_id, item)
-                    embed     = item_embed(item, lieu_name)
+                    embed, file = item_embed(item, lieu_name)
                     time_left = f"{remaining // 60}min {remaining % 60}s"
                     await dm.send(
                         f"🔦 *Tu fouilles le {lieu_name}…* (encore {time_left})",
                         embed=embed,
+                        file=file if file else discord.utils.MISSING,
                     )
 
         # --- Rien ---
