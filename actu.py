@@ -482,8 +482,8 @@ def setup_actu(bot: commands.Bot, cur):
             minutes  = duration // 60
 
             # Enregistrement APRÈS toutes les vérifs
-            explored_today[user_id] = today
-            exploring[user_id]      = _lk
+            #explored_today[user_id] = today
+            #exploring[user_id]      = _lk
 
             await ctx.send(
                 f"{ctx.author.mention} 🚪 Tu pénètres dans **{_lcfg['name']}**… 📩 Suis l'aventure en DM !",
