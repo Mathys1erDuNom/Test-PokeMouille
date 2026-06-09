@@ -113,8 +113,8 @@ def weighted_choice(pool: list[dict]) -> dict | None:
 
 def get_user_item_names(user_id: str) -> set[str]:
     """Retourne l'ensemble des noms d'objets que le joueur possède déjà."""
-    from inventory_db import get_items
-    items = get_items(user_id)  # adapte selon ta fonction réelle
+    from inventory_db import get_inventory
+    items = get_inventory(user_id)
     return {item["name"] for item in items}
 
 
