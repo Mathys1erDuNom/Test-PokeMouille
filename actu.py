@@ -422,14 +422,14 @@ def setup_actu(bot: commands.Bot, cur):
             user_id_str = str(user_id)
 
             # Vérif fenêtre horaire (20h–00h uniquement)
-            now = datetime.now()
-            if not (ACTU_HOUR_MIN <= now.hour < ACTU_HOUR_MAX):
-                await ctx.send(
-                    f"{ctx.author.mention} ⏰ Ce lieu n'est accessible qu'entre "
-                    f"**{ACTU_HOUR_MIN}h et {ACTU_HOUR_MAX % 24:02d}h**.",
-                    delete_after=6,
-                )
-                return
+            #now = datetime.now()
+            #if not (ACTU_HOUR_MIN <= now.hour < ACTU_HOUR_MAX):
+             #   await ctx.send(
+              #      f"{ctx.author.mention} ⏰ Ce lieu n'est accessible qu'entre "
+               #     f"**{ACTU_HOUR_MIN}h et {ACTU_HOUR_MAX % 24:02d}h**.",
+                #    delete_after=6,
+                #)
+                #return
 
             # Vérif lieu de l'actu du jour
             if _lk != actu_lieu_du_jour:
