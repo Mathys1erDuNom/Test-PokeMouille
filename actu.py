@@ -15,9 +15,9 @@ ACTU_HOUR_MIN     = 20              # heure min de publication (20h)
 ACTU_HOUR_MAX     = 24              # heure max de publication (00h)
 EXPLORE_DURATION_MIN = 15 * 60     # 15 minutes en secondes
 EXPLORE_DURATION_MAX = 20 * 60     # 20 minutes en secondes
-POKEMON_RATE = 0.30
-ITEM_RATE    = 0.30
-# NOTHING_RATE = 0.40  (implicite)
+POKEMON_RATE = 0    #POKEMON_RATE = 0.30
+ITEM_RATE    = 1    #ITEM_RATE    = 0.30
+NOTHING_RATE=0 #NOTHING_RATE = 0.40 
 SHINY_RATE   = 1 / 64
 
 JSON_DIR  = os.path.join(os.path.dirname(__file__), "json")
