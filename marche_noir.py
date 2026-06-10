@@ -9,14 +9,10 @@ import random
 from io import BytesIO
 from inventory_db import add_item
 from money_db import get_balance, remove_money
-import psycopg2
-from dotenv import load_dotenv
+from db_connection import get_connection
 from datetime import datetime
 
-load_dotenv()
-DATABASE_URL = os.getenv("DATABASE_URL")
-
-conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+conn = get_connection()
 cur  = conn.cursor()
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -56,6 +52,8 @@ def has_bought_today(user_id: str) -> bool:
     """Vérifie si l'utilisateur a déjà acheté quelque chose aujourd'hui."""
     user_id = str(user_id)
     today = datetime.now().date()
+    conn = get_connection()
+    cur = conn.cursor()
     cur.execute("""
         SELECT 1 FROM marche_noir_purchases
         WHERE user_id = %s AND purchase_date = %s
@@ -69,6 +67,8 @@ def record_purchase(user_id: str, item_name: str) -> bool:
     user_id = str(user_id)
     today = datetime.now().date()
     try:
+        conn = get_connection()
+        cur = conn.cursor()
         cur.execute("""
             INSERT INTO marche_noir_purchases (user_id, purchase_date, item_name)
             VALUES (%s, %s, %s)
@@ -91,6 +91,53 @@ def get_stock_du_jour():
     nb = min(NB_ITEMS_AFFICHES, len(MARCHE_NOIR_ITEMS))
     return random.sample(MARCHE_NOIR_ITEMS, nb)
 
+
+
+#
+
+
+# ─── Vue d'introduction ───────────────────────────────────────────────────────
+class MarcheNoirIntroView(View):
+    def __init__(self):
+        super().__init__(timeout=300)
+
+    @discord.ui.button(label="🖤 Entrer dans le marché noir", style=discord.ButtonStyle.danger)
+    async def entrer(self, interaction: discord.Interaction, button: Button):
+        await interaction.response.defer(ephemeral=True)
+
+        try:
+            user_id = str(interaction.user.id)
+            balance = await asyncio.to_thread(get_balance, user_id)
+            stock   = await asyncio.to_thread(get_stock_du_jour)  # ← thread séparé
+
+            if not stock:
+                await interaction.followup.send(
+                    "❌ Le marché noir est vide aujourd'hui. Reviens demain !",
+                    ephemeral=True
+                )
+                return
+
+            embed = discord.Embed(
+                title="🖤 Marché Noir",
+                description=(
+                    f"*Chut... t'as pas vu ça ici.*\n\n"
+                    f"💰 Votre solde : **{balance:,}** Croco dollars\n"
+                    f"🎲 Stock limité — **{len(stock)} article(s)** disponible(s) aujourd'hui.\n\n"
+                    "Cliquez sur un article pour voir les détails."
+                ),
+                color=discord.Color.dark_gray()
+            )
+
+            view = MarcheNoirView(user_id, stock)
+            await interaction.followup.send(embed=embed, view=view, ephemeral=True)
+
+        except Exception as e:
+            print(f"[MARCHE NOIR] Erreur dans entrer() : {e}")
+            import traceback; traceback.print_exc()
+            try:
+                await interaction.followup.send("❌ Une erreur est survenue.", ephemeral=True)
+            except Exception:
+                pass
 
 # ─── Vue principale du marché noir ────────────────────────────────────────────
 class MarcheNoirView(View):
@@ -324,25 +371,18 @@ class AcheterMarcheNoirButton(Button):
 
 # ─── Fonction standalone appelable sans contexte ───────────────────────────
 async def run_marche_noir(channel, user_id=None):
-    """Lance le marché noir directement dans un salon Discord donné."""
-    if user_id is None:
-        user_id = channel.guild.owner_id
-    
-    balance = await asyncio.to_thread(get_balance, user_id)
-    stock   = get_stock_du_jour()
-
+    """Lance le marché noir — affiche juste l'intro publique."""
     embed = discord.Embed(
         title="🖤 Marché Noir",
         description=(
-            f"*Chut... t'as pas vu ça ici.*\n\n"
-            f"💰 Votre solde : **{balance:,}** Croco dollars\n"
-            f"🎲 Stock limité — **{len(stock)} article(s)** disponible(s) aujourd'hui.\n\n"
-            "Cliquez sur un article pour voir les détails."
+            "*Une silhouette dans l'ombre vous fait signe...*\n\n"
+            "Le marché noir est ouvert. Cliquez pour y accéder.\n"
+            "⚠️ Stock limité, une seule transaction par jour."
         ),
         color=discord.Color.dark_gray()
     )
 
-    view = MarcheNoirView(user_id, stock)
+    view = MarcheNoirIntroView()
     await channel.send(embed=embed, view=view)
 
 
