@@ -6,7 +6,7 @@ import requests
 import os
 import json
 from io import BytesIO
-from inventory_db import remove_item, get_inventory  # adapte si tes fonctions s'appellent autrement
+from inventory_db import delete_inventory, get_inventory  # adapte si tes fonctions s'appellent autrement
 from money_db import get_balance, add_money
 from db_connection import get_connection
 
@@ -301,7 +301,7 @@ class VendreButton(Button):
         quantity = self.item.get("quantity", 1)
 
         # Retire 1 exemplaire de l'inventaire
-        success_remove = await asyncio.to_thread(remove_item, self.user_id, name, 1)
+        success_remove = await asyncio.to_thread(delete_inventory, self.user_id, name, 1)
         if not success_remove:
             await interaction.followup.send(
                 "❌ Impossible de retirer l'item de ton inventaire. Tu l'as encore ?",
