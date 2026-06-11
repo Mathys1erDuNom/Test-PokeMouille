@@ -1234,7 +1234,8 @@ setup_croco_event(
 
 setup_inventory(bot)
 
-
+from receleur import setup_receleur
+setup_receleur(bot)
 setup_region(bot)
 setup_regions()
 
