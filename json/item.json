@@ -115,5 +115,13 @@
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/super-rod.png",
     "extra": "pêche_mega",
     "price" : 700
+  },
+  {
+    "item_name": "Jeton",
+    "rarity": "common",
+    "description": "Permet de jouer à la roue du casino ",
+    "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/amulet-coin.png",
+    "extra": "nothing",
+    "price" : 700
   }
 ]

@@ -6,7 +6,7 @@ from inventory_db import get_items, use_item
 from money_db import get_balance, add_money
 
 # Nom de l'objet jeton dans l'inventaire
-JETON_NAME = "Jeton de roue"
+JETON_NAME = "Jeton"
 
 # Segments de la roue : (label, gain en golds, probabilité)
 WHEEL_SEGMENTS = [
