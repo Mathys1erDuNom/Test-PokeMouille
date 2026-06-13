@@ -23,7 +23,7 @@ SHINY_RATE   = 1 / 64
 JSON_DIR  = os.path.join(os.path.dirname(__file__), "json")
 ACTU_DIR  = os.path.join(JSON_DIR, "actu")
 IMAGES_ACTU_DIR = os.path.join(os.path.dirname(__file__), "images", "actu")
-
+TARGET_USER_ID_CROCO = int(os.getenv("TARGET_USER_ID_CROCO"))
 def is_croco():
     def predicate(ctx):
         return ctx.author.id == TARGET_USER_ID_CROCO
