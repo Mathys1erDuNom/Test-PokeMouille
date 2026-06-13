@@ -145,6 +145,14 @@ tableau_pauvre = [
     {
         "id": 1,
         "name": "Marie Dupont",
+        "item_recompense": {
+            "item_name": "Jeton",
+            "rarity": "common",
+            "description": "Permet de jouer à la roue du casino ",
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/amulet-coin.png",
+            "extra": "nothing",
+            "price" : 700
+        },
         "premier_texte": [
 
             "Bonjour, excusez-moi de vous déranger, après l'arrestation de mon mari et de notre fils, nous avons tout perdu, nous n'avons plus rien et je dois nourrir mes enfants, pourriez-vous me donner un peu d'argent ou de la nourriture si vous en avez ?",
@@ -163,6 +171,16 @@ tableau_pauvre = [
     {
         "id": 2,
         "name": "Sophie Dupont",
+        "item_recompense": {
+            "item_name": "Jeton",
+            "rarity": "common",
+            "description": "Permet de jouer à la roue du casino ",
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/amulet-coin.png",
+            "extra": "nothing",
+            "price" : 700
+        },
+        
+        
         "premier_texte": [
 
             "Tous les crimes de mon père ont été découverts... Même si c'était ce que je voulais, je ne m'attendais pas à ce que mon frère finisse aussi sous les barreaux... Il était sous l'influence de notre père, c'est injuste... Je sais que je ne voulais pas de l'argent sale de mon père, mais c'est vraiment dur de voir ma mère, elle est si triste. À vrai dire, nous n'avons plus rien et nous avons du mal à trouver à manger... Aurait-tu par hasard de la nourriture ou un peu d'argent ?",
@@ -179,6 +197,14 @@ tableau_pauvre = [
        {
         "id": 3,
         "name": "Anne Dupont",
+        "item_recompense": {
+            "item_name": "Jeton",
+            "rarity": "common",
+            "description": "Permet de jouer à la roue du casino ",
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/amulet-coin.png",
+            "extra": "nothing",
+            "price" : 700
+        },
         "premier_texte": [
             "Ma famille et moi n'avons plus rien, par pitié aidez-nous !",
             "Je ne sais pas où nous allons dormir ce soir. Nous mourrons de faim avec ma famille. Après l'arrestation de mon père et de mon frère, nous avons tous perdu. S'il te plaît, aurais-tu quelque chose qui pourrait aider ma famille ?"
@@ -196,6 +222,14 @@ tableau_pauvre = [
        {
         "id": 4,
         "name": "Serge Dupont",
+        "item_recompense": {
+            "item_name": "Jeton",
+            "rarity": "common",
+            "description": "Permet de jouer à la roue du casino ",
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/amulet-coin.png",
+            "extra": "nothing",
+            "price" : 700
+        },
         "premier_texte": [
              "C'est une injustice, mon père et mon frère sont en prison ! Ils sont accusés de choses qu'ils n'ont pas commises, c'est une honte. Maintenant, nous sommes devenus pauvres avec ma famille, nous n'avons plus à manger, tu aurais quelque chose qui pourrait nous aider ?",
              "Je suis tellement énervé, j'aimerais retrouver celui qui a pu mentir à la police ! Comment mon père et mon frère pourraient-ils être coupables de cela ! Ils travaillaient dur au casino. Père gagnait sa vie honnêtement et maintenant nous avons tout perdu, qui a osé nous faire ça ???? Ma famille et moi n'avons rien à manger, pourrais-tu nous aider ?"
@@ -214,6 +248,22 @@ tableau_pauvre = [
   
 ]
 
+
+
+def donner_recompense(user_id: int, personnage: dict):
+    from inventory_db import add_item
+    item = personnage.get("item_recompense")
+    if not item:
+        return None
+    add_item(
+        user_id=user_id,
+        name=item["name"],
+        quantity=item.get("quantity", 1),
+        rarity=item.get("rarity", "commun"),
+        description=item.get("description", ""),
+        image=item.get("image", ""),
+    )
+    return item["name"]
 
 # ─── Fonction principale ───────────────────────────────────────────────────────
 async def run_interaction_personnage(channel: discord.TextChannel, riche_or_not: bool):
@@ -265,9 +315,15 @@ async def run_interaction_personnage(channel: discord.TextChannel, riche_or_not:
                 new_balance = get_balance(interaction.user.id)
                 await channel.send(f"**{personnage['name']}** : {texte_fin}")
                 await channel.send(
-                    f"💰 {interaction.user.mention} a pris **{somme:,}** Croco dollars à {personnage['name']} !\n"
+                    f"🤝 {interaction.user.mention} a donné **{somme:,}** Croco dollars à {personnage['name']} !\n"
                     f"🐊 Nouveau solde : **{new_balance:,}** Croco dollars."
                 )
+
+                # Récompense
+                item_nom = donner_recompense(interaction.user.id, personnage)
+                if item_nom:
+                    await channel.send(f"🎁 En remerciement, **{personnage['name']}** t'offre **{item_nom}** !")
+
                 interaction_done.set()
 
         class RicheView(View):
