@@ -11,12 +11,12 @@ from datetime import datetime
 # -----------------------
 
 ACTU_CHANNEL_ID   = int(os.getenv("ACTU"))   # ID du salon texte actu
-ACTU_HOUR_MIN     = 20              # heure min de publication (20h)
+ACTU_HOUR_MIN     = 20             # heure min de publication (20h)
 ACTU_HOUR_MAX     = 24              # heure max de publication (00h)
 EXPLORE_DURATION_MIN = 15 * 60     # 15 minutes en secondes
 EXPLORE_DURATION_MAX = 20 * 60     # 20 minutes en secondes
-POKEMON_RATE = 0    #POKEMON_RATE = 0.30
-ITEM_RATE    = 1    #ITEM_RATE    = 0.30
+POKEMON_RATE = 1    #POKEMON_RATE = 0.30
+ITEM_RATE    = 0    #ITEM_RATE    = 0.30
 NOTHING_RATE=0 #NOTHING_RATE = 0.40 
 SHINY_RATE   = 1 / 64
 
@@ -432,12 +432,12 @@ def setup_actu(bot: commands.Bot, cur):
                 #return
 
             # Vérif lieu de l'actu du jour
-            if _lk != actu_lieu_du_jour:
-                await ctx.send(
-                    f"{ctx.author.mention} ❌ Ce lieu n'est pas évoqué dans l'actu d'aujourd'hui.",
-                    delete_after=6,
-                )
-                return
+            #if _lk != actu_lieu_du_jour:
+            #    await ctx.send(
+            #        f"{ctx.author.mention} ❌ Ce lieu n'est pas évoqué dans l'actu d'aujourd'hui.",
+            #        delete_after=6,
+            #    )
+            #    return
 
             # Vérif déjà exploré aujourd'hui
             #today = now.date().isoformat()
