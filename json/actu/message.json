@@ -1,14 +1,14 @@
 [
   {
-    "titre": "Mystère à Lavanville…",
-    "texte": "Les habitants de Lavanville rapportent des lumières étranges émanant du vieux **Manoir Hanté** en bordure de ville. Des gémissements se font entendre dès la tombée de la nuit. Les plus courageux pourront peut-être y découvrir quelque chose d'intéressant… ou d'inhabituel.",
-    "image": "",
-    "lieu": "manoir"
+    "titre": "Mystère au vieux château de Vestigion…",
+    "texte": "Au cœur de la **Forêt Vestigion** se dresse un vieux château oublié de tous. Les rares voyageurs qui s'en sont approchés rapportent des lumières étranges filtrant à travers ses fenêtres brisées, et des gémissements portés par le vent entre les arbres. Les plus courageux pourront peut-être y découvrir quelque chose d'intéressant… ou d'inhabituel.",
+    "image": "images/actu/vieuxchateau.jpeg",
+    "lieu": "vieuxchateau"
   },
   {
     "titre": "La foret de Vestigion",
     "texte": "Une forte augmentation des pokémons de la foret de vestigions",
-    "image": "",
+    "image": "images/actu/foret-vestigion.jpg",
     "lieu": "foret"
   }
 ]

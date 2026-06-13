@@ -15,25 +15,32 @@ ACTU_HOUR_MIN     = 20             # heure min de publication (20h)
 ACTU_HOUR_MAX     = 24              # heure max de publication (00h)
 EXPLORE_DURATION_MIN = 15 * 60     # 15 minutes en secondes
 EXPLORE_DURATION_MAX = 20 * 60     # 20 minutes en secondes
-POKEMON_RATE = 1    #POKEMON_RATE = 0.30
-ITEM_RATE    = 0    #ITEM_RATE    = 0.30
-NOTHING_RATE=0 #NOTHING_RATE = 0.40 
+POKEMON_RATE = 0.3  #POKEMON_RATE = 0.30
+ITEM_RATE    = 0.3    #ITEM_RATE    = 0.30
+NOTHING_RATE= 0.4 #NOTHING_RATE = 0.40 
 SHINY_RATE   = 1 / 64
 
 JSON_DIR  = os.path.join(os.path.dirname(__file__), "json")
 ACTU_DIR  = os.path.join(JSON_DIR, "actu")
+IMAGES_ACTU_DIR = os.path.join(os.path.dirname(__file__), "images", "actu")
 
 # Dictionnaire des lieux : command_name -> config
 LIEUX = {
     "manoir": {
-        "name":    "Manoir Hanté",
+        "name":    "Vieux Chateau de Vestigion",
         "emoji":   "🏚️",
-        "command": "manoir",
-        "region":  "Kanto",
+        "command": "vieuxchateau",
+        "region":  "Sinnoh",
         "pokemon_normal": os.path.join(ACTU_DIR, "manoir", "pokemon_manoir_normal.json"),
         "pokemon_shiny":  os.path.join(ACTU_DIR, "manoir", "pokemon_manoir_shinny.json"),
         "objets":         os.path.join(ACTU_DIR, "manoir", "objet_manoir.json"),
-        "description":    "Un vieux manoir délabré aux abords de Lavanville… Des bruits étranges s'en échappent.",
+        "description":    "Des bruits étranges s'en échappent du vieux chateau de Vestigion",
+        "messages_ambiance": [
+            "🌫️ *Un silence pesant règne dans le vieux chateau…* (encore {time_left})",
+            "🕯️ *Un courant d'air froid traverse le vieux chateau…* (encore {time_left})",
+            "🦇 *Des chauves-souris s'envolent dans l'obscurité…* (encore {time_left})",
+            "👣 *Tu entends des pas… mais personne n'est là.* (encore {time_left})",
+        ],
     },
     "foret": {
         "name":    "Forest Vestigion",
@@ -44,6 +51,13 @@ LIEUX = {
         "pokemon_shiny":  os.path.join(ACTU_DIR, "foret_vestigion", "pokemon_foret_vestigion_shinny.json"),
         "objets":         os.path.join(ACTU_DIR, "foret_vestigion", "objet_foret_vestigion.json"),
         "description":    "La forêt de Vestegion",
+        "messages_ambiance": [
+            "🍃 *Les feuilles bruissent autour de toi sans qu'aucun vent ne souffle…* (encore {time_left})",
+            "🦉 *Un hibou t'observe depuis les hauteurs, immobile.* (encore {time_left})",
+            "🌫️ *Un épais brouillard se lève entre les arbres…* (encore {time_left})",
+            "🐾 *Des empreintes fraîches dans la boue… mais aucune créature en vue.* (encore {time_left})",
+            "🌑 *La canopée bloque toute lumière. Il fait soudainement très sombre.* (encore {time_left})",
+        ],
     },
 }
 
@@ -190,13 +204,15 @@ def item_embed(item: dict, lieu_name: str) -> tuple[discord.Embed, discord.File 
         color=discord.Color.green(),
     )
     file = None
-    if item.get("image") and os.path.exists(item["image"]):
-        filename = os.path.basename(item["image"])
-        file = discord.File(item["image"], filename=filename)
+    image_path = item.get("image", "")
+    if image_path and not os.path.isabs(image_path):
+        image_path = os.path.join(os.path.dirname(__file__), image_path)
+
+    if image_path and os.path.exists(image_path):
+        filename = os.path.basename(image_path)
+        file = discord.File(image_path, filename=filename)
         embed.set_image(url=f"attachment://{filename}")
-    embed.add_field(name="Rareté", value=item.get("rarity", "commun").capitalize(), inline=True)
-    embed.set_footer(text=f"Lieu : {lieu_name}")
-    return embed, file
+    
 
 
 # -----------------------
@@ -249,13 +265,11 @@ async def run_exploration(dm: discord.DMChannel, user_id: str, lieu_key: str, du
 
             if not objets_dispo:
                 time_left = f"{remaining // 60}min {remaining % 60}s"
-                msgs = [
-                    f"🕯️ *Un courant d'air froid traverse le {lieu_name}…* (encore {time_left})",
-                    f"🦇 *Des chauves-souris s'envolent dans l'obscurité…* (encore {time_left})",
-                    f"🌫️ *Un silence pesant règne dans le {lieu_name}…* (encore {time_left})",
-                    f"👣 *Tu entends des pas… mais personne n'est là.* (encore {time_left})",
-                ]
-                await dm.send(random.choice(msgs))
+                # Dans le bloc "Objet" quand objets_dispo est vide, et dans le bloc "Rien"
+                msgs = cfg.get("messages_ambiance", [
+                    f"🌫️ *Un silence pesant règne dans le {lieu_name}…* (encore {{time_left}})",
+                ])
+                await dm.send(random.choice(msgs).format(time_left=time_left))
             else:
                 item = weighted_choice(objets_dispo)
                 if item:
