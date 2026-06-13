@@ -350,13 +350,6 @@ def setup_actu(bot: commands.Bot, cur):
             description=actu.get("texte", ""),
             color=discord.Color.dark_orange(),
         )
-        if lieu_cfg:
-            embed.add_field(
-                name="📍 Lieu évoqué",
-                value=f"**{lieu_cfg['name']}** — région **{lieu_cfg.get('region', '?')}**",
-                inline=False,
-            )
-            embed.set_footer(text=f"💡 Utilise !{lieu_cfg['command']} pour explorer ce lieu !")
 
         # Gestion de l'image locale
         file = None
