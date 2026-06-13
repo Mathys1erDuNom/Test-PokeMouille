@@ -257,13 +257,15 @@ def donner_recompense(user_id: int, personnage: dict):
         return None
     add_item(
         user_id=user_id,
-        name=item["name"],
+        name=item["item_name"],      # ← "item_name" pas "name"
         quantity=item.get("quantity", 1),
         rarity=item.get("rarity", "commun"),
         description=item.get("description", ""),
         image=item.get("image", ""),
+        extra=item.get("extra"),
+        price=item.get("price"),
     )
-    return item["name"]
+    return item["item_name"]         # ← idem
 
 # ─── Fonction principale ───────────────────────────────────────────────────────
 async def run_interaction_personnage(channel: discord.TextChannel, riche_or_not: bool):
@@ -315,15 +317,9 @@ async def run_interaction_personnage(channel: discord.TextChannel, riche_or_not:
                 new_balance = get_balance(interaction.user.id)
                 await channel.send(f"**{personnage['name']}** : {texte_fin}")
                 await channel.send(
-                    f"🤝 {interaction.user.mention} a donné **{somme:,}** Croco dollars à {personnage['name']} !\n"
+                    f"💰 {interaction.user.mention} a pris **{somme:,}** Croco dollars à {personnage['name']} !\n"
                     f"🐊 Nouveau solde : **{new_balance:,}** Croco dollars."
                 )
-
-                # Récompense
-                item_nom = donner_recompense(interaction.user.id, personnage)
-                if item_nom:
-                    await channel.send(f"🎁 En remerciement, **{personnage['name']}** t'offre **{item_nom}** !")
-
                 interaction_done.set()
 
         class RicheView(View):
@@ -397,6 +393,12 @@ async def run_interaction_personnage(channel: discord.TextChannel, riche_or_not:
                     f"🫐 {interaction.user.mention} a donné **{chosen_item}** à {personnage['name']} !\n"
                     f"📦 Quantité restante : **{new_qty}**."
                 )
+
+                # ← MANQUANT
+                item_nom = donner_recompense(interaction.user.id, personnage)
+                if item_nom:
+                    await channel.send(f"🎁 En remerciement, **{personnage['name']}** t'offre **{item_nom}** !")
+
                 interaction_done.set()
 
             async def on_timeout(self):
@@ -447,6 +449,12 @@ async def run_interaction_personnage(channel: discord.TextChannel, riche_or_not:
                     f"🤝 {interaction.user.mention} a donné **{somme:,}** Croco dollars à {personnage['name']} !\n"
                     f"🐊 Nouveau solde : **{new_balance:,}** Croco dollars."
                 )
+
+                # ← MANQUANT
+                item_nom = donner_recompense(interaction.user.id, personnage)
+                if item_nom:
+                    await channel.send(f"🎁 En remerciement, **{personnage['name']}** t'offre **{item_nom}** !")
+
                 interaction_done.set()
 
             async def item_callback(self, interaction: discord.Interaction):
