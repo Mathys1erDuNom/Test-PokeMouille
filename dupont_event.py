@@ -162,8 +162,7 @@ tableau_pauvre = [
         ],
         "somme_don": 50,
         "texte_fin": [
-            "",
-            ""
+             "Merci beaucoup de ton aide, tiens prends ça tu pourras l'utiliser dans le casino, on ne peut plus y aller, il n'est plus à nous maintenant...",
         ],
         "adresse_image": "images/famille/pauvre/marie.png"
     },
@@ -189,8 +188,7 @@ tableau_pauvre = [
         ],
         "somme_don": 100,
         "texte_fin": [
-             "",
-            ""
+             "Merci beaucoup de ton aide, tiens prends ça tu pourras l'utiliser dans le casino, on ne peut plus y aller, il n'est plus à nous maintenant...",
         ],
         "adresse_image": "images/famille/pauvre/sophie.png"
     },
@@ -213,8 +211,7 @@ tableau_pauvre = [
         ],
         "somme_don": 60,
         "texte_fin": [
-            "",
-            ""
+             "Merci beaucoup de ton aide, tiens prends ça tu pourras l'utiliser dans le casino, on ne peut plus y aller, il n'est plus à nous maintenant...",
         ],
         "adresse_image": "images/famille/pauvre/anne.png"
     },
@@ -239,8 +236,8 @@ tableau_pauvre = [
         ],
         "somme_don": 30,
         "texte_fin": [
-             "",
-            ""
+            "Merci beaucoup de ton aide, tiens prends ça tu pourras l'utiliser dans le casino, on ne peut plus y aller, il n'est plus à nous maintenant...",
+            
            
         ],
         "adresse_image": "images/famille/pauvre/serge.png"
