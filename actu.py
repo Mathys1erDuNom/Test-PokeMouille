@@ -24,6 +24,12 @@ JSON_DIR  = os.path.join(os.path.dirname(__file__), "json")
 ACTU_DIR  = os.path.join(JSON_DIR, "actu")
 IMAGES_ACTU_DIR = os.path.join(os.path.dirname(__file__), "images", "actu")
 
+def is_croco():
+    def predicate(ctx):
+        return ctx.author.id == TARGET_USER_ID_CROCO
+    return commands.check(predicate)
+
+
 # Dictionnaire des lieux : command_name -> config
 LIEUX = {
     "vieuxchateau": {
@@ -375,7 +381,7 @@ def setup_actu(bot: commands.Bot, cur):
     # -----------------------------------------------
 
     @bot.command(name="actu_on")
-    @commands.has_permissions(administrator=True)
+    @is_croco()
     async def actu_on(ctx):
         """Active les publications d'actu automatiques."""
         global actu_enabled
@@ -387,7 +393,7 @@ def setup_actu(bot: commands.Bot, cur):
         await ctx.send("✅ Les actus automatiques sont maintenant **activées**.", delete_after=6)
 
     @bot.command(name="actu_off")
-    @commands.has_permissions(administrator=True)
+    @is_croco()
     async def actu_off(ctx):
         """Désactive les publications d'actu automatiques."""
         global actu_enabled
@@ -398,7 +404,7 @@ def setup_actu(bot: commands.Bot, cur):
         await ctx.send("⛔ Les actus automatiques sont maintenant **désactivées**.", delete_after=6)
 
     @bot.command(name="actu_status")
-    @commands.has_permissions(administrator=True)
+    @is_croco()
     async def actu_status(ctx):
         """Affiche l'état actuel du système d'actu."""
         etat   = "✅ Activées" if actu_enabled else "⛔ Désactivées"
@@ -412,7 +418,7 @@ def setup_actu(bot: commands.Bot, cur):
         await ctx.send(embed=embed)
 
     @bot.command(name="actu_test")
-    @commands.has_permissions(administrator=True)
+    @is_croco()
     async def actu_test(ctx):
         """Force l'envoi immédiat d'une actu dans CE salon (test admin)."""
         await send_daily_actu(bot, channel_override=ctx.channel)
@@ -441,6 +447,12 @@ def setup_actu(bot: commands.Bot, cur):
 
             #Vérif fenêtre horaire (20h–00h uniquement)
             now = datetime.now()
+
+            # 4 = vendredi, 5 = samedi, 6 = dimanche
+            if now.weekday() not in (4, 5, 6):
+                check_actu_time._published_today = False
+                actu_lieu_du_jour = None
+                return
             if not (ACTU_HOUR_MIN <= now.hour < ACTU_HOUR_MAX):
                 await ctx.send(
                      f"{ctx.author.mention} ⏰ Ce lieu n'est accessible qu'entre "
