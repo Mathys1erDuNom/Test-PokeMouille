@@ -26,14 +26,14 @@ IMAGES_ACTU_DIR = os.path.join(os.path.dirname(__file__), "images", "actu")
 
 # Dictionnaire des lieux : command_name -> config
 LIEUX = {
-    "manoir": {
+    "vieuxchateau": {
         "name":    "Vieux Chateau de Vestigion",
         "emoji":   "🏚️",
         "command": "vieuxchateau",
         "region":  "Sinnoh",
-        "pokemon_normal": os.path.join(ACTU_DIR, "manoir", "pokemon_manoir_normal.json"),
-        "pokemon_shiny":  os.path.join(ACTU_DIR, "manoir", "pokemon_manoir_shinny.json"),
-        "objets":         os.path.join(ACTU_DIR, "manoir", "objet_manoir.json"),
+        "pokemon_normal": os.path.join(ACTU_DIR, "vieuxchateau", "pokemon_vieuxchateau_normal.json"),
+        "pokemon_shiny":  os.path.join(ACTU_DIR, "vieuxchateau", "pokemon_vieuxchateau_shinny.json"),
+        "objets":         os.path.join(ACTU_DIR, "vieuxchateau", "objet_vieuxchateau.json"),
         "description":    "Des bruits étranges s'en échappent du vieux chateau de Vestigion",
         "messages_ambiance": [
             "🌫️ *Un silence pesant règne dans le vieux chateau…* (encore {time_left})",
@@ -343,15 +343,13 @@ def setup_actu(bot: commands.Bot, cur):
         lieu_key = actu.get("lieu")
         lieu_cfg = LIEUX.get(lieu_key, {})
 
-        actu_lieu_du_jour = lieu_key  # débloque le bon lieu
+        actu_lieu_du_jour = lieu_key
 
         embed = discord.Embed(
             title=f"📰 {actu.get('titre', 'Nouvelle du jour')}",
             description=actu.get("texte", ""),
             color=discord.Color.dark_orange(),
         )
-        if actu.get("image"):
-            embed.set_image(url=actu["image"])
         if lieu_cfg:
             embed.add_field(
                 name="📍 Lieu évoqué",
@@ -360,9 +358,22 @@ def setup_actu(bot: commands.Bot, cur):
             )
             embed.set_footer(text=f"💡 Utilise !{lieu_cfg['command']} pour explorer ce lieu !")
 
+        # Gestion de l'image locale
+        file = None
+        image_path = actu.get("image", "")
+        if image_path:
+            if not os.path.isabs(image_path):
+                image_path = os.path.join(os.path.dirname(__file__), image_path)
+            if os.path.exists(image_path):
+                filename = os.path.basename(image_path)
+                file = discord.File(image_path, filename=filename)
+                embed.set_image(url=f"attachment://{filename}")
+            else:
+                print(f"[ACTU] Image introuvable : {image_path}")
+
         channel = channel_override or bot.get_channel(ACTU_CHANNEL_ID)
         if channel:
-            await channel.send(embed=embed)
+            await channel.send(embed=embed, file=file if file else discord.utils.MISSING)
         else:
             print(f"[ACTU] Salon introuvable (ID={ACTU_CHANNEL_ID})")
 
