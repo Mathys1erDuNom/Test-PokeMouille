@@ -191,25 +191,25 @@ def setup_fishing(bot: commands.Bot, cur):
         
     
         # Vérif connexion au vocal
-       # Vérif connexion au vocal via le guild
         VOICE_CHANNEL_ID = int(os.getenv("VOICE_CHANNEL_ID_COPAING"))
-        GUILD_ID = int(os.getenv("GUILD_ID"))
 
-        guild = bot.get_guild(GUILD_ID)
-        if guild is None:
-            await ctx.send("❌ Impossible de trouver le serveur.", delete_after=5)
+        # Utiliser le serveur où la commande a été tapée
+        if ctx.guild is None:
+            await ctx.send("❌ Cette commande doit être utilisée dans un serveur.", delete_after=5)
             return
+        
+        guild = ctx.guild
+        member = ctx.author  # L'utilisateur qui tape la commande
+        
+        print(f"[DEBUG PECHE] VOICE_CHANNEL_ID={VOICE_CHANNEL_ID}")
+        print(f"[DEBUG PECHE] ✅ Guild trouvée : {guild.name}")
+        print(f"[DEBUG PECHE] ✅ Membre trouvé : {member.display_name}")
 
-        member = guild.get_member(user_id)
-        if member is None:
-            await ctx.send("❌ Impossible de te trouver dans le serveur.", delete_after=5)
-            return
-
-        print(f"[DEBUG] guild={guild}")
-        print(f"[DEBUG] member={member}")
-        print(f"[DEBUG] voice={member.voice}")
-        print(f"[DEBUG] channel_id={member.voice.channel.id if member.voice and member.voice.channel else 'None'}")
-        print(f"[DEBUG] VOICE_CHANNEL_ID={VOICE_CHANNEL_ID}")
+        print(f"[DEBUG PECHE] Vérif vocal pour {member.display_name}")
+        print(f"[DEBUG PECHE] voice_state={member.voice}")
+        print(f"[DEBUG PECHE] channel={member.voice.channel if member.voice else 'None'}")
+        print(f"[DEBUG PECHE] channel_id={member.voice.channel.id if member.voice and member.voice.channel else 'None'}")
+        print(f"[DEBUG PECHE] VOICE_CHANNEL_ID cible={VOICE_CHANNEL_ID}")
 
         voice_state = member.voice
         in_correct_channel = (
