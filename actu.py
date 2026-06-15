@@ -444,12 +444,12 @@ def setup_actu(bot: commands.Bot, cur):
 
             user_id     = ctx.author.id
             user_id_str = str(user_id)
-            
-            '''''
+
+     
                                     
             #Vérif fenêtre horaire (20h–00h uniquement)
             now = datetime.now()
-
+            '''
             # 4 = vendredi, 5 = samedi, 6 = dimanche
             if now.weekday() not in (4, 5, 6):
                 check_actu_time._published_today = False
@@ -465,12 +465,12 @@ def setup_actu(bot: commands.Bot, cur):
 
             # Vérif lieu de l'actu du jour
             if _lk != actu_lieu_du_jour:
-                await ctx.send(
+                await ctx.send( 
                     f"{ctx.author.mention} ❌ Ce lieu n'est pas évoqué dans l'actu d'aujourd'hui.",
                     delete_after=6,
                 )
                 return
-
+            '''
             # Vérif déjà exploré aujourd'hui
             today = now.date().isoformat()
             if explored_today.get(user_id) == today:
@@ -480,7 +480,7 @@ def setup_actu(bot: commands.Bot, cur):
                 )
                 return
             
-            '''
+       
 
             # Déjà en exploration active ?
             if user_id in exploring:
