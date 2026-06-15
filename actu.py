@@ -290,23 +290,21 @@ async def run_exploration(dm: discord.DMChannel, user_id: str, lieu_key: str, du
                         file=file if file else discord.utils.MISSING,
                     )
 
+
         # --- Rien ---
         else:
             time_left = f"{remaining // 60}min {remaining % 60}s"
-            msgs = [
-                f"🕯️ *Un courant d'air froid traverse le {lieu_name}…* (encore {time_left})",
-                f"🦇 *Des chauves-souris s'envolent dans l'obscurité…* (encore {time_left})",
-                f"🌫️ *Un silence pesant règne dans le {lieu_name}…* (encore {time_left})",
-                f"👣 *Tu entends des pas… mais personne n'est là.* (encore {time_left})",
-            ]
-            await dm.send(random.choice(msgs))
+            msgs = cfg.get("messages_ambiance", [
+                f"🌫️ *Un silence pesant règne dans le {lieu_name}…* (encore {{time_left}})",
+            ])
+            await dm.send(random.choice(msgs).format(time_left=time_left))
 
-    # Fin de l'exploration
-    exploring.pop(int(user_id), None)
-    await dm.send(
-        f"🚪 **Tu quittes le {lieu_name}.**\n"
-        f"L'exploration est terminée. Reviens quand une nouvelle actu t'y invite !"
-    )
+            # Fin de l'exploration
+            exploring.pop(int(user_id), None)
+            await dm.send(
+                f"🚪 **Tu quittes le {lieu_name}.**\n"
+                f"L'exploration est terminée. Reviens quand une nouvelle actu t'y invite !"
+            )
 
 
 # -----------------------
@@ -446,7 +444,9 @@ def setup_actu(bot: commands.Bot, cur):
 
             user_id     = ctx.author.id
             user_id_str = str(user_id)
-
+            
+            '''''
+                                    
             #Vérif fenêtre horaire (20h–00h uniquement)
             now = datetime.now()
 
@@ -479,6 +479,8 @@ def setup_actu(bot: commands.Bot, cur):
                     delete_after=6,
                 )
                 return
+            
+            '''
 
             # Déjà en exploration active ?
             if user_id in exploring:
