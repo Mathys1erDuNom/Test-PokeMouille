@@ -290,21 +290,23 @@ async def run_exploration(dm: discord.DMChannel, user_id: str, lieu_key: str, du
                         file=file if file else discord.utils.MISSING,
                     )
 
-
         # --- Rien ---
         else:
             time_left = f"{remaining // 60}min {remaining % 60}s"
-            msgs = cfg.get("messages_ambiance", [
-                f"🌫️ *Un silence pesant règne dans le {lieu_name}…* (encore {{time_left}})",
-            ])
-            await dm.send(random.choice(msgs).format(time_left=time_left))
+            msgs = [
+                f"🕯️ *Un courant d'air froid traverse le {lieu_name}…* (encore {time_left})",
+                f"🦇 *Des chauves-souris s'envolent dans l'obscurité…* (encore {time_left})",
+                f"🌫️ *Un silence pesant règne dans le {lieu_name}…* (encore {time_left})",
+                f"👣 *Tu entends des pas… mais personne n'est là.* (encore {time_left})",
+            ]
+            await dm.send(random.choice(msgs))
 
-            # Fin de l'exploration
-            exploring.pop(int(user_id), None)
-            await dm.send(
-                f"🚪 **Tu quittes le {lieu_name}.**\n"
-                f"L'exploration est terminée. Reviens quand une nouvelle actu t'y invite !"
-            )
+    # Fin de l'exploration
+    exploring.pop(int(user_id), None)
+    await dm.send(
+        f"🚪 **Tu quittes le {lieu_name}.**\n"
+        f"L'exploration est terminée. Reviens quand une nouvelle actu t'y invite !"
+    )
 
 
 # -----------------------
@@ -318,16 +320,25 @@ def setup_actu(bot: commands.Bot, cur):
     @tasks.loop(minutes=1)
     async def check_actu_time():
         global actu_lieu_du_jour
+
         if not actu_enabled:
             return
+
         now = datetime.now()
-        if ACTU_HOUR_MIN <= now.hour < ACTU_HOUR_MAX:
+
+        # Vendredi (4), Samedi (5), Dimanche (6)
+        is_allowed_day = now.weekday() in (4, 5, 6)
+        is_allowed_hour = ACTU_HOUR_MIN <= now.hour < ACTU_HOUR_MAX
+
+        if is_allowed_day and is_allowed_hour:
             if not check_actu_time._published_today:
                 check_actu_time._published_today = True
                 await send_daily_actu(bot)
+
         else:
+            # reset quand on sort de la fenêtre ou du bon jour
             check_actu_time._published_today = False
-            actu_lieu_du_jour = None  # reset à minuit, plus aucun lieu accessible
+            actu_lieu_du_jour = None
 
     check_actu_time._published_today = False
 
@@ -445,11 +456,9 @@ def setup_actu(bot: commands.Bot, cur):
             user_id     = ctx.author.id
             user_id_str = str(user_id)
 
-     
-                                    
             #Vérif fenêtre horaire (20h–00h uniquement)
             now = datetime.now()
-            '''
+
             # 4 = vendredi, 5 = samedi, 6 = dimanche
             if now.weekday() not in (4, 5, 6):
                 check_actu_time._published_today = False
@@ -465,12 +474,12 @@ def setup_actu(bot: commands.Bot, cur):
 
             # Vérif lieu de l'actu du jour
             if _lk != actu_lieu_du_jour:
-                await ctx.send( 
+                await ctx.send(
                     f"{ctx.author.mention} ❌ Ce lieu n'est pas évoqué dans l'actu d'aujourd'hui.",
                     delete_after=6,
                 )
                 return
-            '''
+
             # Vérif déjà exploré aujourd'hui
             today = now.date().isoformat()
             if explored_today.get(user_id) == today:
@@ -479,8 +488,6 @@ def setup_actu(bot: commands.Bot, cur):
                     delete_after=6,
                 )
                 return
-            
-       
 
             # Déjà en exploration active ?
             if user_id in exploring:
