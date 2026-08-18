@@ -72,6 +72,8 @@ BADGES_ADVERSAIRES = {
     "Zhu (Glace)" : 40,
     "Iris / Watson (Dragon)" : 41,
 
+###### QG TEAM ROCKET    
+
 }
 
 

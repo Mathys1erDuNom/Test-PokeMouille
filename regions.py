@@ -17,7 +17,8 @@ AVAILABLE_REGIONS = [
     "Johto",
     "Hoenn",
     "Sinnoh",
-    "Unys"
+    "Unys",
+    "QG Team Rocket"
 ]
 
 # Image associée à chaque région
@@ -27,6 +28,7 @@ REGION_IMAGES = {
     "Hoenn": "images/regions/hoenn.png",
     "Sinnoh": "images/regions/sinnoh.png",
     "Unys":  "images/regions/unys.png",
+    "QG Team Rocket": "images/regions/qg_team_rocket.png"
 }
 
 # -----------------------

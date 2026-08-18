@@ -291,6 +291,26 @@ if os.path.exists(gen5_shiny_path):
         unys_shiny_data = json.load(f)
 
 
+#####################################
+# --- 🔥 QG Team Rocket 
+#####################################
+qg_team_rocket_pokemon_data = []
+qg_team_rocket_shiny_data = []
+
+qg_team_rocket_normal_path = os.path.join(json_dir, "pokemon_qg_team_rocket_normal.json")
+if os.path.exists(qg_team_rocket_normal_path):
+    with open(qg_team_rocket_normal_path, "r", encoding="utf-8") as f:
+        qg_team_rocket_pokemon_data = json.load(f)
+
+qg_team_rocket_shiny_path = os.path.join(json_dir, "pokemon_qg_team_rocket_shiny.json")
+if os.path.exists(qg_team_rocket_shiny_path):
+    with open(qg_team_rocket_shiny_path, "r", encoding="utf-8") as f:
+        qg_team_rocket_shiny_data = json.load(f)
+
+if os.path.exists(gen5_shiny_path):
+    with open(gen5_shiny_path, "r", encoding="utf-8") as f:
+        unys_shiny_data = json.load(f)
+
 
 #####################################
 # --- 🔥 POOLS GLOBAUX (toutes régions) ---
@@ -320,6 +340,7 @@ REGION_DATA_MAP = {
     "Hoenn": (hoenn_pokemon_data, hoenn_shiny_data),
     "Sinnoh": (sinnoh_pokemon_data, sinnoh_shiny_data),
     "Unys": (unys_pokemon_data, unys_shiny_data),
+    "QG Team Rocket" :(qg_team_rocket_pokemon_data, qg_team_rocket_shiny_data),
     
 
 
