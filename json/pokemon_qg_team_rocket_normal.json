@@ -1,0 +1,29 @@
+[
+    {
+        "name": "Bulbizarre_shiny",
+        "type": [
+            "plante",
+            "poison"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+        "attacks": [
+            "Fouet Lianes",
+            "Charge",
+            "Bomb-Beurk"
+        ],
+        "stats": {
+            "hp": 45,
+            "attack": 49,
+            "special_attack": 65,
+            "speed": 45,
+            "defense": 49,
+            "special_defense": 65
+        },
+        "current_xp": 0,
+        "xp_evo": 318,
+        "evo": {
+            "name": "Herbizarre_shiny",
+            "file": "pokemon_gen1_shiny.json"
+        }
+    }
+]
