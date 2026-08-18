@@ -1278,62 +1278,7 @@ EVENT_INTERVAL = 25 * 60  # 1 minute
 next_event_time = None
 next_event_name = None
 TIMEZONE = pytz.timezone("Europe/Paris")
-'''
-async def auto_event_loop():
-    await bot.wait_until_ready()
-    global next_event_time, next_event_name
 
-    text_channel = bot.get_channel(TEXT_CHANNEL_ID)
-    voice_channel = bot.get_channel(VOICE_CHANNEL_ID)
-
-    if text_channel is None:
-        print(f"[ERREUR] Salon texte introuvable (id={TEXT_CHANNEL_ID}).")
-        return
-    if voice_channel is None:
-        print(f"[ERREUR] Salon vocal introuvable (id={VOICE_CHANNEL_ID}).")
-        return
-
-    while not bot.is_closed():
-        EVENT_INTERVAL = random.randint(20, 25) * 60  # ← tirage aléatoire à chaque tour 20 à 25 min
-
-        if len(voice_channel.members) == 0:
-            next_event_time = None
-            next_event_name = None
-            print(f"[AUTO] Personne dans le vocal, vérification dans 1 min...")
-            await asyncio.sleep(60)
-            continue
-
-        chosen = random.choice(["quiz", "devine", "spawn", "dupont"])
-        next_event_name = "🧠 Quiz Pokémon" if chosen == "quiz" else "🔍 Devine le Pokémon"
-        next_event_time = datetime.now(TIMEZONE) + timedelta(seconds=EVENT_INTERVAL)
-
-        print(
-            f"[AUTO] {len(voice_channel.members)} joueur(s) dans le vocal — Prochain événement : {next_event_name} "
-            f"— dans {EVENT_INTERVAL // 60} min "
-            f"(à {next_event_time.strftime('%H:%M:%S')})"
-        )
-
-        await asyncio.sleep(EVENT_INTERVAL)
-
-        if len(voice_channel.members) == 0:
-            next_event_time = None
-            next_event_name = None
-            print(f"[AUTO] Plus personne dans le vocal, événement annulé.")
-            await asyncio.sleep(60)
-            continue
-
-        print(f"[AUTO] Lancement de : {next_event_name} ({len(voice_channel.members)} joueur(s) présent(s))")
-
-        if chosen == "quiz":
-            await bot.run_quiz(text_channel)
-        elif chosen == "devine":
-            await bot.run_devine(text_channel)
-        elif chosen == "spawn":
-            await spawn_pokemon(text_channel)
-        elif chosen == "dupont":
-            await run_interaction_personnage(text_channel, False)
-
- '''
 
 
 from chenil import tick_chenil_xp
@@ -1378,9 +1323,9 @@ async def auto_event_loop():
         # ── Planification de l'événement ─────────────────────────────────
         # Ajoute marche_noir aux choix seulement s'il est disponible
         if is_marche_noir_available():
-            available_events = ["marche_noir", "spawn", "dupont", "devine", "spawn"]
+            available_events = ["marche_noir", "spawn", "devine"] # EVENT dupont enlevé
         else:
-            available_events = ["spawn", "dupont", "devine", "spawn"]
+            available_events = ["spawn", "devine", "spawn"] # EVENT dupont enlevé
         chosen = random.choice(available_events)
 
         if chosen == "quiz":
