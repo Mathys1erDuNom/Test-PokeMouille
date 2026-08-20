@@ -1150,7 +1150,9 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
+from event_rocket import setup_rocket 
 
+setup_rocket(bot)
 
 setup_money(bot)
 

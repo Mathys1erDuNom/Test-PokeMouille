@@ -2,6 +2,7 @@ import os
 import json
 import discord
 import psycopg2
+from psycopg2 import sql
 from psycopg2.extras import Json
 from dotenv import load_dotenv
 from discord.ext import commands
@@ -43,6 +44,77 @@ conn.commit()
 # ──────────────────────────────────────────────
 # FONCTIONS BASE DE DONNÉES
 # ──────────────────────────────────────────────
+
+def copy_new_captures_table():
+    """
+    Copie la table new_captures dans la table "copie_new_captures".
+
+    Exemple :
+        copy_new_captures_table()
+    """
+    table_name = "copie_new_captures"
+
+    cur.execute(
+        sql.SQL("CREATE TABLE IF NOT EXISTS {} AS TABLE new_captures").format(
+            sql.Identifier(table_name)
+        )
+    )
+    conn.commit()
+
+    print(f"[INFO] Table {table_name} créée à partir de new_captures")
+    return table_name
+
+
+def restore_from_copie_new_captures():
+    """
+    Ajoute dans new_captures toutes les lignes de copie_new_captures.
+    Si un Pokémon existe déjà pour l'utilisateur (même nom), augmente ses IV de 4
+    au lieu de créer un doublon (même logique que save_new_capture).
+    """
+    cur.execute("""
+        SELECT user_id, name, ivs, stats, image, type, attacks, current_xp, xp_evo, evo
+        FROM copie_new_captures
+    """)
+    rows = cur.fetchall()
+
+    inserted = 0
+    updated  = 0
+
+    for row in rows:
+        user_id, name, ivs, stats, image, ptype, attacks, current_xp, xp_evo, evo = row
+
+        cur.execute("""
+            SELECT COUNT(*) FROM new_captures
+            WHERE user_id = %s AND name = %s
+        """, (user_id, name))
+        exists = cur.fetchone()[0] > 0
+
+        if exists:
+            increase_pokemon_iv(user_id, name, 4)
+            updated += 1
+        else:
+            cur.execute("""
+                INSERT INTO new_captures
+                    (user_id, name, ivs, stats, image, type, attacks, current_xp, xp_evo, evo)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+                user_id, name, Json(ivs), Json(stats), image,
+                Json(ptype), Json(attacks), current_xp, xp_evo, Json(evo)
+            ))
+            conn.commit()
+            inserted += 1
+
+    print(f"[INFO] Restauration terminée : {inserted} ajout(s), {updated} IV augmenté(s)")
+    return {"inserted": inserted, "updated": updated}
+
+def clear_new_captures():
+    """
+    Vide complètement la table new_captures (supprime toutes les lignes).
+    """
+    cur.execute("DELETE FROM new_captures")
+    conn.commit()
+
+    print("[INFO] Table new_captures vidée")
 
 def save_new_capture(user_id, pokemon_name, ivs, final_stats, pokemon):
     """
