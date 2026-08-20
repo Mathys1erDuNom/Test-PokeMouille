@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from utils import is_croco
-from new_db import copy_new_captures_table, clear_new_captures
+from new_db import copy_new_captures_table, clear_new_captures, restore_from_copie_new_captures
 
 def setup_rocket(bot):
 
@@ -25,3 +25,18 @@ def setup_rocket(bot):
             content="✅ La table **new_captures** a été sauvegardée dans `copie_new_captures` puis vidée !",
             file=file
         )
+    is_croco()
+    @bot.command(name="restorerocket")
+    @commands.has_permissions(administrator=True)
+    async def restorecaptures(ctx):
+        """
+        !restorerocket
+        Ajoute dans new_captures toutes les entrées de copie_new_captures.
+        """
+        result = restore_from_copie_new_captures()
+
+        await ctx.send(
+            f"✅ Restauration terminée !\n"
+            f"➕ {result['inserted']} Pokémon ajouté(s)\n"
+            f"📈 {result['updated']} Pokémon déjà existants (IV augmentés de +4)"
+        )    
