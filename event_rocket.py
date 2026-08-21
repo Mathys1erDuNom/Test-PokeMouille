@@ -22,26 +22,27 @@ def setup_rocket(bot):
         # 3. Envoi de l'image + texte dans le channel
         file = discord.File("images/giovanni.jpg", filename="giovanni.jpg")
 
+        # Image en premier
+        await ctx.send(file=file)
+
+        # Texte ensuite
         await ctx.send(
-            
-            file=file,
-            content=(
-                "Dresseurs, écoutez-moi attentivement.\n\n"
-                "Vos Pokémon ont disparu.\n\n"
-                "Inutile de les chercher. C’est moi qui les ai pris.\n\n"
-                "La Team Rocket s’est emparée de vos précieux compagnons, "
-                "et ils sont désormais sous notre contrôle.\n\n"
-                "Vous voulez les récupérer ? Alors venez les chercher.\n\n"
-                "Mes hommes sont dans la région Rocket.\n\n" 
-                "Affrontez-les, et prouvez que vous êtes capables de récupérer ce qui vous appartient.\n\n"
-                "Mais ne vous méprenez pas… chaque membre de la Team Rocket "
-                "que vous vaincrez vous rapprochera de moi.\n\n"
-                "Et lorsque vous serez enfin face à moi… nous verrons si vous êtes "
-                "réellement capables de récupérer vos Pokémon.\n\n"
-                "À bientôt, dresseurs.\n\n"
-                "— Giovanni"
-            )
+            "Dresseurs, écoutez-moi attentivement.\n\n"
+            "Vos Pokémon ont disparu.\n\n"
+            "Inutile de les chercher. C’est moi qui les ai pris.\n\n"
+            "La Team Rocket s’est emparée de vos précieux compagnons, "
+            "et ils sont désormais sous notre contrôle.\n\n"
+            "Vous voulez les récupérer ? Alors venez les chercher.\n\n"
+            "Mes hommes sont dans la région Rocket.\n\n"
+            "Affrontez-les, et prouvez que vous êtes capables de récupérer ce qui vous appartient.\n\n"
+            "Mais ne vous méprenez pas… chaque membre de la Team Rocket "
+            "que vous vaincrez vous rapprochera de moi.\n\n"
+            "Et lorsque vous serez enfin face à moi… nous verrons si vous êtes "
+            "réellement capables de récupérer vos Pokémon.\n\n"
+            "À bientôt, dresseurs.\n\n"
+            "— Giovanni"
         )
+        
     is_croco()
     @bot.command(name="restorerocket")
     @commands.has_permissions(administrator=True)
