@@ -20,7 +20,7 @@ def setup_rocket(bot):
         clear_new_captures()
 
         # 3. Envoi de l'image + texte dans le channel
-        file = discord.File("images/actu/vieuxchateau.jpeg", filename="reset.png")
+        file = discord.File("images/giovanni.jpg", filename="reset.png")
         await ctx.send(
             content="✅ La table **new_captures** a été sauvegardée dans `copie_new_captures` puis vidée !",
             file=file
