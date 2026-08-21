@@ -23,6 +23,8 @@ def setup_rocket(bot):
         file = discord.File("images/giovanni.jpg", filename="giovanni.jpg")
 
         await ctx.send(
+            
+            file=file,
             content=(
                 "Dresseurs, écoutez-moi attentivement.\n\n"
                 "Vos Pokémon ont disparu.\n\n"
@@ -38,8 +40,7 @@ def setup_rocket(bot):
                 "réellement capables de récupérer vos Pokémon.\n\n"
                 "À bientôt, dresseurs.\n\n"
                 "— Giovanni"
-            ),
-            file=file
+            )
         )
     is_croco()
     @bot.command(name="restorerocket")
