@@ -48,20 +48,19 @@ conn.commit()
 def copy_new_captures_table():
     """
     Copie la table new_captures dans la table "copie_new_captures".
-
-    Exemple :
-        copy_new_captures_table()
+    On recrée toujours la table pour éviter de garder un ancien snapshot incomplet.
     """
     table_name = "copie_new_captures"
 
+    cur.execute(sql.SQL("DROP TABLE IF EXISTS {} CASCADE").format(sql.Identifier(table_name)))
     cur.execute(
-        sql.SQL("CREATE TABLE IF NOT EXISTS {} AS TABLE new_captures").format(
+        sql.SQL("CREATE TABLE {} AS TABLE new_captures").format(
             sql.Identifier(table_name)
         )
     )
     conn.commit()
 
-    print(f"[INFO] Table {table_name} créée à partir de new_captures")
+    print(f"[INFO] Table {table_name} recréée à partir de new_captures")
     return table_name
 
 
