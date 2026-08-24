@@ -296,8 +296,69 @@
         "image": "images/badges/41.png",
         "description": "Obtenu après avoir vaincu Iris / Watson, la champion de l'arène Dragon",
         "generation": 5
+    },
+
+
+
+    {
+        "id": 100,
+        "name": "",
+        "image": "images/rocket/100.png",
+        "description": "Obtenu après avoir Jessie",
+        "generation": 0
+    },
+    {
+        "id": 101,
+        "name": "",
+        "image": "images/rocket/101.png",
+        "description": "Obtenu après avoir James",
+        "generation": 0
+    },
+    {
+        "id": 102,
+        "name": "",
+        "image": "images/rocket/102.png",
+        "description": "Obtenu après avoir Butch",
+        "generation": 0
+    },
+    {
+        "id": 103,
+        "name": "",
+        "image": "images/rocket/103.png",
+        "description": "Obtenu après avoir Cassidy",
+        "generation": 0
+    },
+    {
+        "id": 104,
+        "name": "",
+        "image": "images/rocket/104.png",
+        "description": "Obtenu après avoir Proton",
+        "generation": 0
+    },
+    {
+        "id": 105,
+        "name": "",
+        "image": "images/rocket/105.png",
+        "description": "Obtenu après avoir Ariana",
+        "generation": 0
+    },
+    {
+        "id": 106,
+        "name": "",
+        "image": "images/rocket/106.png",
+        "description": "Obtenu après avoir Archer",
+        "generation": 0
+    }, {
+        "id": 107,
+        "name": "",
+        "image": "images/rocket/107.png",
+        "description": "Obtenu après avoir Giovanni",
+        "generation": 0
     }
 
+
+
+    
 
 
 

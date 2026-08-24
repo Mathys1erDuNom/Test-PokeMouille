@@ -74,6 +74,15 @@ BADGES_ADVERSAIRES = {
 
 ###### QG TEAM ROCKET    
 
+    "Jessie" : 100,
+    "James" : 101,
+    "Butch" : 102,
+    "Cassidy" : 103,
+    "Proton" : 104,
+    "Ariana" : 105,
+    "Archer" : 106,
+    "Giovanni" : 107
+
 }
 
 
