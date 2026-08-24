@@ -100,7 +100,14 @@ async def handle_victory(interaction, adversaire_name, state, repliques=None):
         badge_info = next((b for b in BADGE_DATA if b["id"] == badge_id), None)
         if badge_info:
             badge_image_path = os.path.join(script_dir, "..", badge_info["image"])
-            file = discord.File(badge_image_path, filename="badge.png")
+            # Eviter l'exception si le fichier d'image est absent
+            file = None
+            try:
+                if os.path.exists(badge_image_path):
+                    file = discord.File(badge_image_path, filename="badge.png")
+            except Exception:
+                file = None
+
             if badge_id not in user_badges:
                 give_badge(user_id, badge_id)
                 reward = 500
@@ -110,8 +117,12 @@ async def handle_victory(interaction, adversaire_name, state, repliques=None):
                     description=f"{badge_info.get('description','')}\n💰 Vous gagnez **{reward}** Croco dollars !",
                     color=0xFFD700
                 )
-                emb.set_image(url="attachment://badge.png")
-                await interaction.channel.send(file=file, embed=emb)
+                if file:
+                    emb.set_image(url="attachment://badge.png")
+                    await interaction.channel.send(file=file, embed=emb)
+                else:
+                    # Fallback : envoyer l'embed sans image et notifier en log
+                    await interaction.channel.send(embed=emb)
             else:
                 reward = 10
                 add_money(user_id, reward)
