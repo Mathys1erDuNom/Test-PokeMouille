@@ -302,56 +302,56 @@
 
     {
         "id": 100,
-        "name": "",
-        "image": "images/rocket/100.png",
+        "name": "Machine Jessie",
+        "image": "images/badges/100.png",
         "description": "Obtenu après avoir Jessie",
         "generation": 0
     },
     {
         "id": 101,
-        "name": "",
-        "image": "images/rocket/101.png",
+        "name": "Machine James",
+        "image": "images/badges/100.png",
         "description": "Obtenu après avoir James",
         "generation": 0
     },
     {
         "id": 102,
-        "name": "",
-        "image": "images/rocket/102.png",
+        "name": "Machine Butch",
+        "image": "images/badges/100.png",
         "description": "Obtenu après avoir Butch",
         "generation": 0
     },
     {
         "id": 103,
-        "name": "",
-        "image": "images/rocket/103.png",
+        "name": "Machine Cassidy",
+        "image": "images/badges/100.png",
         "description": "Obtenu après avoir Cassidy",
         "generation": 0
     },
     {
         "id": 104,
-        "name": "",
-        "image": "images/rocket/104.png",
+        "name": "Machine Proton",
+        "image": "images/badges/100.png",
         "description": "Obtenu après avoir Proton",
         "generation": 0
     },
     {
         "id": 105,
-        "name": "",
-        "image": "images/rocket/105.png",
+        "name": "Machine Ariana",
+        "image": "images/badges/100.png",
         "description": "Obtenu après avoir Ariana",
         "generation": 0
     },
     {
         "id": 106,
-        "name": "",
-        "image": "images/rocket/106.png",
+        "name": "Machine Archer",
+        "image": "images/badges/100.png",
         "description": "Obtenu après avoir Archer",
         "generation": 0
     }, {
         "id": 107,
-        "name": "",
-        "image": "images/rocket/107.png",
+        "name": "Machine Giovanni",
+        "image": "images/badges/100.png",
         "description": "Obtenu après avoir Giovanni",
         "generation": 0
     }
