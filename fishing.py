@@ -37,6 +37,7 @@ REGION_TO_GEN = {
     "Hoenn":  "gen3",
     "Sinnoh": "gen4",
     "Unys":   "gen5",
+    "Rocket" : "rocket"
 }
 
 
