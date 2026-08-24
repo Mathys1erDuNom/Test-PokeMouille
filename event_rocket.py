@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from utils import is_croco
+from badge_db import get_user_badges
 from new_db import copy_new_captures_table, clear_new_captures, restore_from_copie_new_captures
 
 def setup_rocket(bot):
@@ -45,16 +46,40 @@ def setup_rocket(bot):
         
     is_croco()
     @bot.command(name="restorerocket")
-    @commands.has_permissions(administrator=True)
     async def restorecaptures(ctx):
         """
         !restorerocket
-        Ajoute dans new_captures toutes les entrées de copie_new_captures.
+        Restaure uniquement les Pokémon du membre qui a exécuté la commande.
         """
-        result = restore_from_copie_new_captures()
+        user_id = str(ctx.author.id)
+        required_badges = {100, 101, 102, 103, 104, 105, 106, 107}
+        user_badges = set(get_user_badges(user_id))
+
+        if not required_badges.issubset(user_badges):
+            missing_badges = [
+                badge_name
+                for badge_name, badge_id in {
+                    "Jessie": 100,
+                    "James": 101,
+                    "Butch" : 102,
+                    "Cassidy": 103,
+                    "Proton" : 104,
+                    "Ariana": 105,
+                    "Archer" : 106,
+                    "Giovanni": 107,
+                }.items()
+                if badge_id not in user_badges
+            ]
+            await ctx.send(
+                f"❌ Tu ne peux pas utiliser `!restorerocket` tant que tu n’as pas les machines "
+                f"{', '.join(missing_badges)}."
+            )
+            return
+
+        result = restore_from_copie_new_captures(user_id)
 
         await ctx.send(
-            f"✅ Restauration terminée !\n"
+            f"✅ Restauration terminée pour {ctx.author.mention} !\n"
             f"➕ {result['inserted']} Pokémon ajouté(s)\n"
             f"📈 {result['updated']} Pokémon déjà existants (IV augmentés de +4)"
-        )    
+        )

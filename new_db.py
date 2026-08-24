@@ -65,32 +65,41 @@ def copy_new_captures_table():
     return table_name
 
 
-def restore_from_copie_new_captures():
+def restore_from_copie_new_captures(user_id=None):
     """
-    Ajoute dans new_captures toutes les lignes de copie_new_captures.
+    Ajoute dans new_captures les lignes de copie_new_captures.
+    Si user_id est fourni, ne restaure que les Pokémon de cet utilisateur.
     Si un Pokémon existe déjà pour l'utilisateur (même nom), augmente ses IV de 4
     au lieu de créer un doublon (même logique que save_new_capture).
     """
-    cur.execute("""
-        SELECT user_id, name, ivs, stats, image, type, attacks, current_xp, xp_evo, evo
-        FROM copie_new_captures
-    """)
+    if user_id is not None:
+        user_id = str(user_id)
+        cur.execute("""
+            SELECT user_id, name, ivs, stats, image, type, attacks, current_xp, xp_evo, evo
+            FROM copie_new_captures
+            WHERE user_id = %s
+        """, (user_id,))
+    else:
+        cur.execute("""
+            SELECT user_id, name, ivs, stats, image, type, attacks, current_xp, xp_evo, evo
+            FROM copie_new_captures
+        """)
     rows = cur.fetchall()
 
     inserted = 0
     updated  = 0
 
     for row in rows:
-        user_id, name, ivs, stats, image, ptype, attacks, current_xp, xp_evo, evo = row
+        user_id_row, name, ivs, stats, image, ptype, attacks, current_xp, xp_evo, evo = row
 
         cur.execute("""
             SELECT COUNT(*) FROM new_captures
             WHERE user_id = %s AND name = %s
-        """, (user_id, name))
+        """, (user_id_row, name))
         exists = cur.fetchone()[0] > 0
 
         if exists:
-            increase_pokemon_iv(user_id, name, 4)
+            increase_pokemon_iv(user_id_row, name, 4)
             updated += 1
         else:
             cur.execute("""
@@ -98,13 +107,16 @@ def restore_from_copie_new_captures():
                     (user_id, name, ivs, stats, image, type, attacks, current_xp, xp_evo, evo)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
-                user_id, name, Json(ivs), Json(stats), image,
+                user_id_row, name, Json(ivs), Json(stats), image,
                 Json(ptype), Json(attacks), current_xp, xp_evo, Json(evo)
             ))
             conn.commit()
             inserted += 1
 
-    print(f"[INFO] Restauration terminée : {inserted} ajout(s), {updated} IV augmenté(s)")
+    if user_id is not None:
+        print(f"[INFO] Restauration pour user_id={user_id} terminée : {inserted} ajout(s), {updated} IV augmenté(s)")
+    else:
+        print(f"[INFO] Restauration terminée : {inserted} ajout(s), {updated} IV augmenté(s)")
     return {"inserted": inserted, "updated": updated}
 
 def clear_new_captures():
