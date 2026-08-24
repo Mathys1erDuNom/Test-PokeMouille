@@ -31,6 +31,7 @@ def is_croco():
 
 
 # Dictionnaire des lieux : command_name -> config
+# Dictionnaire des lieux : command_name -> config
 LIEUX = {
     "vieuxchateau": {
         "name":    "Vieux Chateau de Vestigion",
@@ -40,23 +41,24 @@ LIEUX = {
         "pokemon_normal": os.path.join(ACTU_DIR, "vieuxchateau", "pokemon_vieuxchateau_normal.json"),
         "pokemon_shiny":  os.path.join(ACTU_DIR, "vieuxchateau", "pokemon_vieuxchateau_shinny.json"),
         "objets":         os.path.join(ACTU_DIR, "vieuxchateau", "objet_vieuxchateau.json"),
-        "description":    "Des bruits étranges s'en échappent du vieux chateau de Vestigion",
+        "description":    "Des bruits étranges s'en échappent du vieux château de Vestigion",
         "messages_ambiance": [
-            "🌫️ *Un silence pesant règne dans le vieux chateau…* (encore {time_left})",
-            "🕯️ *Un courant d'air froid traverse le vieux chateau…* (encore {time_left})",
+            "🌫️ *Un silence pesant règne dans le vieux château…* (encore {time_left})",
+            "🕯️ *Un courant d'air froid traverse le vieux château…* (encore {time_left})",
             "🦇 *Des chauves-souris s'envolent dans l'obscurité…* (encore {time_left})",
             "👣 *Tu entends des pas… mais personne n'est là.* (encore {time_left})",
         ],
     },
+
     "foret": {
-        "name":    "Forest Vestigion",
+        "name":    "Forêt de Vestigion",
         "emoji":   "🌲",
         "command": "foret",
         "region":  "Sinnoh",
         "pokemon_normal": os.path.join(ACTU_DIR, "foret_vestigion", "pokemon_foret_vestigion_normal.json"),
         "pokemon_shiny":  os.path.join(ACTU_DIR, "foret_vestigion", "pokemon_foret_vestigion_shinny.json"),
         "objets":         os.path.join(ACTU_DIR, "foret_vestigion", "objet_foret_vestigion.json"),
-        "description":    "La forêt de Vestegion",
+        "description":    "La forêt de Vestigion",
         "messages_ambiance": [
             "🍃 *Les feuilles bruissent autour de toi sans qu'aucun vent ne souffle…* (encore {time_left})",
             "🦉 *Un hibou t'observe depuis les hauteurs, immobile.* (encore {time_left})",
@@ -65,6 +67,27 @@ LIEUX = {
             "🌑 *La canopée bloque toute lumière. Il fait soudainement très sombre.* (encore {time_left})",
         ],
     },
+
+    "chateauenfoui": {
+    "name":    "Château Enfoui",
+    "emoji":   "🏜️",
+    "command": "chateauenfoui",
+    "region":  "Unys",
+    "pokemon_normal": os.path.join(ACTU_DIR, "chateauenfoui", "pokemon_chateauenfoui_normal.json"),
+    "pokemon_shiny":  os.path.join(ACTU_DIR, "chateauenfoui", "pokemon_chateauenfoui_shinny.json"),
+    "objets":         os.path.join(ACTU_DIR, "chateauenfoui", "objet_chateauenfoui.json"),
+    "description":    "Un ancien château perdu au cœur du désert, dont les ruines émergent peu à peu du sable.",
+    "messages_ambiance": [
+        "🏜️ *Le vent soulève le sable autour de toi, brouillant peu à peu tes traces…* (encore {time_left})",
+        "☀️ *La chaleur est étouffante. Au loin, les ruines du château semblent vaciller dans un mirage…* (encore {time_left})",
+        "🌪️ *Une petite tempête de sable traverse les ruines et recouvre rapidement les anciennes pierres…* (encore {time_left})",
+        "🪨 *Tu découvres une vieille inscription à moitié ensevelie sous le sable…* (encore {time_left})",
+        "👣 *Des traces apparaissent dans le sable devant toi… mais elles ne semblent appartenir à aucun humain.* (encore {time_left})",
+        "🏺 *Un ancien vase émerge du sable. À l'intérieur, quelque chose semble avoir bougé…* (encore {time_left})",
+        "🌑 *Une rafale dégage l'entrée d'une ancienne salle enfouie sous les ruines…* (encore {time_left})",
+        "💨 *Le vent siffle entre les pierres du château, comme si les ruines murmuraient encore leurs secrets…* (encore {time_left})"
+    ],
+},
 }
 
 # Joueurs actuellement en exploration  { user_id: lieu_key }
