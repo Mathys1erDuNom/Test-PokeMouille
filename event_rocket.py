@@ -54,7 +54,7 @@ def setup_rocket(bot):
         user_id = str(ctx.author.id)
         required_badges = {100, 101, 102, 103, 104, 105, 106, 107}
         user_badges = set(get_user_badges(user_id))
-
+        """
         if not required_badges.issubset(user_badges):
             missing_badges = [
                 badge_name
@@ -75,9 +75,9 @@ def setup_rocket(bot):
                 f"{', '.join(missing_badges)}."
             )
             return
-
+        """
         result = restore_from_copie_new_captures(user_id)
-
+    
         await ctx.send(
             f"✅ Restauration terminée pour {ctx.author.mention} !\n"
             f"➕ {result['inserted']} Pokémon ajouté(s)\n"
