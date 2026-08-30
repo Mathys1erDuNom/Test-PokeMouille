@@ -1,8 +1,11 @@
+import os
 import discord
 from discord.ext import commands
 from utils import is_croco
 from badge_db import get_user_badges
 from new_db import copy_new_captures_table, clear_new_captures, restore_from_copie_new_captures
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def setup_rocket(bot):
 
@@ -21,7 +24,8 @@ def setup_rocket(bot):
         clear_new_captures()
 
         # 3. Envoi de l'image + texte dans le channel
-        file = discord.File("images/giovanni.jpg", filename="giovanni.jpg")
+        image_path = os.path.join(PROJECT_ROOT, "images", "giovanni.jpg")
+        file = discord.File(image_path, filename="giovanni.jpg")
 
         # Image en premier
         await ctx.send(file=file)

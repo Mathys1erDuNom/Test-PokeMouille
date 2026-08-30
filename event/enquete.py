@@ -1,12 +1,16 @@
 import json
 import os
 import discord
-from preuve_db import add_preuve, has_preuve, get_preuves, init_preuves_db
+
+try:
+    from .preuve_db import add_preuve, has_preuve, get_preuves, init_preuves_db
+except ImportError:  # compatibilité exécution directe
+    from preuve_db import add_preuve, has_preuve, get_preuves, init_preuves_db
 from utils import is_croco
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-ENQUETE_JSON_PATH = os.path.join(script_dir, "json", "enquete.json")
-images_dir = os.path.join(script_dir, "images", "enquete")
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ENQUETE_JSON_PATH = os.path.join(project_root, "json", "enquete.json")
+images_dir = os.path.join(project_root, "images", "enquete")
 
 REGION_COMMANDS = {
     "parc":     {"region": "Kanto",  "item": "Corps Ramoloss"},
@@ -150,6 +154,9 @@ def setup_enquete(bot, get_user_region):
     @bot.command(name="supprimer_preuves")
     @is_croco()
     async def supprimer_preuves(ctx, user: discord.User):
-        from preuve_db import delete_preuves
+        try:
+            from .preuve_db import delete_preuves
+        except ImportError:
+            from preuve_db import delete_preuves
         delete_preuves(user.id)
         await ctx.send(f"🗑️ Les preuves de **{user.display_name}** ont été supprimées.")    

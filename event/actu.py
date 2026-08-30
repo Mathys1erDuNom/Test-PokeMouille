@@ -10,6 +10,8 @@ from datetime import datetime
 # CONFIGURATION ACTU
 # -----------------------
 
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 ACTU_CHANNEL_ID   = int(os.getenv("ACTU"))   # ID du salon texte actu
 ACTU_HOUR_MIN     = 20             # heure min de publication (20h)
 ACTU_HOUR_MAX     = 24              # heure max de publication (00h)
@@ -20,9 +22,9 @@ ITEM_RATE    = 0.3    #ITEM_RATE    = 0.30
 NOTHING_RATE= 0.4 #NOTHING_RATE = 0.40 
 SHINY_RATE   = 1 / 64
 
-JSON_DIR  = os.path.join(os.path.dirname(__file__), "json")
+JSON_DIR  = os.path.join(PROJECT_ROOT, "json")
 ACTU_DIR  = os.path.join(JSON_DIR, "actu")
-IMAGES_ACTU_DIR = os.path.join(os.path.dirname(__file__), "images", "actu")
+IMAGES_ACTU_DIR = os.path.join(PROJECT_ROOT, "images", "actu")
 TARGET_USER_ID_CROCO = int(os.getenv("TARGET_USER_ID_CROCO"))
 def is_croco():
     def predicate(ctx):

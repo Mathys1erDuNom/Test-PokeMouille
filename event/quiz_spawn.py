@@ -6,8 +6,8 @@ import random
 import json
 import os
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-json_dir = os.path.join(script_dir, "json")
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+json_dir = os.path.join(project_root, "json")
 
 answered_users = set()
 quiz_winner = None

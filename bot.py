@@ -14,7 +14,7 @@ import stat
 import requests
 import io
 import uuid
-from croco_event import setup_croco_event
+from event.croco_event import setup_croco_event
 from money_view import setup_money
 
 from utils import is_in_spawn_window
@@ -25,13 +25,13 @@ from casino_view import setup_casino
 
 import unicodedata
 
-from quiz_spawn import setup_quiz_commands
-from devine_poke import setup_guess_pokemon_command
+from event.quiz_spawn import setup_quiz_commands
+from event.devine_poke import setup_guess_pokemon_command
 
-from dupont_event import run_interaction_personnage
+from event.dupont_event import run_interaction_personnage
 
 
-from dupont_event import setup_dupont_command
+from event.dupont_event import setup_dupont_command
 
 from combat.utils import normalize_text
 
@@ -1148,7 +1148,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
-from event_rocket import setup_rocket 
+from event.event_rocket import setup_rocket 
 
 setup_rocket(bot)
 
@@ -1167,7 +1167,7 @@ with open(badges_file, "r", encoding="utf-8") as f:
 # Setup du module badge
 setup_badges(bot, full_badge_data)
 
-from actu import setup_actu
+from event.actu import setup_actu
 setup_actu(bot,cur)
 
 
@@ -1265,7 +1265,7 @@ setup_fishing(bot, cur)
 setup_dupont_command(bot)
 
 
-from enquete import setup_enquete
+from event.enquete import setup_enquete
 from inventory_db import add_item, get_inventory
 from regions import get_user_region
 
@@ -1407,7 +1407,7 @@ async def auto_event_loop():
 
 
 
-from preuve_db import get_preuves
+from event.preuve_db import get_preuves
 from marche_noir import setup_marche_noir, run_marche_noir
 
 # ── Fonction pour vérifier si marche noir est disponible ────────────────────

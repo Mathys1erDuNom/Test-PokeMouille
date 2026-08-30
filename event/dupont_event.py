@@ -10,7 +10,7 @@ from money_db import add_money, remove_money, get_balance
 from discord.ui import View, Button, Select
 
 import os
-script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # ─── Tableaux de personnages ───────────────────────────────────────────────────
 
@@ -283,7 +283,7 @@ async def run_interaction_personnage(channel: discord.TextChannel, riche_or_not:
 
     # ── Image ─────────────────────────────────────────────────────────────────
     try:
-        image_path = os.path.join(script_dir, personnage["adresse_image"])
+        image_path = os.path.join(project_root, personnage["adresse_image"])
         file = discord.File(fp=image_path, filename="personnage.png")
         await channel.send(file=file)
     except Exception as e:
