@@ -21,7 +21,7 @@ from utils import is_in_spawn_window
 
 from utils import  get_daily_spawn_window
 
-from casino_view import setup_casino
+from casino.casino_view import setup_casino
 
 import unicodedata
 

@@ -1,11 +1,19 @@
 # casino_view.py
 import discord
 from discord.ui import View, Button
-from card_game import CardColorGame
-from slot_machine import SlotMachine
+
+try:
+    from .card_game import CardColorGame
+    from .slot_machine import SlotMachine
+    from .plus_ou_moins import DiceGame
+    from .roue import WheelButton
+except ImportError:  # compatibilité exécution directe
+    from card_game import CardColorGame
+    from slot_machine import SlotMachine
+    from plus_ou_moins import DiceGame
+    from roue import WheelButton
+
 from money_db import get_balance
-from plus_ou_moins import DiceGame
-from roue import WheelButton
 
 # Dans CasinoView.__init__ :
 
