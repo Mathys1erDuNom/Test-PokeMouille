@@ -49,7 +49,7 @@ from inventory_view import setup_inventory
 from utils import is_croco
 
 from money_db import add_money
-from shop_view import setup_shop
+from shop.shop_view import setup_shop
 
 from badge_view import setup_badges
 from regions import setup_regions, setup_region # region_command
@@ -1255,7 +1255,7 @@ setup_croco_event(
 
 setup_inventory(bot)
 
-from receleur import setup_receleur
+from shop.receleur import setup_receleur
 setup_receleur(bot)
 setup_region(bot)
 setup_regions()
@@ -1408,7 +1408,7 @@ async def auto_event_loop():
 
 
 from event.preuve_db import get_preuves
-from marche_noir import setup_marche_noir, run_marche_noir
+from shop.marche_noir import setup_marche_noir, run_marche_noir
 
 # ── Fonction pour vérifier si marche noir est disponible ────────────────────
 def is_marche_noir_available():

@@ -8,10 +8,11 @@ from io import BytesIO
 from inventory_db import add_item
 from money_db import get_balance, remove_money
 
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 script_dir = os.path.dirname(os.path.abspath(__file__))
-item_json_path = os.path.join(script_dir, "json", "item.json")
-images_dir = os.path.join(script_dir, "images")
-images_json_path = os.path.join(script_dir, "json", "images.json")
+item_json_path = os.path.join(project_root, "json", "item.json")
+images_dir = os.path.join(project_root, "images")
+images_json_path = os.path.join(project_root, "json", "images.json")
 
 # Chargement du fichier item.json
 with open(item_json_path, "r", encoding="utf-8") as f:

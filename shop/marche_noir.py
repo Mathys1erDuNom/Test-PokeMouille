@@ -15,10 +15,11 @@ from datetime import datetime
 conn = get_connection()
 cur  = conn.cursor()
 
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 script_dir = os.path.dirname(os.path.abspath(__file__))
-marche_noir_json_path = os.path.join(script_dir, "json","marche_noir.json")
-images_dir = os.path.join(script_dir, "images")
-images_json_path = os.path.join(script_dir, "json", "images.json")
+marche_noir_json_path = os.path.join(project_root, "json", "marche_noir.json")
+images_dir = os.path.join(project_root, "images")
+images_json_path = os.path.join(project_root, "json", "images.json")
 
 # ─── Table pour tracer les achats du marché noir ───────────────────────────────
 cur.execute("""

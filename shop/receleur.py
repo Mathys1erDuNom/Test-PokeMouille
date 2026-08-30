@@ -11,10 +11,11 @@ from money_db import get_balance, add_money
 from db_connection import get_connection
 from inventory_db import use_item, get_inventory
 
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 script_dir = os.path.dirname(os.path.abspath(__file__))
-receleur_json_path = os.path.join(script_dir, "json", "receleur.json")
-images_dir = os.path.join(script_dir, "images")
-images_json_path = os.path.join(script_dir, "json", "images.json")
+receleur_json_path = os.path.join(project_root, "json", "receleur.json")
+images_dir = os.path.join(project_root, "images")
+images_json_path = os.path.join(project_root, "json", "images.json")
 
 # ─── Chargement des prix de rachat ────────────────────────────────────────────
 with open(receleur_json_path, "r", encoding="utf-8") as f:
