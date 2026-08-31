@@ -15,7 +15,7 @@ SHINY_RATE = 1 / 64
 NO_CATCH_RATE = 0.40
 ITEM_RATE     = 0.30
 
-JSON_DIR = os.path.join(os.path.dirname(__file__), "json")
+JSON_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "json"))
 FISHING_ITEMS_FILE = os.path.join(JSON_DIR, "fishing_items.json")
 
 RODS = {
