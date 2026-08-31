@@ -60,7 +60,7 @@ import discord
 from discord.ui import Select, View
 from dotenv import load_dotenv
 
-from fishing import setup_fishing
+from regions import setup_fishing
 
 
 # ──────────────────────────────────────────────────────────────────────────────
