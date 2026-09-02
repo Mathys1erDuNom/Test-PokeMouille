@@ -172,7 +172,7 @@ def save_new_capture(user_id, pokemon_name, ivs, final_stats, pokemon):
         print(f"[INFO] Pokémon {pokemon_name} a eu ses IVs augmentés de 3 pour {user_id}")
 
     try:
-        from new_pokedex import invalidate_new_pokedex_cache
+        from pokedex.new_pokedex import invalidate_new_pokedex_cache
         invalidate_new_pokedex_cache(user_id)
         print(f"[CACHE] Cache du pokédex invalidé pour {user_id}")
     except ImportError:
@@ -218,7 +218,7 @@ def delete_capture(user_id, pokemon_name):
     print(f"[INFO] Pokémon {pokemon_name} supprimé pour l'utilisateur {user_id}")
 
     try:
-        from new_pokedex import invalidate_new_pokedex_cache
+        from pokedex.new_pokedex import invalidate_new_pokedex_cache
         invalidate_new_pokedex_cache(user_id)
         print(f"[CACHE] Cache du pokédex invalidé pour {user_id}")
     except ImportError:
@@ -274,7 +274,7 @@ def increase_pokemon_iv(user_id, pokemon_name, iv_increase, stat_name=None):
     conn.commit()
 
     try:
-        from new_pokedex import invalidate_new_pokedex_cache
+        from pokedex.new_pokedex import invalidate_new_pokedex_cache
         invalidate_new_pokedex_cache(user_id)
         print(f"[CACHE] Cache du pokédex invalidé pour {user_id}")
     except ImportError:
@@ -442,7 +442,7 @@ def setupxp(bot):
         conn.commit()
 
         try:
-            from new_pokedex import invalidate_new_pokedex_cache
+            from pokedex.new_pokedex import invalidate_new_pokedex_cache
             invalidate_new_pokedex_cache(user_id)
         except ImportError:
             pass
@@ -486,7 +486,7 @@ def setupxp(bot):
             conn.commit()
 
             try:
-                from new_pokedex import invalidate_new_pokedex_cache
+                from pokedex.new_pokedex import invalidate_new_pokedex_cache
                 invalidate_new_pokedex_cache(user_id)
             except ImportError:
                 pass
@@ -535,7 +535,7 @@ def setupxp(bot):
         conn.commit()
 
         try:
-            from new_pokedex import invalidate_new_pokedex_cache
+            from pokedex.new_pokedex import invalidate_new_pokedex_cache
             invalidate_new_pokedex_cache(user_id)
         except ImportError:
             pass

@@ -35,8 +35,7 @@ from event.dupont_event import setup_dupont_command
 
 from combat.utils import normalize_text
 
-from pokedex import setup_pokedex
-from new_pokedex import setup_new_pokedex
+from pokedex import setup_pokedex, setup_new_pokedex
 
 
 

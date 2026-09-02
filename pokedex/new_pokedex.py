@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw, ImageFont
 import requests, io, os
 from io import BytesIO
 import json
+from pathlib import Path
 from new_db import get_new_captures
 from utils import is_croco
 from combat.utils import normalize_text
@@ -13,8 +14,9 @@ from new_db import increase_pokemon_iv
 
 
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-images_dir = os.path.join(script_dir, "images")
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+images_dir = PROJECT_ROOT / "images"
+fonts_dir = PROJECT_ROOT / "fonts"
 
 # --- CACHE POKEDEX DYNAMIQUE ---
 NEW_POKEDEX_CACHE = {}   # { user_id: { "pokemons": [...], "mosaic": bytes } }
@@ -51,7 +53,7 @@ async def create_mosaic(pokemon_names, full_pokemon_data, full_pokemon_shiny_dat
         if not p_data:
             print(f"[IGNORÉ] {name} (base: {clean_base}) non trouvé dans le JSON. Utilisation de l'image par défaut.")
             try:
-                fallback = Image.open(os.path.join(images_dir, "default.png")).convert("RGBA").resize((64, 64))
+                fallback = Image.open(images_dir / "default.png").convert("RGBA").resize((64, 64))
                 images.append(fallback)
                 continue
             except Exception as e:
@@ -66,7 +68,7 @@ async def create_mosaic(pokemon_names, full_pokemon_data, full_pokemon_shiny_dat
         except Exception as e:
             print(f"[ERREUR] Image introuvable pour {p_data['name']}, fallback utilisé. → {e}")
             try:
-                fallback = Image.open(os.path.join(images_dir, "default.png")).convert("RGBA").resize((64, 64))
+                fallback = Image.open(images_dir / "default.png").convert("RGBA").resize((64, 64))
                 images.append(fallback)
             except Exception as e:
                 print(f"[ERREUR] Image par défaut manquante ou corrompue : {e}")
@@ -178,7 +180,7 @@ class PokemonButton(Button):
 
         width, height = 850, 600
         try:
-            image = Image.open(os.path.join(images_dir, "fond_pokedex_3.png")).convert("RGBA")
+            image = Image.open(images_dir / "fond_pokedex_3.png").convert("RGBA")
             image = image.resize((width, height), Image.Resampling.LANCZOS)
         except Exception as e:
             print(f"[ERREUR] Impossible de charger le fond : {e}")
@@ -186,9 +188,9 @@ class PokemonButton(Button):
 
         draw = ImageDraw.Draw(image)
         try:
-            font_path_bold = os.path.join(script_dir, "fonts", "DejaVuSans-Bold.ttf")
-            font = ImageFont.truetype(font_path_bold, 15)
-            font_bold = ImageFont.truetype(font_path_bold, 20) 
+            font_path_bold = fonts_dir / "DejaVuSans-Bold.ttf"
+            font = ImageFont.truetype(str(font_path_bold), 15)
+            font_bold = ImageFont.truetype(str(font_path_bold), 20) 
         except:
             font = ImageFont.load_default()
             font_bold = font
