@@ -13,7 +13,7 @@ except ImportError:  # compatibilité exécution directe
     from plus_ou_moins import DiceGame
     from roue import WheelButton
 
-from money_db import get_balance
+from BDD.money_db import get_balance
 
 # Dans CasinoView.__init__ :
 

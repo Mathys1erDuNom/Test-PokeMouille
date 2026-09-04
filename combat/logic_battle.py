@@ -10,7 +10,7 @@ from combat.views_attack import AttackOrSwitchView, SwitchSelectView
 from combat.utils import calculate_damage  # <-- on garde
 
 from BDD.badge_db import give_badge, get_user_badges
-from money_db import add_money
+from BDD.money_db import add_money
 
 
 from new_db import get_new_captures, add_xp, evolve_pokemon

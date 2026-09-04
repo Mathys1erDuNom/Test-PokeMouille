@@ -15,7 +15,7 @@ import requests
 import io
 import uuid
 from event.croco_event import setup_croco_event
-from money_view import setup_money
+from BDD.money_view import setup_money
 
 from utils import is_in_spawn_window
 
@@ -47,7 +47,7 @@ from new_db import save_new_capture, get_new_captures, setupxp
 from BDD.inventory_view import setup_inventory
 from utils import is_croco
 
-from money_db import add_money
+from BDD.money_db import add_money
 from shop.shop_view import setup_shop
 
 from BDD.badge_view import setup_badges

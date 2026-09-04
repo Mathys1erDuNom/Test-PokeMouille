@@ -5,7 +5,7 @@ import asyncio
 import random
 import io
 from BDD.inventory_db import get_inventory, use_item
-from money_db import add_money, remove_money, get_balance
+from BDD.money_db import add_money, remove_money, get_balance
 
 from discord.ui import View, Button, Select
 

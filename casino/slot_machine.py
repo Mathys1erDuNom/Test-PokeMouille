@@ -2,7 +2,7 @@
 import discord
 from discord.ui import View, Button
 import random
-from money_db import get_balance, add_money, remove_money
+from BDD.money_db import get_balance, add_money, remove_money
 
 class SlotMachine(View):
     def __init__(self, user_id, bet_amount=10):

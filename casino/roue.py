@@ -3,7 +3,7 @@ import discord
 from discord.ui import View, Button
 import random
 from BDD.inventory_db import get_items, use_item
-from money_db import get_balance, add_money
+from BDD.money_db import get_balance, add_money
 
 # Nom de l'objet jeton dans l'inventaire
 JETON_NAME = "Jeton"

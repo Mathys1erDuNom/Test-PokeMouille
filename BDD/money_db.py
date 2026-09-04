@@ -1,4 +1,4 @@
-# money_db.py
+# money_db.py (migré dans BDD)
 from db_connection import get_connection
 
 # Création de la table argent
@@ -28,7 +28,6 @@ def get_balance(user_id):
     if row:
         return row[0]
     else:
-        # Si l'utilisateur n'existe pas, on le crée avec 0
         cur.execute("""
             INSERT INTO argent (user_id, balance)
             VALUES (%s, 0)
@@ -43,7 +42,6 @@ def add_money(user_id, amount):
     conn = get_connection()
     cur = conn.cursor()
     
-    # Vérifie si l'utilisateur existe
     cur.execute("""
         SELECT balance FROM argent
         WHERE user_id = %s
@@ -51,14 +49,12 @@ def add_money(user_id, amount):
     row = cur.fetchone()
     
     if row:
-        # Mise à jour
         new_balance = row[0] + amount
         cur.execute("""
             UPDATE argent SET balance = %s
             WHERE user_id = %s
         """, (new_balance, user_id))
     else:
-        # Insertion
         cur.execute("""
             INSERT INTO argent (user_id, balance)
             VALUES (%s, %s)
@@ -74,7 +70,7 @@ def remove_money(user_id, amount):
     current_balance = get_balance(user_id)
     
     if current_balance < amount:
-        return False  # Solde insuffisant
+        return False
     
     new_balance = current_balance - amount
     conn = get_connection()
@@ -119,10 +115,7 @@ def transfer_money(from_user_id, to_user_id, amount):
     from_user_id = str(from_user_id)
     to_user_id = str(to_user_id)
     
-    # Vérifie le solde de l'expéditeur
     if not remove_money(from_user_id, amount):
-        return False  # Solde insuffisant
-    
-    # Ajoute à l'utilisateur destinataire
+        return False
     add_money(to_user_id, amount)
     return True

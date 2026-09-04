@@ -1,7 +1,8 @@
-# money_commands.py
+# money_view.py (migré dans BDD)
 import discord
-from money_db import get_balance, add_money, remove_money, set_money, transfer_money
 from utils import is_croco
+
+from .money_db import get_balance, add_money, remove_money, set_money, transfer_money, cur
 
 
 def setup_money(bot):
@@ -9,7 +10,6 @@ def setup_money(bot):
     
     @bot.command(name="money")
     async def money(ctx, user: discord.User = None):
-        """Affiche le solde d'un utilisateur."""
         target = user or ctx.author
         balance = get_balance(target.id)
         
@@ -18,11 +18,9 @@ def setup_money(bot):
         else:
             await ctx.send(f"💰🐊 {target.mention} a **{balance:,}** Croco dollars.")
     
-    
     @is_croco()
     @bot.command(name="addmoney")
     async def addmoney(ctx, user: discord.User, amount: int):
-        """Ajoute de l'argent à un utilisateur (admin uniquement)."""
         if amount <= 0:
             await ctx.send("❌ Le montant doit être positif.")
             return
@@ -33,11 +31,9 @@ def setup_money(bot):
             f"💰🐊 Nouveau solde : **{new_balance:,}** Croco dollars."
         )
     
-    
     @is_croco()
     @bot.command(name="removemoney")
     async def takemoney(ctx, user: discord.User, amount: int):
-        """Retire de l'argent à un utilisateur (admin uniquement)."""
         if amount <= 0:
             await ctx.send("❌ Le montant doit être positif.")
             return
@@ -57,11 +53,9 @@ def setup_money(bot):
                 f"💰🐊 Nouveau solde : **{new_balance:,}** Croco dollars."
             )
     
-    
     @is_croco()
     @bot.command(name="setmoney")
     async def setmoney(ctx, user: discord.User, amount: int):
-        """Définit le solde exact d'un utilisateur (admin uniquement)."""
         if amount < 0:
             await ctx.send("❌ Le montant ne peut pas être négatif.")
             return
@@ -71,10 +65,8 @@ def setup_money(bot):
             f"✅ Le solde de {user.mention} a été défini à **{amount:,}** Croco dollars."
         )
     
-    
     @bot.command(name="pay")
     async def pay(ctx, user: discord.User, amount: int):
-        """Transfère de l'argent à un autre utilisateur."""
         if amount <= 0:
             await ctx.send("❌ Le montant doit être positif.")
             return
@@ -100,12 +92,8 @@ def setup_money(bot):
                 f"💰🐊 Solde de {user.mention} : **{receiver_balance:,}** Croco dollars."
             )
     
-    
     @bot.command(name="richest")
     async def richest(ctx, limit: int = 10):
-        """Affiche le classement des utilisateurs les plus riches."""
-        from money_db import cur
-        
         if limit > 25:
             limit = 25
         
@@ -115,7 +103,6 @@ def setup_money(bot):
             ORDER BY balance DESC
             LIMIT %s
         """, (limit,))
-        
         rows = cur.fetchall()
         
         if not rows:

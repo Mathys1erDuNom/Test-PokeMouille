@@ -7,7 +7,7 @@ import os
 import json
 from io import BytesIO
 from BDD.inventory_db import delete_inventory, get_inventory  # adapte si tes fonctions s'appellent autrement
-from money_db import get_balance, add_money
+from BDD.money_db import get_balance, add_money
 from db_connection import get_connection
 from BDD.inventory_db import use_item, get_inventory
 

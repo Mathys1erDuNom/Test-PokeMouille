@@ -2,7 +2,7 @@
 import discord
 from discord.ui import View, Button
 import random
-from money_db import get_balance, add_money, remove_money
+from BDD.money_db import get_balance, add_money, remove_money
 
 # Mise et gains
 BET_AMOUNT = 10
