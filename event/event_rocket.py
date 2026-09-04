@@ -2,7 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from utils import is_croco
-from badge_db import get_user_badges
+from BDD.badge_db import get_user_badges
 from new_db import copy_new_captures_table, clear_new_captures, restore_from_copie_new_captures
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

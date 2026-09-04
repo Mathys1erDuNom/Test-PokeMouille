@@ -50,7 +50,7 @@ from utils import is_croco
 from money_db import add_money
 from shop.shop_view import setup_shop
 
-from badge_view import setup_badges
+from BDD.badge_view import setup_badges
 from regions import setup_regions, setup_region # region_command
 
 import os

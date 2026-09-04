@@ -1,10 +1,9 @@
-# badge_view.py
 import discord
 from discord.ext import commands
 from discord.ui import View, Button
 from PIL import Image
 import io, os, requests, json
-from badge_db import give_badge, get_user_badges
+from BDD.badge_db import give_badge, get_user_badges
 from utils import is_croco
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
