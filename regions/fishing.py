@@ -83,7 +83,7 @@ def load_fishing_items(rod_name: str) -> list:
         return []
 
 
-def get_user_region(cur, user_id: str) -> str | None:
+def get_user_region_with_cursor(cur, user_id: str) -> str | None:
     cur.execute("SELECT region FROM user_regions WHERE user_id = %s", (user_id,))
     row = cur.fetchone()
     return row[0] if row else None
@@ -172,7 +172,7 @@ def setup_fishing(bot: commands.Bot, cur):
             return
 
         # Vérif région
-        region = get_user_region(cur, user_id_str)
+        region = get_user_region_with_cursor(cur, user_id_str)
         if not region:
             await ctx.send(
                 f"{ctx.author.mention} ❌ Pas de région choisie ! Utilise `!region`.",
