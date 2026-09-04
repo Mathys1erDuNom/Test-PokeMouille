@@ -1301,12 +1301,12 @@ TIMEZONE = pytz.timezone("Europe/Paris")
 
 
 
-from chenil import tick_chenil_xp
+from BDD.chenil import tick_chenil_xp
 
 # dict persistant entre les tours de boucle  { user_id (int): nb_checks (int) }
 chenil_xp_counters: dict[int, int] = {}
 
-from chenil import setup_chenil 
+from BDD.chenil import setup_chenil
 
 setup_chenil(bot,TEXT_CHANNEL_ID)
 riche_or_not = True
