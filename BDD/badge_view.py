@@ -6,8 +6,9 @@ import io, os, requests, json
 from BDD.badge_db import give_badge, get_user_badges
 from utils import is_croco
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-images_dir = os.path.join(script_dir, "json")  # dossier pour fallback si image introuvable
+# Base pour chemins : racine du projet (deux niveaux au-dessus de ce fichier)
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+images_dir = os.path.join(PROJECT_ROOT, "images")  # dossier images à la racine
 
 # --- Cache ---
 BADGE_CACHE = {}  # { user_id: { "mosaic": bytes, "badge_ids": [] } }
@@ -19,8 +20,8 @@ class BadgeInfoButton(Button):
         self.badge = badge
 
     async def callback(self, interaction: discord.Interaction):
-        # Ouvre l'image locale
-        img_path = os.path.join(script_dir, self.badge["image"])
+        # Ouvre l'image locale (depuis la racine du projet)
+        img_path = os.path.join(PROJECT_ROOT, self.badge["image"]) 
         file = discord.File(img_path, filename="badge.png")
 
         embed = discord.Embed(
@@ -40,8 +41,8 @@ async def create_badge_mosaic(badges):
 
     for badge in badges:
         try:
-            # Nouveau chemin vers l'image locale
-            img_path = os.path.join(script_dir, badge["image"])
+            # Nouveau chemin vers l'image locale (depuis la racine du projet)
+            img_path = os.path.join(PROJECT_ROOT, badge["image"])
             img = Image.open(img_path).convert("RGBA").resize((64,64))
             images.append(img)
         except Exception as e:
