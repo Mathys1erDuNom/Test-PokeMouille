@@ -158,7 +158,7 @@ def weighted_choice(pool: list[dict]) -> dict | None:
 
 def get_user_item_names(user_id: str) -> set[str]:
     """Retourne l'ensemble des noms d'objets que le joueur possède déjà."""
-    from inventory_db import get_inventory
+    from BDD.inventory_db import get_inventory
     items = get_inventory(user_id)
     return {item["name"] for item in items}
 
@@ -192,7 +192,7 @@ def save_pokemon_capture(user_id: str, pokemon: dict, is_shiny: bool):
 
 
 def add_item_to_inventory(user_id: str, item: dict):
-    from inventory_db import add_item
+    from BDD.inventory_db import add_item
     add_item(
         user_id=user_id,
         name=item["item_name"],

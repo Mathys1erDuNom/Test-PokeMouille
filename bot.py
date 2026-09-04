@@ -44,7 +44,7 @@ from io import BytesIO
 from db import save_capture, get_captures
 from new_db import save_new_capture, get_new_captures, setupxp
 
-from inventory_view import setup_inventory
+from BDD.inventory_view import setup_inventory
 from utils import is_croco
 
 from money_db import add_money
@@ -1265,7 +1265,7 @@ setup_dupont_command(bot)
 
 
 from event.enquete import setup_enquete
-from inventory_db import add_item, get_inventory
+from BDD.inventory_db import add_item, get_inventory
 from regions import get_user_region
 
 #setup_enquete(bot, get_user_region, add_item)

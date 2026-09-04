@@ -91,7 +91,7 @@ def get_user_region_with_cursor(cur, user_id: str) -> str | None:
 
 def get_available_rods(user_id: str) -> list[str]:
     """Retourne les cannes que le joueur possède dans son inventaire."""
-    from inventory_db import get_inventory
+    from BDD.inventory_db import get_inventory
     inventory = get_inventory(user_id)
     owned_items = {item["name"] for item in inventory if item["quantity"] > 0}
     return [rod for rod in RODS if rod in owned_items]
@@ -293,7 +293,7 @@ def setup_fishing(bot: commands.Bot, cur):
             fishing_items = load_fishing_items(chosen_rod)
             if fishing_items:
                 found_item = random.choice(fishing_items)
-                from inventory_db import add_item
+                from BDD.inventory_db import add_item
                 add_item(
                     user_id=user_id_str,
                     name=found_item["item_name"],

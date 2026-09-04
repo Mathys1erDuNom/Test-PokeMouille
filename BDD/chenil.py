@@ -9,7 +9,7 @@ from discord.ext import commands
 import discord
 
 from new_db import get_new_captures, add_xp, evolve_pokemon
-from inventory_db import use_item
+from .inventory_db import use_item
 
 load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -363,7 +363,7 @@ def setup_chenil(bot, channel_id):
             return
 
         # Cherche d'abord un œuf dans l'inventaire
-        from inventory_db import get_inventory
+        from .inventory_db import get_inventory
         inventory = get_inventory(uid)
         egg_item  = next(
             (i for i in inventory

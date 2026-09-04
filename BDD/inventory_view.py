@@ -1,4 +1,4 @@
-# inventory_view.py
+# inventory_view.py (migré dans BDD)
 import discord
 from discord.ui import View, Button
 from PIL import Image, ImageDraw, ImageFont
@@ -6,14 +6,14 @@ import requests, io, os
 from io import BytesIO
 from utils import is_croco
 
-from inventory_db import add_item
-from inventory_db import get_inventory
-from inventory_db import delete_inventory
+from .inventory_db import add_item, get_inventory, delete_inventory, use_item
 import json
-from inventory_db import use_item
 from utils import spawn_pokemon_for_user
-script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# script_dir doit pointer sur la racine du projet (deux niveaux au-dessus du fichier BDD)
+script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 images_dir = os.path.join(script_dir, "images")
+
 from buff_iv import BuffPokemonView
 from new_db_avantmodif import get_new_captures
 
@@ -61,7 +61,7 @@ async def _handle_spawn(interaction, spawn_func, json_normal, json_shiny, shiny_
 
     pokemon_name, is_shiny = await spawn_func(
         interaction.user,
-        json_file=json_normal,   # spawn_pokemon_for_user gère lui-même le chemin et le shiny
+        json_file=json_normal,
         shiny_rate=shiny_rate
     )
 
@@ -69,9 +69,8 @@ async def _handle_spawn(interaction, spawn_func, json_normal, json_shiny, shiny_
         await interaction.followup.send("❌ Impossible de spawn le Pokémon.", ephemeral=True)
         return
 
-    # Le fichier à utiliser pour l'embed image uniquement
     json_file_to_use = json_normal.replace("_normal.json", "_shiny.json") if is_shiny else json_normal
-    json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "json", json_file_to_use)
+    json_path = os.path.join(script_dir, "json", json_file_to_use)
 
     embed, file = await get_pokemon_image_embed(pokemon_name, json_file=json_path, is_shiny=is_shiny)
 
@@ -84,6 +83,8 @@ async def _handle_spawn(interaction, spawn_func, json_normal, json_shiny, shiny_
         )
     else:
         await interaction.followup.send("❌ Impossible de trouver l'image du Pokémon.", ephemeral=True)
+
+
 # ─── Views inventaire ─────────────────────────────────────────────────────────
 
 class InventoryView(View):
@@ -141,7 +142,6 @@ class UseItemButton(Button):
         self.spawn_func = spawn_func
 
     async def callback(self, interaction: discord.Interaction):
-        # ✅ Vérifier si c'est un item à ne pas consommer
         if self.item.get("extra") in ("nothing", "pêche", "pêche_super", "pêche_mega", "baie", "oeuf"):
             await interaction.response.defer(ephemeral=True)
             msg = f"✅ Vous avez utilisé **{self.item['name']}**."
@@ -157,7 +157,6 @@ class UseItemButton(Button):
             )
             return
 
-        # ✅ Un seul defer, tout de suite
         await interaction.response.defer(ephemeral=True)
 
         msg = f"✅ Vous avez utilisé **{self.item['name']}**."
@@ -165,8 +164,6 @@ class UseItemButton(Button):
             msg += " C'était le dernier, il a été supprimé ahhhhaaaaaaaaaaa."
         else:
             msg += f" Il vous en reste {new_qty}."
-
-        # ─── Effets spécifiques ───────────────────────────────────────────────
 
         if extra == "spawn_pokemon":
             await interaction.followup.send(msg, ephemeral=True)
@@ -235,15 +232,8 @@ class UseItemButton(Button):
             await interaction.followup.send(msg, ephemeral=True)
             await interaction.followup.send(embed=embed, view=view, ephemeral=True)
 
-############## Pour les items pas utiles desuite ou pas ici
-
-        #elif extra in ("nothing", "pêche", "pêche_super", "pêche_mega", "baie"):
-         #   await interaction.followup.send("⏳ Chaque chose en son temps…", ephemeral=True)     
-
         else:
-            # Aucun effet spécial → on envoie juste le message de confirmation
             await interaction.followup.send(msg, ephemeral=True)
-
 
 
 
@@ -313,7 +303,6 @@ class InventoryItemButton(Button):
         draw.text((70, 180), f"Quantité : {quantity}", fill="black", font=font_small)
         draw_multiline_text(draw, description or "Aucune description.", (70, 230), font_small, max_width=240)
 
-        # APRÈS
         if image_url:
             try:
                 if image_url.startswith("http"):
@@ -369,7 +358,7 @@ def setup_inventory(bot, spawn_func=None):
             None
         )
         if not found_item:
-            await ctx.send(f"❌ Grand Maître suprême des Crocodiles, l'item `{item_name}` n'existe pas.")
+            await ctx.send(f"❌ Grand Maître suprême des Crocodiles, l'item {item_name} n'existe pas.")
             return
 
         add_item(
@@ -384,8 +373,7 @@ def setup_inventory(bot, spawn_func=None):
         )
 
         await ctx.send(
-            f"🎁 Grand Maître suprême des Crocodiles, l'item **{found_item['item_name']}** "
-            f"a été ajouté à l'inventaire de **{user.mention}**."
+            f"🎁 Grand Maître suprême des Crocodiles, l'item **{found_item['item_name']}** a été ajouté à l'inventaire de **{user.mention}**."
         )
 
     @is_croco()

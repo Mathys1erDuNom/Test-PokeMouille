@@ -7,7 +7,7 @@ import os
 import json
 import random
 from io import BytesIO
-from inventory_db import add_item
+from BDD.inventory_db import add_item
 from money_db import get_balance, remove_money
 from db_connection import get_connection
 from datetime import datetime

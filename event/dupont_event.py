@@ -4,7 +4,7 @@ import aiohttp
 import asyncio
 import random
 import io
-from inventory_db import get_inventory, use_item
+from BDD.inventory_db import get_inventory, use_item
 from money_db import add_money, remove_money, get_balance
 
 from discord.ui import View, Button, Select
@@ -248,7 +248,7 @@ tableau_pauvre = [
 
 
 def donner_recompense(user_id: int, personnage: dict):
-    from inventory_db import add_item
+    from BDD.inventory_db import add_item
     item = personnage.get("item_recompense")
     if not item:
         return None

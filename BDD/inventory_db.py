@@ -1,7 +1,6 @@
-# inventory_db.py
+# inventory_db.py (migré dans BDD)
 import os
 import psycopg2
-
 from dotenv import load_dotenv
 
 # Charge les variables d’environnement
@@ -12,8 +11,6 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 # Connexion globale à la base
 conn = psycopg2.connect(DATABASE_URL, sslmode="require")
 cur = conn.cursor()
-
-
 
 
 
@@ -65,7 +62,6 @@ def add_item(user_id, name, quantity=1, rarity="commun", description="", image="
             image,
             str(extra) if extra is not None else None,
             price,
-            
         ))
 
     conn.commit()

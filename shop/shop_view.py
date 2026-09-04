@@ -5,7 +5,7 @@ import requests
 import os
 import json
 from io import BytesIO
-from inventory_db import add_item
+from BDD.inventory_db import add_item
 from money_db import get_balance, remove_money
 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

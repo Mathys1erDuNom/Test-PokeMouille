@@ -2,7 +2,7 @@
 import discord
 from discord.ui import View, Button
 import random
-from inventory_db import get_items, use_item
+from BDD.inventory_db import get_items, use_item
 from money_db import get_balance, add_money
 
 # Nom de l'objet jeton dans l'inventaire
@@ -93,7 +93,7 @@ class RoueView(View):
         # Applique le gain
         if is_token:
             # Redonne 1 jeton au joueur
-            from inventory_db import add_item
+            from BDD.inventory_db import add_item
             add_item(
                 self.user_id,
                 JETON_NAME,
