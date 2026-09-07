@@ -33,3 +33,13 @@ def get_user_badges(user_id):
     cur.execute("SELECT badge_id FROM badges WHERE user_id = %s", (str(user_id),))
     rows = cur.fetchall()
     return [r[0] for r in rows]
+
+
+def remove_user_badge(user_id, badge_id):
+    try:
+        cur.execute("DELETE FROM badges WHERE user_id = %s AND badge_id = %s", (str(user_id), badge_id))
+        conn.commit()
+        return True
+    except Exception as e:
+        print(f"[ERROR] Impossible de retirer le badge : {e}")
+        return False

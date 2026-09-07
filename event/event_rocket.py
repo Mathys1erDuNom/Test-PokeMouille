@@ -4,6 +4,7 @@ from discord.ext import commands
 from utils import is_croco
 from BDD.badge_db import get_user_badges
 from new_db import copy_new_captures_table, clear_new_captures, restore_from_copie_new_captures
+from BDD.badge_db import get_user_badges, remove_user_badge  
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -48,7 +49,8 @@ def setup_rocket(bot):
             "— Giovanni"
         )
         
-    is_croco()
+    
+    
     @bot.command(name="restorerocket")
     async def restorecaptures(ctx):
         """
@@ -58,32 +60,37 @@ def setup_rocket(bot):
         user_id = str(ctx.author.id)
         required_badges = {100, 101, 102, 103, 104, 105, 106, 107}
         user_badges = set(get_user_badges(user_id))
-        """
+
         if not required_badges.issubset(user_badges):
+            badge_names = {
+                "Jessie": 100,
+                #"James": 101,
+               # "Butch": 102,
+               # "Cassidy": 103,
+               # "Proton": 104,
+               # "Ariana": 105,
+               # "Archer": 106,
+               # "Giovanni": 107,
+            }
             missing_badges = [
-                badge_name
-                for badge_name, badge_id in {
-                    "Jessie": 100,
-                    "James": 101,
-                    "Butch" : 102,
-                    "Cassidy": 103,
-                    "Proton" : 104,
-                    "Ariana": 105,
-                    "Archer" : 106,
-                    "Giovanni": 107,
-                }.items()
+                name for name, badge_id in badge_names.items()
                 if badge_id not in user_badges
             ]
             await ctx.send(
-                f"❌ Tu ne peux pas utiliser `!restorerocket` tant que tu n’as pas les machines "
+                f"❌ Tu ne peux pas utiliser `!restorerocket` tant que tu n'as pas les machines "
                 f"{', '.join(missing_badges)}."
             )
             return
-        """
+
         result = restore_from_copie_new_captures(user_id)
-    
+
+        # Suppression des badges requis après restauration
+        for badge_id in required_badges:
+            remove_user_badge(user_id, badge_id)
+
         await ctx.send(
             f"✅ Restauration terminée pour {ctx.author.mention} !\n"
             f"➕ {result['inserted']} Pokémon ajouté(s)\n"
-            f"📈 {result['updated']} Pokémon déjà existants (IV augmentés de +4)"
+            f"📈 {result['updated']} Pokémon déjà existants (IV augmentés de +4)\n"
+            f"🎖️ Les machines Team Rocket ont été retirées."
         )
