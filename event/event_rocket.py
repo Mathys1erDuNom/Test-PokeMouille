@@ -58,7 +58,7 @@ def setup_rocket(bot):
         Restaure uniquement les Pokémon du membre qui a exécuté la commande.
         """
         user_id = str(ctx.author.id)
-        required_badges = {100, 101, 102, 103, 104, 105, 106, 107}
+        required_badges = {100}#, 101, 102, 103, 104, 105, 106, 107}
         user_badges = set(get_user_badges(user_id))
 
         if not required_badges.issubset(user_badges):
