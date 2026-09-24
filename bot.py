@@ -17,6 +17,8 @@ import uuid
 from event.croco_event import setup_croco_event
 from BDD.money_view import setup_money
 
+from event.event_climatique import setup_event_climatique, CLIMATIC_EVENTS
+
 from utils import is_in_spawn_window
 
 from utils import  get_daily_spawn_window
@@ -1180,7 +1182,100 @@ bot.is_under_ban = is_under_ban
 setup_pokedex(bot, full_pokemon_shiny_data, full_pokemon_data, type_sprites, attack_type_map, json_dir)
 setup_new_pokedex(bot, full_pokemon_shiny_data, full_pokedex, type_sprites, attack_type_map, json_dir)
 
+# Initialise le système climatique qui attache l'état sur l'objet `bot`
+setup_event_climatique(bot, base_pools=(full_pokemon_data, full_pokemon_shiny_data))
+
 print("[DEBUG] Ready to run bot...")
+
+
+@bot.command(name="climat_on")
+@is_croco()
+async def climat_on(ctx):
+    """Active manuellement le système climatique (démarre la tâche si nécessaire)."""
+    if hasattr(bot, "_climate_task") and bot._climate_task is not None and not bot._climate_task.done():
+        await ctx.send("✅ Le système climatique est déjà actif.")
+        return
+    setup_event_climatique(bot, base_pools=(full_pokemon_data, full_pokemon_shiny_data))
+    await ctx.send("✅ Système climatique activé manuellement.")
+
+
+@bot.command(name="climat_off")
+@is_croco()
+async def climat_off(ctx):
+    """Désactive manuellement le système climatique (arrête la tâche en arrière-plan)."""
+    if hasattr(bot, "_climate_task") and bot._climate_task is not None:
+        try:
+            bot._climate_task.cancel()
+        except Exception:
+            pass
+        bot._climate_task = None
+        bot.climate_state = {"time_of_day": "day", "active_event": None, "event_ends_at": None}
+        await ctx.send("⛔ Système climatique arrêté manuellement.")
+    else:
+        await ctx.send("ℹ️ Le système climatique n'était pas en cours d'exécution.")
+
+
+@bot.command(name="climat_status")
+@is_croco()
+async def climat_status(ctx):
+    """Affiche l'état climatique courant attaché au bot."""
+    state = getattr(bot, "climate_state", None)
+    if not state:
+        await ctx.send("ℹ️ Le système climatique n'est pas initialisé.")
+        return
+
+    active = state.get("active_event")
+    ends = state.get("event_ends_at")
+    tod = state.get("time_of_day")
+
+    msg = f"⏱️ Time of day: **{tod}**\n"
+    if active:
+        evt = CLIMATIC_EVENTS.get(active, {})
+        emoji = evt.get("emoji", "")
+        ends_str = ends.strftime('%Y-%m-%d %H:%M:%S') if ends else 'inconnu'
+        msg += f"🔥 Active event: **{active}** {emoji} (jusqu'à {ends_str})\n"
+    else:
+        msg += "✅ Aucun événement climatique actif.\n"
+
+    # pool sizes
+    try:
+        normal_pool, shiny_pool = bot.get_current_pokemon_pools()
+        msg += f"🔸 Pokémons disponibles (normal): {len(normal_pool)}\n"
+        msg += f"✨ Pokémons disponibles (shiny): {len(shiny_pool)}\n"
+    except Exception:
+        pass
+
+    await ctx.send(msg)
+
+
+@bot.command(name="climat_list")
+@is_croco()
+async def climat_list(ctx):
+    """Liste les événements climatiques utilisables."""
+    lines = []
+    for k, v in CLIMATIC_EVENTS.items():
+        lines.append(f"{v.get('emoji','')} **{k}** → types: {', '.join(sorted(v.get('types', [])))}")
+    await ctx.send("\n".join(lines))
+
+
+@bot.command(name="climat_force")
+@is_croco()
+async def climat_force(ctx, event_key: str, hours: int = 2):
+    """Force un événement climatique pour une durée donnée (heures)."""
+    key = event_key.strip().lower()
+    if key not in CLIMATIC_EVENTS:
+        await ctx.send(f"❌ Événement inconnu: {key}. Utilise `!climat_list` pour la liste.")
+        return
+
+    # assure la présence du système
+    if not hasattr(bot, "get_current_pokemon_pools"):
+        setup_event_climatique(bot, base_pools=(full_pokemon_data, full_pokemon_shiny_data))
+
+    tz = pytz.timezone("Europe/Paris")
+    bot.climate_state["active_event"] = key
+    bot.climate_state["event_ends_at"] = datetime.now(tz) + timedelta(hours=hours)
+
+    await ctx.send(f"✅ Événement forcé: **{key}** pour {hours} heure(s).")
 
 
 from datetime import datetime, timedelta
@@ -1310,6 +1405,7 @@ from BDD.chenil import setup_chenil
 
 setup_chenil(bot,TEXT_CHANNEL_ID)
 riche_or_not = True
+
 async def auto_event_loop():
     await bot.wait_until_ready()
     global next_event_time, next_event_name
