@@ -480,6 +480,15 @@ async def spawn_pokemon(channel, force=False, author=None, target_user: discord.
         print(f"[DEBUG] shiny_rate={shiny_rate}, is_shiny={is_shiny}, pokemon={pokemon['name']}".encode('utf-8', errors='replace').decode('utf-8'))
     else:
         is_shiny = (random.randint(1, shiny_rate) == 1)
+        # Debug: log climate state and pool sizes
+        try:
+            print(f"[CLIMAT DEBUG] climate_state={getattr(bot,'climate_state',None)}")
+            allowed = get_allowed_types_for_current_state(bot) if hasattr(bot, 'climate_state') else []
+            print(f"[CLIMAT DEBUG] allowed_types={allowed}")
+            print(f"[CLIMAT DEBUG] pool_sizes: normal={len(region_pokemon_data)} shiny={len(region_shiny_data)}")
+        except Exception as e:
+            print(f"[CLIMAT DEBUG] error reading climate state: {e}")
+
         pokemon = random.choice(region_shiny_data if is_shiny else region_pokemon_data)
         print(f"[DEBUG] shiny_rate={shiny_rate}, is_shiny={is_shiny}, pokemon={pokemon['name']}".encode('utf-8', errors='replace').decode('utf-8'))
 
