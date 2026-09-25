@@ -163,9 +163,30 @@ def setup_event_climatique(bot, base_pools: Optional[Tuple[List[dict], List[dict
 
     bot.get_current_pokemon_pools = get_current_pokemon_pools
 
-    # Start background task if not already running
-    if not hasattr(bot, "_climate_task") or bot._climate_task is None or bot._climate_task.done():
-        bot._climate_task = bot.loop.create_task(_climate_loop(bot, tz))
-        print("[CLIMAT] climate task started and attached to bot")
+    # Start background task if not already running.
+    # We must not access `bot.loop` in synchronous context (discord.py restriction).
+    # Instead, register an `on_ready` listener that will create the asyncio task when the bot is ready.
+
+    async def _start_task_on_ready(*_args, **_kwargs):
+        if not hasattr(bot, "_climate_task") or bot._climate_task is None or getattr(bot._climate_task, "done", lambda: False)():
+            bot._climate_task = asyncio.create_task(_climate_loop(bot, tz))
+            print("[CLIMAT] climate task started and attached to bot (on_ready)")
+
+    # Register the listener (safe to call multiple times, discord will ignore duplicates)
+    try:
+        bot.add_listener(_start_task_on_ready, "on_ready")
+    except Exception:
+        # If add_listener fails for any reason, we ignore but still attempt to start below when possible
+        pass
+
+    # If the bot is already ready and we're inside the event loop (e.g. called from a command), start immediately
+    if getattr(bot, "is_ready", lambda: False)():
+        try:
+            if not hasattr(bot, "_climate_task") or bot._climate_task is None or getattr(bot._climate_task, "done", lambda: False)():
+                bot._climate_task = asyncio.create_task(_climate_loop(bot, tz))
+                print("[CLIMAT] climate task started immediately (bot already ready)")
+        except RuntimeError:
+            # No running loop in this synchronous context — the on_ready listener will start the task later.
+            pass
 
     return bot
