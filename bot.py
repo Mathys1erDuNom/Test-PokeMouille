@@ -17,7 +17,7 @@ import uuid
 from event.croco_event import setup_croco_event
 from BDD.money_view import setup_money
 
-from event.event_climatique import setup_event_climatique, CLIMATIC_EVENTS
+from event.event_climatique import setup_event_climatique, CLIMATIC_EVENTS, filter_pools_by_types, get_allowed_types_for_current_state
 
 from utils import is_in_spawn_window
 
@@ -425,11 +425,20 @@ async def spawn_pokemon(channel, force=False, author=None, target_user: discord.
             return
 
     # -----------------------
-    # FILTRAGE PAR RÉGION
+    # FILTRAGE PAR RÉGION + CLIMAT
     # -----------------------
-    region_pokemon_data = full_pokemon_data
-    region_shiny_data = full_pokemon_shiny_data
+    # Par défaut, récupère les pools courants (qui tiennent compte du climat) si le bot expose l'API
+    if hasattr(bot, "get_current_pokemon_pools"):
+        try:
+            region_pokemon_data, region_shiny_data = bot.get_current_pokemon_pools()
+        except Exception:
+            region_pokemon_data = full_pokemon_data
+            region_shiny_data = full_pokemon_shiny_data
+    else:
+        region_pokemon_data = full_pokemon_data
+        region_shiny_data = full_pokemon_shiny_data
 
+    # Si spawn en DM, on peut utiliser la région de l'utilisateur (puis appliquer le filtre climatique localement)
     if dm_user:
         cur.execute("SELECT region FROM user_regions WHERE user_id = %s", (str(dm_user.id),))
         row = cur.fetchone()
@@ -438,8 +447,18 @@ async def spawn_pokemon(channel, force=False, author=None, target_user: discord.
         if user_region and user_region in REGION_DATA_MAP:
             region_pokemon_data, region_shiny_data = REGION_DATA_MAP[user_region]
 
-            # Sécurité : si la liste est vide, fallback sur le pool global
-            if not region_pokemon_data:
+            # Applique le filtrage climatique (si disponible) sur les pools régionaux
+            try:
+                allowed = get_allowed_types_for_current_state(bot) if hasattr(bot, "climate_state") else []
+                if allowed:
+                    region_pokemon_data, region_shiny_data = filter_pools_by_types(region_pokemon_data, region_shiny_data, allowed)
+
+                # Sécurité : si la liste est vide, fallback sur le pool global
+                if not region_pokemon_data:
+                    region_pokemon_data = full_pokemon_data
+                    region_shiny_data = full_pokemon_shiny_data
+            except Exception:
+                # en cas d'erreur dans le filtre, on fallback proprement
                 region_pokemon_data = full_pokemon_data
                 region_shiny_data = full_pokemon_shiny_data
 

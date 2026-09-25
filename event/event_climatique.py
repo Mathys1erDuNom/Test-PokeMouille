@@ -75,10 +75,12 @@ async def _climate_loop(bot, timezone: pytz.timezone, event_chance_per_2h: float
             now = datetime.now(timezone)
             hour = now.hour
             is_day = 6 <= hour < 20
+            # Preserve existing active_event/event_ends_at if already set (e.g. via climat_force)
+            existing = getattr(bot, "climate_state", None) or {}
             bot.climate_state = {
                 "time_of_day": "day" if is_day else "night",
-                "active_event": None,
-                "event_ends_at": None,
+                "active_event": existing.get("active_event"),
+                "event_ends_at": existing.get("event_ends_at"),
             }
 
             # If daytime, consider starting an event at every 2-hour boundary (e.g. 0:00,2:00,4:00...)
@@ -87,7 +89,8 @@ async def _climate_loop(bot, timezone: pytz.timezone, event_chance_per_2h: float
                 minutes_since_midnight = hour * 60 + now.minute
                 # If within the first minute of a 2-hour window, consider starting
                 if minutes_since_midnight % 120 == 0:
-                    if random.random() < event_chance_per_2h:
+                    # Only start a new random event if none currently active
+                    if not bot.climate_state.get("active_event") and random.random() < event_chance_per_2h:
                         event_key = random.choice(list(CLIMATIC_EVENTS.keys()))
                         event_info = CLIMATIC_EVENTS[event_key]
                         bot.climate_state["active_event"] = event_key
@@ -96,8 +99,13 @@ async def _climate_loop(bot, timezone: pytz.timezone, event_chance_per_2h: float
 
             # If there is an active event, and it expired, clear it
             if bot.climate_state.get("active_event") and bot.climate_state.get("event_ends_at"):
-                if now >= bot.climate_state["event_ends_at"]:
-                    print(f"[CLIMAT] Event {bot.climate_state.get('active_event')} ended")
+                try:
+                    if now >= bot.climate_state["event_ends_at"]:
+                        print(f"[CLIMAT] Event {bot.climate_state.get('active_event')} ended")
+                        bot.climate_state["active_event"] = None
+                        bot.climate_state["event_ends_at"] = None
+                except Exception:
+                    # If event_ends_at is not comparable, clear to be safe
                     bot.climate_state["active_event"] = None
                     bot.climate_state["event_ends_at"] = None
 
