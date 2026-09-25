@@ -119,17 +119,19 @@ async def _climate_loop(bot, timezone: pytz.timezone, event_chance_per_2h: float
 def get_allowed_types_for_current_state(bot) -> List[str]:
     """Return the set of allowed types depending on day/night and active climatic event."""
     time_of_day = bot.climate_state.get("time_of_day", "day")
+    # If an event is active, prefer event types only (it overrides day/night pools).
+    active = bot.climate_state.get("active_event")
+    if active:
+        evt = CLIMATIC_EVENTS.get(active)
+        if evt:
+            return list(evt["types"])
+
+    # Otherwise fallback to normal day/night pools
     allowed = set()
     if time_of_day == "day":
         allowed.update(DAY_TYPES)
     else:
         allowed.update(NIGHT_TYPES)
-
-    active = bot.climate_state.get("active_event")
-    if active:
-        evt = CLIMATIC_EVENTS.get(active)
-        if evt:
-            allowed.update(evt["types"])
 
     return list(allowed)
 
