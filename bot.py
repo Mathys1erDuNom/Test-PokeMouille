@@ -1239,11 +1239,10 @@ async def climat_off(ctx):
             bot._climate_task.cancel()
         except Exception:
             pass
-        bot._climate_task = None
-        bot.climate_state = {"time_of_day": "day", "active_event": None, "event_ends_at": None}
-        await ctx.send("⛔ Système climatique arrêté manuellement.")
-    else:
-        await ctx.send("ℹ️ Le système climatique n'était pas en cours d'exécution.")
+    bot._climate_task = None
+    bot.climate_enabled = False
+    bot.climate_state = {"time_of_day": "day", "active_event": None, "event_ends_at": None}
+    await ctx.send("⛔ Climat désactivé : les spawns utilisent tous les Pokémon.")
 
 
 @bot.command(name="climat_status")

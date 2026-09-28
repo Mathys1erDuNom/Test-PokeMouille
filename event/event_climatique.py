@@ -159,9 +159,13 @@ def setup_event_climatique(bot, base_pools: Optional[Tuple[List[dict], List[dict
 
     # Initialize climate state
     bot.climate_state = {"time_of_day": "day", "active_event": None, "event_ends_at": None}
+    bot.climate_enabled = True
 
     # Helper to get current pools filtered by active climate
     def get_current_pokemon_pools() -> Tuple[List[dict], List[dict]]:
+        if not bot.climate_enabled:
+            return list(bot._base_full_pokemon_data), list(bot._base_full_pokemon_shiny_data)
+
         allowed = get_allowed_types_for_current_state(bot)
         normal, shiny = filter_pools_by_types(bot._base_full_pokemon_data, bot._base_full_pokemon_shiny_data, allowed)
         # If filter produced empty lists, fallback to base pools
