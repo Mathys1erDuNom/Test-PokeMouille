@@ -413,7 +413,7 @@ def apply_ivs(base_stats, ivs):
 ####################################################################################################################
 ####################################################################################################################
 
-async def spawn_pokemon(channel, force=False, author=None, target_user: discord.Member = None, pokemon_name: str = None, shiny_rate=64, dm_user: discord.Member = None):
+async def spawn_pokemon(channel, force=False, author=None, target_user: discord.Member = None, pokemon_name: str = None, shiny_rate=64, dm_user: discord.Member = None, ignore_climate=False):
     guild_id = channel.guild.id
 
     # Gestion des spawns manuel vs auto
@@ -429,7 +429,7 @@ async def spawn_pokemon(channel, force=False, author=None, target_user: discord.
     # FILTRAGE PAR RÉGION + CLIMAT
     # -----------------------
     # Par défaut, récupère les pools courants (qui tiennent compte du climat) si le bot expose l'API
-    if hasattr(bot, "get_current_pokemon_pools"):
+    if not ignore_climate and hasattr(bot, "get_current_pokemon_pools"):
         try:
             region_pokemon_data, region_shiny_data = bot.get_current_pokemon_pools()
         except Exception:
@@ -469,7 +469,7 @@ async def spawn_pokemon(channel, force=False, author=None, target_user: discord.
     if pokemon_name:
         pokemon = next((p for p in region_pokemon_data if p["name"].lower() == pokemon_name.lower()), None)
         if not pokemon:
-            await channel.send(f"❌ Le Pokémon `{pokemon_name}` est introuvable dans cette région.")
+            await channel.send(f"❌ Le Pokémon `{pokemon_name}` est introuvable dans le pool de spawn.")
             return
 
         is_shiny = (random.randint(1, shiny_rate) == 1)
@@ -1060,7 +1060,8 @@ async def spawn(ctx, *args):
             channel=ctx.channel,
             force=True,
             author=ctx.author,
-            shiny_rate=DEFAULT_SHINY_RATE
+            shiny_rate=DEFAULT_SHINY_RATE,
+            ignore_climate=True
         )
         return
 
@@ -1098,7 +1099,8 @@ async def spawn(ctx, *args):
         author=ctx.author,
         target_user=target_user,
         pokemon_name=pokemon_name,
-        shiny_rate=shiny_rate
+        shiny_rate=shiny_rate,
+        ignore_climate=True
     )
 
 
