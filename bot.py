@@ -1452,7 +1452,7 @@ async def auto_event_loop():
         return
 
     while not bot.is_closed():
-        EVENT_INTERVAL = random.randint(20, 25) * 60
+        EVENT_INTERVAL = random.randint(1, 2) * 60#(20, 25) * 60
 
         # ── Personne dans le vocal ────────────────────────────────────────
         if len(voice_channel.members) == 0:
@@ -1470,9 +1470,9 @@ async def auto_event_loop():
         # ── Planification de l'événement ─────────────────────────────────
         # Ajoute marche_noir aux choix seulement s'il est disponible
         if is_marche_noir_available():
-            available_events = ["marche_noir", "spawn", "devine"] # EVENT dupont enlevé
+            available_events = ["marche_noir", "spawn", "devine", "quiz"] # EVENT dupont enlevé
         else:
-            available_events = ["spawn", "devine", "spawn"] # EVENT dupont enlevé
+            available_events = ["spawn"]#, "devine", "quiz"] # EVENT dupont enlevé
         if bot.raid_enabled:
             available_events.append("raid")
         chosen = random.choice(available_events)
