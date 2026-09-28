@@ -1473,8 +1473,8 @@ async def auto_event_loop():
             available_events = ["marche_noir", "spawn", "devine", "quiz"] # EVENT dupont enlevé
         else:
             available_events = ["spawn"]#, "devine", "quiz"] # EVENT dupont enlevé
-        if bot.raid_enabled:
-            available_events.append("raid")
+        #if bot.raid_enabled:
+         #   available_events.append("raid")
         chosen = random.choice(available_events)
 
         if chosen == "quiz":
