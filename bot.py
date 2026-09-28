@@ -15,6 +15,7 @@ import requests
 import io
 import uuid
 from event.croco_event import setup_croco_event
+from event.raid import setup_raid
 from BDD.money_view import setup_money
 
 from event.event_climatique import setup_event_climatique, CLIMATIC_EVENTS, filter_pools_by_types, get_allowed_types_for_current_state
@@ -1432,6 +1433,7 @@ chenil_xp_counters: dict[int, int] = {}
 from BDD.chenil import setup_chenil
 
 setup_chenil(bot,TEXT_CHANNEL_ID)
+setup_raid(bot)
 riche_or_not = True
 
 async def auto_event_loop():
@@ -1470,6 +1472,8 @@ async def auto_event_loop():
             available_events = ["marche_noir", "spawn", "devine"] # EVENT dupont enlevé
         else:
             available_events = ["spawn", "devine", "spawn"] # EVENT dupont enlevé
+        if bot.raid_enabled:
+            available_events.append("raid")
         chosen = random.choice(available_events)
 
         if chosen == "quiz":
@@ -1486,6 +1490,9 @@ async def auto_event_loop():
 
         elif chosen == "marche_noir":
             next_event_name = "🌙 Événement Marché Noir"
+
+        elif chosen == "raid":
+            next_event_name = "⚔️ Raid Pokémon"
 
         next_event_time = datetime.now(TIMEZONE) + timedelta(seconds=EVENT_INTERVAL)
 
@@ -1527,6 +1534,8 @@ async def auto_event_loop():
             await run_interaction_personnage(text_channel, riche_or_not)
         elif chosen == "marche_noir":
             await run_marche_noir(text_channel)
+        elif chosen == "raid":
+            await bot.run_raid()
 
 
 

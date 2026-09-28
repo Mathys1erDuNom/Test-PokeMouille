@@ -1,0 +1,22 @@
+{
+  "mewtwo": {
+    "name": "Mew",
+    "type": ["psy"],
+    "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png",
+    "attacks": ["Psyko", "Eclat Magique", "Exploforce"],
+    "stats": {
+      "hp": 100,
+      "attack": 100,
+      "defense": 100,
+      "special_attack": 100,
+      "special_defense": 100,
+      "speed": 100
+    },
+    "current_xp": 0,
+    "xp_evo": 0,
+    "evo": {
+      "name": "pas evo",
+      "file": "pas evo"
+    }
+  }
+}

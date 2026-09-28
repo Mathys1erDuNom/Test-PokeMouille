@@ -1,0 +1,15 @@
+[
+  {
+    "name": "Mewtwo",
+    "type": ["psy"],
+    "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png",
+    "stats": {
+      "hp": 1200,
+      "attack": 180,
+      "defense": 110,
+      "special_attack": 200,
+      "special_defense": 130,
+      "speed": 130
+    }
+  }
+]
