@@ -4,7 +4,7 @@
     "type": ["psy"],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png",
     "stats": {
-      "hp": 1200,
+      "hp": 120,
       "attack": 180,
       "defense": 110,
       "special_attack": 200,
