@@ -168,10 +168,19 @@ def setup_raid(bot):
     except ValueError:
         raid_channel_id = None
 
+    if isinstance(raid_pokemon, dict):
+        raid_entries = raid_pokemon.values()
+    elif isinstance(raid_pokemon, list):
+        raid_entries = raid_pokemon
+    else:
+        raid_entries = []
     valid_raids = [
-        pokemon for pokemon in raid_pokemon
-        if pokemon.get("name") and pokemon.get("stats") and pokemon.get("type")
-    ] if isinstance(raid_pokemon, list) else []
+        pokemon for pokemon in raid_entries
+        if isinstance(pokemon, dict)
+        and pokemon.get("name")
+        and pokemon.get("stats")
+        and pokemon.get("type")
+    ]
     bot.raid_enabled = bool(raid_channel_id and valid_raids and isinstance(linked_pokemon, dict))
     active_raid = False
 
