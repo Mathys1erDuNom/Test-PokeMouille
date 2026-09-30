@@ -1,15 +1,22 @@
-[
-  {
-    "name": "Mewtwo",
-    "type": ["psy"],
-    "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png",
+{
+  "mega_florizarre": {
+    "name": "Mega-Florizarre",
+    "type": ["plante", "poison"],
+    "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10033.png",
+    "attacks": ["Lance-Soleil", "Bomb-Beurk", "Giga-Sangsue"],
     "stats": {
-      "hp": 120,
-      "attack": 180,
-      "defense": 110,
-      "special_attack": 200,
-      "special_defense": 130,
-      "speed": 130
+      "hp": 80,
+      "attack": 100,
+      "defense": 123,
+      "special_attack": 122,
+      "special_defense": 120,
+      "speed": 80
+    },
+    "current_xp": 0,
+    "xp_evo": 0,
+    "evo": {
+      "name": "pas evo",
+      "file": "pas evo"
     }
   }
-]
+}
