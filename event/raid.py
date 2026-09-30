@@ -9,7 +9,7 @@ from discord.ext import commands
 from discord.ui import Button, Select, View
 
 from new_db import get_new_captures, save_new_capture
-from utils import is_croco
+from utils import apply_ivs, generate_ivs, is_croco
 from combat.utils import TYPE_CHART
 
 
@@ -242,13 +242,17 @@ def setup_raid(bot):
                 return
 
             for user_id in participants:
-                reward_stats = reward["stats"]
+                reward_ivs = generate_ivs()
+                reward_stats = apply_ivs(reward["stats"], reward_ivs)
+                reward_pokemon = dict(reward)
+                reward_pokemon["ivs"] = reward_ivs
+                reward_pokemon["stats_iv"] = reward_stats
                 save_new_capture(
                     user_id,
                     reward["name"],
-                    reward.get("ivs", {}),
+                    reward_ivs,
                     reward_stats,
-                    reward,
+                    reward_pokemon,
                 )
             mentions = ", ".join(f"<@{user_id}>" for user_id in participants)
             await channel.send(
