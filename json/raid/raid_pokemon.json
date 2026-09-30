@@ -1,6 +1,6 @@
 {
   "mega_florizarre": {
-    "name": "Mega-Florizarre",
+    "name": "Mega_Florizarre",
     "type": ["plante", "poison"],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10033.png",
     "attacks": ["Lance-Soleil", "Bomb-Beurk", "Giga-Sangsue"],
