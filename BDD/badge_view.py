@@ -89,7 +89,7 @@ def setup_badges(bot, full_badge_data):
         else:
             await ctx.send("❌ Impossible d'attribuer le badge.")
 
-    @bot.command()
+    # !badge désactivé : géré par un autre projet (remettre @bot.command() pour réactiver)
     async def badge(ctx, generation: int = None):
         user_id = str(ctx.author.id)
         user_badge_ids = get_user_badges(user_id)

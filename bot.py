@@ -1325,7 +1325,7 @@ async def battletime(ctx):
 
 
 
-@bot.command()
+# !battle désactivé : les combats sont gérés par un autre projet (remettre @bot.command() pour réactiver)
 async def battle(ctx):
     #if not await is_in_spawn_window(bot):
      #   await ctx.send("❌ Le crocodile n'est pas apparu ! Revenez entre 21h30 et 23h30.")
@@ -1386,7 +1386,8 @@ setup_regions()
 
 setup_fishing(bot, cur)
 
-setup_dupont_command(bot)
+# Événements Dupont désactivés (!event_dupont) : décommenter pour réactiver
+#setup_dupont_command(bot)
 
 
 from event.enquete import setup_enquete
@@ -1394,7 +1395,8 @@ from BDD.inventory_db import add_item, get_inventory
 from regions import get_user_region
 
 #setup_enquete(bot, get_user_region, add_item)
-setup_enquete(bot, get_user_region=get_user_region)
+# Enquête Dupont désactivée (!parc, !grotte, !entrepot, !preuves, !supprimer_preuves) : décommenter pour réactiver
+#setup_enquete(bot, get_user_region=get_user_region)
 
 # Après tes setup_*() :
 setup_guess_pokemon_command(
@@ -1554,7 +1556,7 @@ def is_marche_noir_available():
 
 setup_marche_noir(bot)
 
-@bot.command()
+# !police désactivé avec l'enquête Dupont (remettre @bot.command() pour réactiver)
 async def police(ctx):
     global riche_or_not
     preuves = get_preuves(ctx.author.id)
