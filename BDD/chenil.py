@@ -188,8 +188,8 @@ _text_channel_id = None
 async def tick_chenil_xp(
     members_in_vc: list,
     xp_counters:   dict,
-    xp_amount:     int = 5,
-    xp_amount_eggs: int =30,
+    xp_amount:     int = 30, #5 avant
+    xp_amount_eggs: int = 50, #30 avant 
     threshold:     int = 30,
 ):
     """
