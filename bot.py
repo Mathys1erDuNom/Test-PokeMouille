@@ -494,7 +494,7 @@ async def spawn_pokemon(channel, force=False, author=None, target_user: discord.
         except Exception as e:
             print(f"[CLIMAT DEBUG] error reading climate state: {e}")
 
-        alola = None if ignore_climate else pick_alola_pokemon(bot, is_shiny)
+        alola = pick_alola_pokemon(bot, is_shiny)
         if alola:
             pokemon, is_shiny = alola, alola["name"].endswith("_shiny")
         else:
