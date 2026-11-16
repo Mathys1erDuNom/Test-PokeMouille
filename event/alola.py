@@ -5,7 +5,7 @@ import random
 
 from utils import is_croco
 
-ALOLA_CHANCE = 0.30
+ALOLA_CHANCE = 1 #0.30
 
 _alola_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "json", "alola.json")
 
