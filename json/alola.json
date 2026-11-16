@@ -1,0 +1,377 @@
+[
+    {
+        "name": "Rattata d'Alola",
+        "type": [
+            "tenebres",
+            "normal"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10091.png",
+        "attacks": [
+            "Coup d’Boule",
+            "Charge",
+            "Damoclès"
+        ],
+        "stats": {
+            "hp": 30,
+            "attack": 56,
+            "defense": 35,
+            "special_attack": 25,
+            "special_defense": 35,
+            "speed": 72
+        }
+    },
+    {
+        "name": "Rattatac d'Alola",
+        "type": [
+            "tenebres",
+            "normal"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10092.png",
+        "attacks": [
+            "Danse Lames",
+            "Coup d’Boule",
+            "Charge"
+        ],
+        "stats": {
+            "hp": 75,
+            "attack": 71,
+            "defense": 70,
+            "special_attack": 40,
+            "special_defense": 80,
+            "speed": 77
+        }
+    },
+    {
+        "name": "Raichu d'Alola",
+        "type": [
+            "electrique",
+            "psy"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10100.png",
+        "attacks": [
+            "Ultimapoing",
+            "Jackpot",
+            "Poing Éclair"
+        ],
+        "stats": {
+            "hp": 60,
+            "attack": 85,
+            "defense": 50,
+            "special_attack": 95,
+            "special_defense": 85,
+            "speed": 110
+        }
+    },
+    {
+        "name": "Sabelette d'Alola",
+        "type": [
+            "glace",
+            "acier"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10101.png",
+        "attacks": [
+            "Poing Glace",
+            "Griffe",
+            "Danse Lames"
+        ],
+        "stats": {
+            "hp": 50,
+            "attack": 75,
+            "defense": 90,
+            "special_attack": 10,
+            "special_defense": 35,
+            "speed": 40
+        }
+    },
+    {
+        "name": "Sablaireau d'Alola",
+        "type": [
+            "glace",
+            "acier"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10102.png",
+        "attacks": [
+            "Poing Glace",
+            "Griffe",
+            "Danse Lames"
+        ],
+        "stats": {
+            "hp": 75,
+            "attack": 100,
+            "defense": 120,
+            "special_attack": 25,
+            "special_defense": 65,
+            "speed": 65
+        }
+    },
+    {
+        "name": "Goupix d'Alola",
+        "type": [
+            "glace"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10103.png",
+        "attacks": [
+            "Coup d’Boule",
+            "Charge",
+            "Plaquage"
+        ],
+        "stats": {
+            "hp": 38,
+            "attack": 41,
+            "defense": 40,
+            "special_attack": 50,
+            "special_defense": 65,
+            "speed": 65
+        }
+    },
+    {
+        "name": "Feunard d'Alola",
+        "type": [
+            "glace",
+            "fee"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10104.png",
+        "attacks": [
+            "Coup d’Boule",
+            "Charge",
+            "Plaquage"
+        ],
+        "stats": {
+            "hp": 73,
+            "attack": 67,
+            "defense": 75,
+            "special_attack": 81,
+            "special_defense": 100,
+            "speed": 109
+        }
+    },
+    {
+        "name": "Taupiqueur d'Alola",
+        "type": [
+            "sol",
+            "acier"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10105.png",
+        "attacks": [
+            "Griffe",
+            "Danse Lames",
+            "Jet de Sable"
+        ],
+        "stats": {
+            "hp": 10,
+            "attack": 55,
+            "defense": 30,
+            "special_attack": 35,
+            "special_defense": 45,
+            "speed": 90
+        }
+    },
+    {
+        "name": "Triopikeur d'Alola",
+        "type": [
+            "sol",
+            "acier"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10106.png",
+        "attacks": [
+            "Griffe",
+            "Danse Lames",
+            "Jet de Sable"
+        ],
+        "stats": {
+            "hp": 35,
+            "attack": 100,
+            "defense": 60,
+            "special_attack": 50,
+            "special_defense": 70,
+            "speed": 110
+        }
+    },
+    {
+        "name": "Miaouss d'Alola",
+        "type": [
+            "tenebres"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10107.png",
+        "attacks": [
+            "Jackpot",
+            "Griffe",
+            "Coup d’Boule"
+        ],
+        "stats": {
+            "hp": 40,
+            "attack": 35,
+            "defense": 35,
+            "special_attack": 50,
+            "special_defense": 40,
+            "speed": 90
+        }
+    },
+    {
+        "name": "Persian d'Alola",
+        "type": [
+            "tenebres"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10108.png",
+        "attacks": [
+            "Jackpot",
+            "Griffe",
+            "Coup d’Boule"
+        ],
+        "stats": {
+            "hp": 65,
+            "attack": 60,
+            "defense": 60,
+            "special_attack": 75,
+            "special_defense": 65,
+            "speed": 115
+        }
+    },
+    {
+        "name": "Racaillou d'Alola",
+        "type": [
+            "roche",
+            "electrique"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10109.png",
+        "attacks": [
+            "Poing Feu",
+            "Poing Éclair",
+            "Coup d’Boule"
+        ],
+        "stats": {
+            "hp": 40,
+            "attack": 80,
+            "defense": 100,
+            "special_attack": 30,
+            "special_defense": 30,
+            "speed": 20
+        }
+    },
+    {
+        "name": "Gravalanch d'Alola",
+        "type": [
+            "roche",
+            "electrique"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10110.png",
+        "attacks": [
+            "Poing Feu",
+            "Poing Éclair",
+            "Coup d’Boule"
+        ],
+        "stats": {
+            "hp": 55,
+            "attack": 95,
+            "defense": 115,
+            "special_attack": 45,
+            "special_defense": 45,
+            "speed": 35
+        }
+    },
+    {
+        "name": "Grolem d'Alola",
+        "type": [
+            "roche",
+            "electrique"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10111.png",
+        "attacks": [
+            "Ultimapoing",
+            "Poing Feu",
+            "Poing Éclair"
+        ],
+        "stats": {
+            "hp": 80,
+            "attack": 120,
+            "defense": 130,
+            "special_attack": 55,
+            "special_defense": 65,
+            "speed": 45
+        }
+    },
+    {
+        "name": "Tadmorv d'Alola",
+        "type": [
+            "poison",
+            "tenebres"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10112.png",
+        "attacks": [
+            "Écras’Face",
+            "Poing Feu",
+            "Poing Glace"
+        ],
+        "stats": {
+            "hp": 80,
+            "attack": 80,
+            "defense": 50,
+            "special_attack": 40,
+            "special_defense": 50,
+            "speed": 25
+        }
+    },
+    {
+        "name": "Grotadmorv d'Alola",
+        "type": [
+            "poison",
+            "tenebres"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10113.png",
+        "attacks": [
+            "Écras’Face",
+            "Poing Feu",
+            "Poing Glace"
+        ],
+        "stats": {
+            "hp": 105,
+            "attack": 105,
+            "defense": 75,
+            "special_attack": 65,
+            "special_defense": 100,
+            "speed": 50
+        }
+    },
+    {
+        "name": "Noadkoko d'Alola",
+        "type": [
+            "plante",
+            "dragon"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10114.png",
+        "attacks": [
+            "Danse Lames",
+            "Coup d’Boule",
+            "Plaquage"
+        ],
+        "stats": {
+            "hp": 95,
+            "attack": 105,
+            "defense": 85,
+            "special_attack": 125,
+            "special_defense": 75,
+            "speed": 45
+        }
+    },
+    {
+        "name": "Ossatueur d'Alola",
+        "type": [
+            "feu",
+            "spectre"
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10115.png",
+        "attacks": [
+            "Ultimapoing",
+            "Poing Feu",
+            "Poing Éclair"
+        ],
+        "stats": {
+            "hp": 60,
+            "attack": 80,
+            "defense": 110,
+            "special_attack": 50,
+            "special_defense": 80,
+            "speed": 45
+        }
+    }
+]
