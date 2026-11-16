@@ -14,12 +14,17 @@
         "stats": {
             "hp": 30,
             "attack": 56,
-            "defense": 35,
             "special_attack": 25,
-            "special_defense": 35,
-            "speed": 72
+            "speed": 72,
+            "defense": 35,
+            "special_defense": 35
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 253,
+        "evo": {
+            "name": "Rattatac d'Alola_shiny",
+            "file": "alola_shiny.json"
+        }
     },
     {
         "name": "Rattatac d'Alola_shiny",
@@ -36,12 +41,17 @@
         "stats": {
             "hp": 75,
             "attack": 71,
-            "defense": 70,
             "special_attack": 40,
-            "special_defense": 80,
-            "speed": 77
+            "speed": 77,
+            "defense": 70,
+            "special_defense": 80
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 413,
+        "evo": {
+            "name": "pas evo",
+            "file": "pas evo"
+        }
     },
     {
         "name": "Raichu d'Alola_shiny",
@@ -58,12 +68,17 @@
         "stats": {
             "hp": 60,
             "attack": 85,
-            "defense": 50,
             "special_attack": 95,
-            "special_defense": 85,
-            "speed": 110
+            "speed": 110,
+            "defense": 50,
+            "special_defense": 85
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 485,
+        "evo": {
+            "name": "pas evo",
+            "file": "pas evo"
+        }
     },
     {
         "name": "Sabelette d'Alola_shiny",
@@ -80,12 +95,17 @@
         "stats": {
             "hp": 50,
             "attack": 75,
-            "defense": 90,
             "special_attack": 10,
-            "special_defense": 35,
-            "speed": 40
+            "speed": 40,
+            "defense": 90,
+            "special_defense": 35
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 300,
+        "evo": {
+            "name": "Sablaireau d'Alola_shiny",
+            "file": "alola_shiny.json"
+        }
     },
     {
         "name": "Sablaireau d'Alola_shiny",
@@ -102,12 +122,17 @@
         "stats": {
             "hp": 75,
             "attack": 100,
-            "defense": 120,
             "special_attack": 25,
-            "special_defense": 65,
-            "speed": 65
+            "speed": 65,
+            "defense": 120,
+            "special_defense": 65
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 450,
+        "evo": {
+            "name": "pas evo",
+            "file": "pas evo"
+        }
     },
     {
         "name": "Goupix d'Alola_shiny",
@@ -123,12 +148,17 @@
         "stats": {
             "hp": 38,
             "attack": 41,
-            "defense": 40,
             "special_attack": 50,
-            "special_defense": 65,
-            "speed": 65
+            "speed": 65,
+            "defense": 40,
+            "special_defense": 65
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 299,
+        "evo": {
+            "name": "Feunard d'Alola_shiny",
+            "file": "alola_shiny.json"
+        }
     },
     {
         "name": "Feunard d'Alola_shiny",
@@ -145,12 +175,17 @@
         "stats": {
             "hp": 73,
             "attack": 67,
-            "defense": 75,
             "special_attack": 81,
-            "special_defense": 100,
-            "speed": 109
+            "speed": 109,
+            "defense": 75,
+            "special_defense": 100
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 505,
+        "evo": {
+            "name": "pas evo",
+            "file": "pas evo"
+        }
     },
     {
         "name": "Taupiqueur d'Alola_shiny",
@@ -167,12 +202,17 @@
         "stats": {
             "hp": 10,
             "attack": 55,
-            "defense": 30,
             "special_attack": 35,
-            "special_defense": 45,
-            "speed": 90
+            "speed": 90,
+            "defense": 30,
+            "special_defense": 45
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 265,
+        "evo": {
+            "name": "Triopikeur d'Alola_shiny",
+            "file": "alola_shiny.json"
+        }
     },
     {
         "name": "Triopikeur d'Alola_shiny",
@@ -189,12 +229,17 @@
         "stats": {
             "hp": 35,
             "attack": 100,
-            "defense": 60,
             "special_attack": 50,
-            "special_defense": 70,
-            "speed": 110
+            "speed": 110,
+            "defense": 60,
+            "special_defense": 70
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 425,
+        "evo": {
+            "name": "pas evo",
+            "file": "pas evo"
+        }
     },
     {
         "name": "Miaouss d'Alola_shiny",
@@ -210,12 +255,17 @@
         "stats": {
             "hp": 40,
             "attack": 35,
-            "defense": 35,
             "special_attack": 50,
-            "special_defense": 40,
-            "speed": 90
+            "speed": 90,
+            "defense": 35,
+            "special_defense": 40
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 290,
+        "evo": {
+            "name": "Persian d'Alola_shiny",
+            "file": "alola_shiny.json"
+        }
     },
     {
         "name": "Persian d'Alola_shiny",
@@ -231,12 +281,17 @@
         "stats": {
             "hp": 65,
             "attack": 60,
-            "defense": 60,
             "special_attack": 75,
-            "special_defense": 65,
-            "speed": 115
+            "speed": 115,
+            "defense": 60,
+            "special_defense": 65
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 440,
+        "evo": {
+            "name": "pas evo",
+            "file": "pas evo"
+        }
     },
     {
         "name": "Racaillou d'Alola_shiny",
@@ -253,12 +308,17 @@
         "stats": {
             "hp": 40,
             "attack": 80,
-            "defense": 100,
             "special_attack": 30,
-            "special_defense": 30,
-            "speed": 20
+            "speed": 20,
+            "defense": 100,
+            "special_defense": 30
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 300,
+        "evo": {
+            "name": "Gravalanch d'Alola_shiny",
+            "file": "alola_shiny.json"
+        }
     },
     {
         "name": "Gravalanch d'Alola_shiny",
@@ -275,12 +335,17 @@
         "stats": {
             "hp": 55,
             "attack": 95,
-            "defense": 115,
             "special_attack": 45,
-            "special_defense": 45,
-            "speed": 35
+            "speed": 35,
+            "defense": 115,
+            "special_defense": 45
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 390,
+        "evo": {
+            "name": "Grolem d'Alola_shiny",
+            "file": "alola_shiny.json"
+        }
     },
     {
         "name": "Grolem d'Alola_shiny",
@@ -297,12 +362,17 @@
         "stats": {
             "hp": 80,
             "attack": 120,
-            "defense": 130,
             "special_attack": 55,
-            "special_defense": 65,
-            "speed": 45
+            "speed": 45,
+            "defense": 130,
+            "special_defense": 65
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 495,
+        "evo": {
+            "name": "pas evo",
+            "file": "pas evo"
+        }
     },
     {
         "name": "Tadmorv d'Alola_shiny",
@@ -319,12 +389,17 @@
         "stats": {
             "hp": 80,
             "attack": 80,
-            "defense": 50,
             "special_attack": 40,
-            "special_defense": 50,
-            "speed": 25
+            "speed": 25,
+            "defense": 50,
+            "special_defense": 50
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 325,
+        "evo": {
+            "name": "Grotadmorv d'Alola_shiny",
+            "file": "alola_shiny.json"
+        }
     },
     {
         "name": "Grotadmorv d'Alola_shiny",
@@ -341,12 +416,17 @@
         "stats": {
             "hp": 105,
             "attack": 105,
-            "defense": 75,
             "special_attack": 65,
-            "special_defense": 100,
-            "speed": 50
+            "speed": 50,
+            "defense": 75,
+            "special_defense": 100
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 500,
+        "evo": {
+            "name": "pas evo",
+            "file": "pas evo"
+        }
     },
     {
         "name": "Noadkoko d'Alola_shiny",
@@ -363,12 +443,17 @@
         "stats": {
             "hp": 95,
             "attack": 105,
-            "defense": 85,
             "special_attack": 125,
-            "special_defense": 75,
-            "speed": 45
+            "speed": 45,
+            "defense": 85,
+            "special_defense": 75
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 530,
+        "evo": {
+            "name": "pas evo",
+            "file": "pas evo"
+        }
     },
     {
         "name": "Ossatueur d'Alola_shiny",
@@ -385,11 +470,16 @@
         "stats": {
             "hp": 60,
             "attack": 80,
-            "defense": 110,
             "special_attack": 50,
-            "special_defense": 80,
-            "speed": 45
+            "speed": 45,
+            "defense": 110,
+            "special_defense": 80
         },
-        "evo": {}
+        "current_xp": 0,
+        "xp_evo": 425,
+        "evo": {
+            "name": "pas evo",
+            "file": "pas evo"
+        }
     }
 ]
