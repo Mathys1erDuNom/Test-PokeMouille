@@ -17,7 +17,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAID_DATA_DIR = os.path.join(PROJECT_ROOT, "json", "raid")
 RAID_BOSS_PATH = os.path.join(RAID_DATA_DIR, "raid_boss.json")
 RECOMPENSES_PATH = os.path.join(RAID_DATA_DIR, "raid_recompenses.json")
-RAID_DURATION_SECONDS = 180
+RAID_DURATION_SECONDS = 20 # duré du raid
 
 
 def _load_json(path, fallback):
