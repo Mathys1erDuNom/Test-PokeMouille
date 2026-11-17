@@ -15,8 +15,8 @@ from combat.utils import TYPE_CHART
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAID_DATA_DIR = os.path.join(PROJECT_ROOT, "json", "raid")
-RAID_POKEMON_PATH = os.path.join(RAID_DATA_DIR, "raid_pokemon.json")
-LINKED_POKEMON_PATH = os.path.join(RAID_DATA_DIR, "pokemin_lie.json")
+RAID_BOSS_PATH = os.path.join(RAID_DATA_DIR, "raid_boss.json")
+RECOMPENSES_PATH = os.path.join(RAID_DATA_DIR, "raid_recompenses.json")
 RAID_DURATION_SECONDS = 180
 
 
@@ -160,18 +160,18 @@ class RaidView(View):
 
 
 def setup_raid(bot):
-    raid_pokemon = _load_json(RAID_POKEMON_PATH, [])
-    linked_pokemon = _load_json(LINKED_POKEMON_PATH, {})
+    raid_boss = _load_json(RAID_BOSS_PATH, [])
+    recompenses = _load_json(RECOMPENSES_PATH, {})
     channel_id_raw = os.getenv("CHANNEL_ID_RAID")
     try:
         raid_channel_id = int(channel_id_raw) if channel_id_raw else None
     except ValueError:
         raid_channel_id = None
 
-    if isinstance(raid_pokemon, dict):
-        raid_entries = raid_pokemon.values()
-    elif isinstance(raid_pokemon, list):
-        raid_entries = raid_pokemon
+    if isinstance(raid_boss, dict):
+        raid_entries = raid_boss.values()
+    elif isinstance(raid_boss, list):
+        raid_entries = raid_boss
     else:
         raid_entries = []
     valid_raids = [
@@ -181,7 +181,7 @@ def setup_raid(bot):
         and pokemon.get("stats")
         and pokemon.get("type")
     ]
-    bot.raid_enabled = bool(raid_channel_id and valid_raids and isinstance(linked_pokemon, dict))
+    bot.raid_enabled = bool(raid_channel_id and valid_raids and isinstance(recompenses, dict))
     active_raid = False
 
     async def run_raid():
@@ -202,9 +202,9 @@ def setup_raid(bot):
                 return
 
         boss = random.choice(valid_raids)
-        reward = linked_pokemon.get(_normalize(boss["name"])) or linked_pokemon.get(boss["name"])
+        reward = recompenses.get(_normalize(boss["name"])) or recompenses.get(boss["name"])
         if not reward or not reward.get("name") or not reward.get("stats"):
-            await channel.send(f"❌ Aucune récompense valide n'est liée au raid **{boss['name']}** dans `pokemin_lie.json`.")
+            await channel.send(f"❌ Aucune récompense valide n'est liée au raid **{boss['name']}** dans `raid_recompenses.json`.")
             return
 
         active_raid = True

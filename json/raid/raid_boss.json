@@ -5,7 +5,7 @@
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10033.png",
     "attacks": ["Lance-Soleil", "Bomb-Beurk", "Giga-Sangsue"],
     "stats": {
-      "hp": 80,
+      "hp": 150,
       "attack": 100,
       "defense": 123,
       "special_attack": 122,
