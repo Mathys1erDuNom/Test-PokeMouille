@@ -28,7 +28,7 @@ from casino.casino_view import setup_casino
 
 import unicodedata
 
-from event.alola import setup_alola, pick_alola_pokemon, load_alola_pool
+from event.forme_regionale import setup_forme_regionale, pick_forme_regionale_pokemon, load_regional_pool
 from event.quiz_spawn import setup_quiz_commands
 from event.devine_poke import setup_guess_pokemon_command
 
@@ -358,8 +358,9 @@ if os.path.exists(mega_path):
         data = json.load(f)
         full_pokedex.extend(data)
 
-# Alola : visible dans le pokédex même si l'event est inactif
-full_pokedex.extend(load_alola_pool())
+# Formes régionales (Alola, Galar) : visibles dans le pokédex même si l'event est inactif
+full_pokedex.extend(load_regional_pool("alola.json"))
+full_pokedex.extend(load_regional_pool("galar.json"))
 ##############################################################
 ##############################################################
 
@@ -494,9 +495,9 @@ async def spawn_pokemon(channel, force=False, author=None, target_user: discord.
         except Exception as e:
             print(f"[CLIMAT DEBUG] error reading climate state: {e}")
 
-        alola = pick_alola_pokemon(bot, is_shiny)
-        if alola:
-            pokemon, is_shiny = alola, alola["name"].endswith("_shiny")
+        regional = pick_forme_regionale_pokemon(bot, is_shiny)
+        if regional:
+            pokemon, is_shiny = regional, regional["name"].endswith("_shiny")
         else:
             pokemon = random.choice(region_shiny_data if is_shiny else region_pokemon_data)
         print(f"[DEBUG] shiny_rate={shiny_rate}, is_shiny={is_shiny}, pokemon={pokemon['name']}".encode('utf-8', errors='replace').decode('utf-8'))
@@ -1223,7 +1224,7 @@ setup_new_pokedex(bot, full_pokemon_shiny_data, full_pokedex, type_sprites, atta
 
 # Initialise le système climatique qui attache l'état sur l'objet `bot`
 setup_event_climatique(bot, base_pools=(full_pokemon_data, full_pokemon_shiny_data))
-setup_alola(bot)
+setup_forme_regionale(bot)
 
 print("[DEBUG] Ready to run bot...")
 

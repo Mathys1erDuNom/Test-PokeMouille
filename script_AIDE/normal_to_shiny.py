@@ -18,8 +18,8 @@ import sys
 script_dir  = os.path.dirname(os.path.abspath(__file__))
 root_dir    = os.path.join(script_dir, "..")
 
-INPUT_FILE  = os.path.join(root_dir, "json","alola.json")
-OUTPUT_FILE = os.path.join(root_dir, "json","alola_shiny.json")
+INPUT_FILE  = os.path.join(root_dir, "json","galar.json")
+OUTPUT_FILE = os.path.join(root_dir, "json","galar_shiny.json")
 # ──────────────────────────────────────────────────────────────────────────────
 
 
