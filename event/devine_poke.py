@@ -8,6 +8,7 @@ import os
 import aiohttp
 import io
 from utils import is_croco
+from event.forme_regionale import pick_forme_regionale_pokemon
 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 json_dir = os.path.join(project_root, "json")
@@ -108,7 +109,7 @@ def setup_guess_pokemon_command(bot, spawn_pokemon=None, role_id=None, authorize
             await channel.send("Pas assez de Pokémon pour générer un quiz.")
             return
 
-        chosen = random.choice(all_pokemon)
+        chosen = pick_forme_regionale_pokemon(bot) or random.choice(all_pokemon)
         correct_name = chosen["name"]
         image_url = chosen["image"]
 

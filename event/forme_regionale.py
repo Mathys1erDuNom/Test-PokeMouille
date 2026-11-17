@@ -6,7 +6,7 @@ import random
 
 from utils import is_croco
 
-FORME_REGIONALE_CHANCE = 0.4 # 40% de chances d'avoir un pokémon d'une forme régionale
+FORME_REGIONALE_CHANCE = 1 # 40% de chances d'avoir un pokémon d'une forme régionale
 
 _json_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "json")
 
