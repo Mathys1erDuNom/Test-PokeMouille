@@ -3,7 +3,7 @@
     "name": "Mega-Florizarre",
     "type": ["plante", "poison"],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10033.png",
-    "attacks": ["Lance-Soleil", "Bomb-Beurk"],
+    "attacks": ["Lance-Soleil", "Bomb-Beurk", "Spore"],
     "stats": {
       "hp": 80,
       "attack": 100,
@@ -13,7 +13,27 @@
       "speed": 80
     },
     "current_xp": 0,
-    "xp_evo": 0,
+    "xp_evo": 550,
+    "evo": {
+      "name": "pas evo",
+      "file": "pas evo"
+    }
+  },
+  "mega_dracaufeu_x": {
+    "name": "Mega-Dracaufeu-X",
+    "type": ["feu", "dragon"],
+    "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10034.png",
+    "attacks": ["Déflagration", "Lame d'Air", "Draco-Charge"],
+    "stats": {
+      "hp": 78,
+      "attack": 130,
+      "defense": 111,
+      "special_attack": 130,
+      "special_defense": 85,
+      "speed": 100
+    },
+    "current_xp": 0,
+    "xp_evo": 550,
     "evo": {
       "name": "pas evo",
       "file": "pas evo"
