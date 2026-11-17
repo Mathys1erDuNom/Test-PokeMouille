@@ -1,6 +1,6 @@
 [
     {
-        "name": "Rattata d'Alola_shiny",
+        "name": "Rattata_d'Alola_shiny",
         "type": [
             "tenebres",
             "normal"
@@ -22,12 +22,12 @@
         "current_xp": 0,
         "xp_evo": 253,
         "evo": {
-            "name": "Rattatac d'Alola_shiny",
+            "name": "Rattatac_d'Alola_shiny",
             "file": "alola_shiny.json"
         }
     },
     {
-        "name": "Rattatac d'Alola_shiny",
+        "name": "Rattatac_d'Alola_shiny",
         "type": [
             "tenebres",
             "normal"
@@ -54,7 +54,7 @@
         }
     },
     {
-        "name": "Raichu d'Alola_shiny",
+        "name": "Raichu_d'Alola_shiny",
         "type": [
             "electrique",
             "psy"
@@ -81,7 +81,7 @@
         }
     },
     {
-        "name": "Sabelette d'Alola_shiny",
+        "name": "Sabelette_d'Alola_shiny",
         "type": [
             "glace",
             "acier"
@@ -103,12 +103,12 @@
         "current_xp": 0,
         "xp_evo": 300,
         "evo": {
-            "name": "Sablaireau d'Alola_shiny",
+            "name": "Sablaireau_d'Alola_shiny",
             "file": "alola_shiny.json"
         }
     },
     {
-        "name": "Sablaireau d'Alola_shiny",
+        "name": "Sablaireau_d'Alola_shiny",
         "type": [
             "glace",
             "acier"
@@ -135,7 +135,7 @@
         }
     },
     {
-        "name": "Goupix d'Alola_shiny",
+        "name": "Goupix_d'Alola_shiny",
         "type": [
             "glace"
         ],
@@ -156,12 +156,12 @@
         "current_xp": 0,
         "xp_evo": 299,
         "evo": {
-            "name": "Feunard d'Alola_shiny",
+            "name": "Feunard_d'Alola_shiny",
             "file": "alola_shiny.json"
         }
     },
     {
-        "name": "Feunard d'Alola_shiny",
+        "name": "Feunard_d'Alola_shiny",
         "type": [
             "glace",
             "fee"
@@ -188,7 +188,7 @@
         }
     },
     {
-        "name": "Taupiqueur d'Alola_shiny",
+        "name": "Taupiqueur_d'Alola_shiny",
         "type": [
             "sol",
             "acier"
@@ -210,12 +210,12 @@
         "current_xp": 0,
         "xp_evo": 265,
         "evo": {
-            "name": "Triopikeur d'Alola_shiny",
+            "name": "Triopikeur_d'Alola_shiny",
             "file": "alola_shiny.json"
         }
     },
     {
-        "name": "Triopikeur d'Alola_shiny",
+        "name": "Triopikeur_d'Alola_shiny",
         "type": [
             "sol",
             "acier"
@@ -242,7 +242,7 @@
         }
     },
     {
-        "name": "Miaouss d'Alola_shiny",
+        "name": "Miaouss_d'Alola_shiny",
         "type": [
             "tenebres"
         ],
@@ -263,12 +263,12 @@
         "current_xp": 0,
         "xp_evo": 290,
         "evo": {
-            "name": "Persian d'Alola_shiny",
+            "name": "Persian_d'Alola_shiny",
             "file": "alola_shiny.json"
         }
     },
     {
-        "name": "Persian d'Alola_shiny",
+        "name": "Persian_d'Alola_shiny",
         "type": [
             "tenebres"
         ],
@@ -294,7 +294,7 @@
         }
     },
     {
-        "name": "Racaillou d'Alola_shiny",
+        "name": "Racaillou_d'Alola_shiny",
         "type": [
             "roche",
             "electrique"
@@ -316,12 +316,12 @@
         "current_xp": 0,
         "xp_evo": 300,
         "evo": {
-            "name": "Gravalanch d'Alola_shiny",
+            "name": "Gravalanch_d'Alola_shiny",
             "file": "alola_shiny.json"
         }
     },
     {
-        "name": "Gravalanch d'Alola_shiny",
+        "name": "Gravalanch_d'Alola_shiny",
         "type": [
             "roche",
             "electrique"
@@ -343,12 +343,12 @@
         "current_xp": 0,
         "xp_evo": 390,
         "evo": {
-            "name": "Grolem d'Alola_shiny",
+            "name": "Grolem_d'Alola_shiny",
             "file": "alola_shiny.json"
         }
     },
     {
-        "name": "Grolem d'Alola_shiny",
+        "name": "Grolem_d'Alola_shiny",
         "type": [
             "roche",
             "electrique"
@@ -375,7 +375,7 @@
         }
     },
     {
-        "name": "Tadmorv d'Alola_shiny",
+        "name": "Tadmorv_d'Alola_shiny",
         "type": [
             "poison",
             "tenebres"
@@ -397,12 +397,12 @@
         "current_xp": 0,
         "xp_evo": 325,
         "evo": {
-            "name": "Grotadmorv d'Alola_shiny",
+            "name": "Grotadmorv_d'Alola_shiny",
             "file": "alola_shiny.json"
         }
     },
     {
-        "name": "Grotadmorv d'Alola_shiny",
+        "name": "Grotadmorv_d'Alola_shiny",
         "type": [
             "poison",
             "tenebres"
@@ -429,7 +429,7 @@
         }
     },
     {
-        "name": "Noadkoko d'Alola_shiny",
+        "name": "Noadkoko_d'Alola_shiny",
         "type": [
             "plante",
             "dragon"
@@ -456,7 +456,7 @@
         }
     },
     {
-        "name": "Ossatueur d'Alola_shiny",
+        "name": "Ossatueur_d'Alola_shiny",
         "type": [
             "feu",
             "spectre"

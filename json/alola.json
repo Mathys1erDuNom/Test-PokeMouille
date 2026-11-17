@@ -1,6 +1,6 @@
 [
     {
-        "name": "Rattata d'Alola",
+        "name": "Rattata_d'Alola",
         "type": [
             "tenebres",
             "normal"
@@ -22,12 +22,12 @@
         "current_xp": 0,
         "xp_evo": 253,
         "evo": {
-            "name": "Rattatac d'Alola",
+            "name": "Rattatac_d'Alola",
             "file": "alola.json"
         }
     },
     {
-        "name": "Rattatac d'Alola",
+        "name": "Rattatac_d'Alola",
         "type": [
             "tenebres",
             "normal"
@@ -54,7 +54,7 @@
         }
     },
     {
-        "name": "Raichu d'Alola",
+        "name": "Raichu_d'Alola",
         "type": [
             "electrique",
             "psy"
@@ -81,7 +81,7 @@
         }
     },
     {
-        "name": "Sabelette d'Alola",
+        "name": "Sabelette_d'Alola",
         "type": [
             "glace",
             "acier"
@@ -103,12 +103,12 @@
         "current_xp": 0,
         "xp_evo": 300,
         "evo": {
-            "name": "Sablaireau d'Alola",
+            "name": "Sablaireau_d'Alola",
             "file": "alola.json"
         }
     },
     {
-        "name": "Sablaireau d'Alola",
+        "name": "Sablaireau_d'Alola",
         "type": [
             "glace",
             "acier"
@@ -135,7 +135,7 @@
         }
     },
     {
-        "name": "Goupix d'Alola",
+        "name": "Goupix_d'Alola",
         "type": [
             "glace"
         ],
@@ -156,12 +156,12 @@
         "current_xp": 0,
         "xp_evo": 299,
         "evo": {
-            "name": "Feunard d'Alola",
+            "name": "Feunard_d'Alola",
             "file": "alola.json"
         }
     },
     {
-        "name": "Feunard d'Alola",
+        "name": "Feunard_d'Alola",
         "type": [
             "glace",
             "fee"
@@ -188,7 +188,7 @@
         }
     },
     {
-        "name": "Taupiqueur d'Alola",
+        "name": "Taupiqueur_d'Alola",
         "type": [
             "sol",
             "acier"
@@ -210,12 +210,12 @@
         "current_xp": 0,
         "xp_evo": 265,
         "evo": {
-            "name": "Triopikeur d'Alola",
+            "name": "Triopikeur_d'Alola",
             "file": "alola.json"
         }
     },
     {
-        "name": "Triopikeur d'Alola",
+        "name": "Triopikeur_d'Alola",
         "type": [
             "sol",
             "acier"
@@ -242,7 +242,7 @@
         }
     },
     {
-        "name": "Miaouss d'Alola",
+        "name": "Miaouss_d'Alola",
         "type": [
             "tenebres"
         ],
@@ -263,12 +263,12 @@
         "current_xp": 0,
         "xp_evo": 290,
         "evo": {
-            "name": "Persian d'Alola",
+            "name": "Persian_d'Alola",
             "file": "alola.json"
         }
     },
     {
-        "name": "Persian d'Alola",
+        "name": "Persian_d'Alola",
         "type": [
             "tenebres"
         ],
@@ -294,7 +294,7 @@
         }
     },
     {
-        "name": "Racaillou d'Alola",
+        "name": "Racaillou_d'Alola",
         "type": [
             "roche",
             "electrique"
@@ -316,12 +316,12 @@
         "current_xp": 0,
         "xp_evo": 300,
         "evo": {
-            "name": "Gravalanch d'Alola",
+            "name": "Gravalanch_d'Alola",
             "file": "alola.json"
         }
     },
     {
-        "name": "Gravalanch d'Alola",
+        "name": "Gravalanch_d'Alola",
         "type": [
             "roche",
             "electrique"
@@ -343,12 +343,12 @@
         "current_xp": 0,
         "xp_evo": 390,
         "evo": {
-            "name": "Grolem d'Alola",
+            "name": "Grolem_d'Alola",
             "file": "alola.json"
         }
     },
     {
-        "name": "Grolem d'Alola",
+        "name": "Grolem_d'Alola",
         "type": [
             "roche",
             "electrique"
@@ -375,7 +375,7 @@
         }
     },
     {
-        "name": "Tadmorv d'Alola",
+        "name": "Tadmorv_d'Alola",
         "type": [
             "poison",
             "tenebres"
@@ -397,12 +397,12 @@
         "current_xp": 0,
         "xp_evo": 325,
         "evo": {
-            "name": "Grotadmorv d'Alola",
+            "name": "Grotadmorv_d'Alola",
             "file": "alola.json"
         }
     },
     {
-        "name": "Grotadmorv d'Alola",
+        "name": "Grotadmorv_d'Alola",
         "type": [
             "poison",
             "tenebres"
@@ -429,7 +429,7 @@
         }
     },
     {
-        "name": "Noadkoko d'Alola",
+        "name": "Noadkoko_d'Alola",
         "type": [
             "plante",
             "dragon"
@@ -456,7 +456,7 @@
         }
     },
     {
-        "name": "Ossatueur d'Alola",
+        "name": "Ossatueur_d'Alola",
         "type": [
             "feu",
             "spectre"
