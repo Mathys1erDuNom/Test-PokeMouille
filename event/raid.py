@@ -17,7 +17,9 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAID_DATA_DIR = os.path.join(PROJECT_ROOT, "json", "raid")
 RAID_BOSS_PATH = os.path.join(RAID_DATA_DIR, "raid_boss.json")
 RECOMPENSES_PATH = os.path.join(RAID_DATA_DIR, "raid_recompenses.json")
+RECOMPENSES_SHINY_PATH = os.path.join(RAID_DATA_DIR, "raid_recompenses_shiny.json")
 RAID_DURATION_SECONDS = 20 # duré du raid
+RAID_SHINY_RATE = 1 # 1 chance sur 64 par joueur ayant gagné le raid
 
 
 def _load_json(path, fallback):
@@ -54,6 +56,10 @@ def _type_effectiveness(attack_type, defender_types):
         elif normalized_type in chart["x0.5"]:
             multiplier *= 0.5
     return multiplier
+
+
+def _find_reward(source, boss_name):
+    return source.get(_normalize(boss_name)) or source.get(boss_name)
 
 
 def calculate_raid_damage(attacker, defender):
@@ -162,6 +168,7 @@ class RaidView(View):
 def setup_raid(bot):
     raid_boss = _load_json(RAID_BOSS_PATH, [])
     recompenses = _load_json(RECOMPENSES_PATH, {})
+    recompenses_shiny = _load_json(RECOMPENSES_SHINY_PATH, {})
     channel_id_raw = os.getenv("CHANNEL_ID_RAID")
     try:
         raid_channel_id = int(channel_id_raw) if channel_id_raw else None
@@ -202,7 +209,8 @@ def setup_raid(bot):
                 return
 
         boss = random.choice(valid_raids)
-        reward = recompenses.get(_normalize(boss["name"])) or recompenses.get(boss["name"])
+        reward = _find_reward(recompenses, boss["name"])
+        reward_shiny = _find_reward(recompenses_shiny, boss["name"])
         if not reward or not reward.get("name") or not reward.get("stats"):
             await channel.send(f"❌ Aucune récompense valide n'est liée au raid **{boss['name']}** dans `raid_recompenses.json`.")
             return
@@ -241,24 +249,34 @@ def setup_raid(bot):
                 )
                 return
 
+            shiny_winners = []
             for user_id in participants:
+                # tirage shiny indépendant pour chaque joueur
+                is_shiny = bool(reward_shiny) and random.randint(1, RAID_SHINY_RATE) == 1
+                base = reward_shiny if is_shiny else reward
                 reward_ivs = generate_ivs()
-                reward_stats = apply_ivs(reward["stats"], reward_ivs)
-                reward_pokemon = dict(reward)
+                reward_stats = apply_ivs(base["stats"], reward_ivs)
+                reward_pokemon = dict(base)
                 reward_pokemon["ivs"] = reward_ivs
                 reward_pokemon["stats_iv"] = reward_stats
                 save_new_capture(
                     user_id,
-                    reward["name"],
+                    base["name"],
                     reward_ivs,
                     reward_stats,
                     reward_pokemon,
                 )
+                if is_shiny:
+                    shiny_winners.append(f"<@{user_id}>")
             mentions = ", ".join(f"<@{user_id}>" for user_id in participants)
             await channel.send(
                 f"🏆 **Raid remporté !** Les joueurs {mentions} reçoivent chacun **{reward['name']}**. "
                 f"Dégâts cumulés : **{total_damage}/{boss_hp}**."
             )
+            if shiny_winners:
+                await channel.send(
+                    f"✨ **Shiny !** {', '.join(shiny_winners)} obtiennent **{reward['name']} ✨** !"
+                )
         finally:
             raid["closed"] = True
             active_raid = False

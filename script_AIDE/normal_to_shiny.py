@@ -16,10 +16,10 @@ import sys
 
 # ── Fichiers ───────────────────────────────────────────────────────────────────
 script_dir  = os.path.dirname(os.path.abspath(__file__))
-root_dir    = os.path.join(script_dir, "..")
+root_dir    = os.path.join(script_dir)
 
-INPUT_FILE  = os.path.join(root_dir, "json","galar.json")
-OUTPUT_FILE = os.path.join(root_dir, "json","galar_shiny.json")
+INPUT_FILE  = os.path.join(root_dir,"pokemon_output.json")
+OUTPUT_FILE = os.path.join(root_dir,"pokemon_output_shiny.json")
 # ──────────────────────────────────────────────────────────────────────────────
 
 

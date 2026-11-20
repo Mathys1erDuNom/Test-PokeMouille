@@ -272,7 +272,7 @@
     "attacks": [
       "Psyko",
       "Pietisol",
-      "Point Boost"
+      "Poing Boost"
     ],
     "stats": {
       "hp": 106,
@@ -298,7 +298,7 @@
     "attacks": [
       "Psyko",
       "Balle Ombre",
-      "Point Boost"
+      "Poing Boost"
     ],
     "stats": {
       "hp": 106,
@@ -482,7 +482,7 @@
     "attacks": [
       "Griffe Acier",
       "Lame de Roc",
-      "Point Boost"
+      "Poing Boost"
     ],
     "stats": {
       "hp": 70,
@@ -584,7 +584,7 @@
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10059.png",
     "attacks": [
-      "Point Boost",
+      "Poing Boost",
       "Seisme",
       "Psyko"
     ],
@@ -610,7 +610,10 @@
       "glace"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10060.png",
-    "attacks": [],
+    "attacks": [
+      "Poing Glace",
+      "Tranch Herbe"
+    ],
     "stats": {
       "hp": 90,
       "attack": 132,
@@ -633,7 +636,10 @@
       "psy"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10062.png",
-    "attacks": [],
+    "attacks": [
+      "Psyko",
+      "Dracochoc"
+    ],
     "stats": {
       "hp": 80,
       "attack": 100,
@@ -656,7 +662,10 @@
       "psy"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10063.png",
-    "attacks": [],
+    "attacks": [
+      "Psyko",
+      "Dracochoc"
+    ],
     "stats": {
       "hp": 80,
       "attack": 130,
@@ -679,7 +688,11 @@
       "sol"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10064.png",
-    "attacks": [],
+    "attacks": [
+      "Seisme",
+      "Hydrocanon",
+      "Pietisol"
+    ],
     "stats": {
       "hp": 100,
       "attack": 150,
@@ -702,7 +715,11 @@
       "dragon"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10065.png",
-    "attacks": [],
+    "attacks": [
+      "Dracochoc",
+      "Eco-Sphere"
+
+    ],
     "stats": {
       "hp": 70,
       "attack": 110,
@@ -725,7 +742,10 @@
       "spectre"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10066.png",
-    "attacks": [],
+    "attacks": [
+      "Balle Ombre",
+      "Psyko"
+    ],
     "stats": {
       "hp": 50,
       "attack": 85,
@@ -748,7 +768,10 @@
       "fee"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10067.png",
-    "attacks": [],
+    "attacks": [
+      "Dracochoc",
+      "Eclat Magique"
+    ],
     "stats": {
       "hp": 75,
       "attack": 110,
@@ -771,7 +794,10 @@
       "combat"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10068.png",
-    "attacks": [],
+    "attacks": [
+      "Balayette",
+      "Psyko"
+    ],
     "stats": {
       "hp": 68,
       "attack": 165,
@@ -794,7 +820,10 @@
       "fee"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10069.png",
-    "attacks": [],
+    "attacks": [
+      "Calinerie",
+      "Megaphone"
+    ],
     "stats": {
       "hp": 103,
       "attack": 60,
@@ -817,7 +846,10 @@
       "tenebres"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10070.png",
-    "attacks": [],
+    "attacks": [
+      "Hydrocanon",
+      "Machouille"
+    ],
     "stats": {
       "hp": 70,
       "attack": 140,
@@ -840,7 +872,10 @@
       "psy"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10071.png",
-    "attacks": [],
+    "attacks": [
+      "Psyko",
+      "Hydrocanon"
+    ],
     "stats": {
       "hp": 95,
       "attack": 75,
@@ -863,7 +898,10 @@
       "sol"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10072.png",
-    "attacks": [],
+    "attacks": [
+      "Seisme",
+      "Queue de fer"
+    ],
     "stats": {
       "hp": 75,
       "attack": 125,
@@ -886,7 +924,10 @@
       "vol"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10073.png",
-    "attacks": [],
+    "attacks": [
+      "Vent Violent",
+      "Cru-Aile"
+    ],
     "stats": {
       "hp": 83,
       "attack": 80,
@@ -909,7 +950,10 @@
       "fee"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10075.png",
-    "attacks": [],
+    "attacks": [
+      "Eclat Magique",
+      "Lame de Roc"
+    ],
     "stats": {
       "hp": 50,
       "attack": 160,
@@ -932,7 +976,10 @@
       "psy"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10076.png",
-    "attacks": [],
+    "attacks": [
+      "Psyko",
+      "Luminocanon"
+    ],
     "stats": {
       "hp": 80,
       "attack": 145,
@@ -954,7 +1001,10 @@
       "eau"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10077.png",
-    "attacks": [],
+    "attacks": [
+      "Hydrocanon",
+      "Laser Glace"
+    ],
     "stats": {
       "hp": 100,
       "attack": 150,
@@ -977,7 +1027,10 @@
       "feu"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10078.png",
-    "attacks": [],
+    "attacks": [
+      "Seisme",
+      "Poing feu"
+    ],
     "stats": {
       "hp": 100,
       "attack": 180,
@@ -1000,7 +1053,11 @@
       "vol"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10079.png",
-    "attacks": [],
+    "attacks": [
+      "Vent Violent",
+      "Dracochoc",
+      "Dracogriffe"
+    ],
     "stats": {
       "hp": 105,
       "attack": 180,
@@ -1023,7 +1080,10 @@
       "sol"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10087.png",
-    "attacks": [],
+    "attacks": [
+      "Seisme",
+      "Lance-Flammes"
+    ],
     "stats": {
       "hp": 70,
       "attack": 120,
@@ -1046,7 +1106,10 @@
       "combat"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10088.png",
-    "attacks": [],
+    "attacks": [
+      "Poing Boost",
+      "Charge"
+    ],
     "stats": {
       "hp": 65,
       "attack": 136,
@@ -1069,7 +1132,11 @@
       "vol"
     ],
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10089.png",
-    "attacks": [],
+    "attacks": [
+      "Vent Violent",
+      "Dracogriffe",
+      "Dracochoc"
+    ],
     "stats": {
       "hp": 95,
       "attack": 145,
