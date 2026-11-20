@@ -358,6 +358,14 @@ if os.path.exists(mega_path):
         data = json.load(f)
         full_pokedex.extend(data)
 
+# Shiny des méga (et des récompenses de raid, mêmes noms) : pokédex uniquement,
+# pas ajoutés aux pools de spawn
+pokedex_shiny_data = list(full_pokemon_shiny_data)
+mega_shiny_path = os.path.join(json_dir, "mega_shiny.json")
+if os.path.exists(mega_shiny_path):
+    with open(mega_shiny_path, "r", encoding="utf-8") as f:
+        pokedex_shiny_data.extend(json.load(f))
+
 # Formes régionales (Alola, Galar) : visibles dans le pokédex même si l'event est inactif
 full_pokedex.extend(load_regional_pool("alola.json"))
 full_pokedex.extend(load_regional_pool("galar.json"))
@@ -1219,8 +1227,8 @@ setup_casino(bot)
 
 
 bot.is_under_ban = is_under_ban
-setup_pokedex(bot, full_pokemon_shiny_data, full_pokemon_data, type_sprites, attack_type_map, json_dir)
-setup_new_pokedex(bot, full_pokemon_shiny_data, full_pokedex, type_sprites, attack_type_map, json_dir)
+setup_pokedex(bot, pokedex_shiny_data, full_pokemon_data, type_sprites, attack_type_map, json_dir)
+setup_new_pokedex(bot, pokedex_shiny_data, full_pokedex, type_sprites, attack_type_map, json_dir)
 
 # Initialise le système climatique qui attache l'état sur l'objet `bot`
 setup_event_climatique(bot, base_pools=(full_pokemon_data, full_pokemon_shiny_data))

@@ -19,7 +19,7 @@ RAID_BOSS_PATH = os.path.join(RAID_DATA_DIR, "raid_boss.json")
 RECOMPENSES_PATH = os.path.join(RAID_DATA_DIR, "raid_recompenses.json")
 RECOMPENSES_SHINY_PATH = os.path.join(RAID_DATA_DIR, "raid_recompenses_shiny.json")
 RAID_DURATION_SECONDS = 20 # duré du raid
-RAID_SHINY_RATE = 1 # 1 chance sur 64 par joueur ayant gagné le raid
+RAID_SHINY_RATE = 1/16 # 1 chance sur 16 par joueur ayant gagné le raid
 
 
 def _load_json(path, fallback):
