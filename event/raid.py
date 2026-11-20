@@ -18,7 +18,7 @@ RAID_DATA_DIR = os.path.join(PROJECT_ROOT, "json", "raid")
 RAID_BOSS_PATH = os.path.join(RAID_DATA_DIR, "raid_boss.json")
 RECOMPENSES_PATH = os.path.join(RAID_DATA_DIR, "raid_recompenses.json")
 RECOMPENSES_SHINY_PATH = os.path.join(RAID_DATA_DIR, "raid_recompenses_shiny.json")
-RAID_DURATION_SECONDS = 20 # duré du raid
+RAID_DURATION_SECONDS = 60 * 60 * 4 # duré du raid 4h
 RAID_SHINY_RATE = 1/16 # 1 chance sur 16 par joueur ayant gagné le raid
 
 

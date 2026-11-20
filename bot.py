@@ -463,7 +463,7 @@ async def spawn_pokemon(channel, force=False, author=None, target_user: discord.
 
             # Applique le filtrage climatique (si disponible) sur les pools régionaux
             try:
-                allowed = get_allowed_types_for_current_state(bot) if hasattr(bot, "climate_state") else []
+                allowed = get_allowed_types_for_current_state(bot) if getattr(bot, "climate_enabled", False) and hasattr(bot, "climate_state") else []
                 if allowed:
                     region_pokemon_data, region_shiny_data = filter_pools_by_types(region_pokemon_data, region_shiny_data, allowed)
 
@@ -1187,6 +1187,7 @@ async def before_check_voice():
 async def on_ready():
     print(f"[BOT] Connecté en tant que {bot.user} ({bot.user.id})")
     asyncio.ensure_future(auto_event_loop())
+    asyncio.ensure_future(planner_loop(bot, TEXT_CHANNEL_ID))
     if not check_voice_channel.is_running():
         check_voice_channel.start()
 
@@ -1455,6 +1456,7 @@ from BDD.chenil import setup_chenil
 
 setup_chenil(bot,TEXT_CHANNEL_ID)
 setup_raid(bot)
+from event.planner import planner_loop
 riche_or_not = True
 
 async def auto_event_loop():
