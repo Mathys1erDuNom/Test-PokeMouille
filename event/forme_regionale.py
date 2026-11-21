@@ -37,26 +37,36 @@ def pick_forme_regionale_pokemon(bot, shiny: bool = False):
     return random.choice(pool)
 
 
+def activate_forme_regionale(bot) -> int:
+    """Charge les pools Alola/Galar (normaux et shiny). Renvoie le nombre de Pokémon (0 = échec)."""
+    bot.forme_regionale_pools = {
+        "alola": load_regional_pool("alola.json"),
+        "galar": load_regional_pool("galar.json"),
+    }
+    bot.forme_regionale_shiny_pools = {
+        "alola": load_regional_pool("alola_shiny.json"),
+        "galar": load_regional_pool("galar_shiny.json"),
+    }
+    return sum(len(p) for p in bot.forme_regionale_pools.values())
+
+
+def deactivate_forme_regionale(bot):
+    """Vide les pools : l'event est inactif."""
+    bot.forme_regionale_pools = {"alola": [], "galar": []}
+
+
 def setup_forme_regionale(bot):
-    bot.forme_regionale_pools = {"alola": [], "galar": []}  # pools vides = event inactif
+    deactivate_forme_regionale(bot)
     bot.forme_regionale_shiny_pools = {"alola": [], "galar": []}
 
     @bot.command(name="forme_regionale_on")
     @is_croco()
     async def forme_regionale_on(ctx):
         """Active l'event Formes régionales (relit les json Alola et Galar, normaux et shiny)."""
-        bot.forme_regionale_pools = {
-            "alola": load_regional_pool("alola.json"),
-            "galar": load_regional_pool("galar.json"),
-        }
-        bot.forme_regionale_shiny_pools = {
-            "alola": load_regional_pool("alola_shiny.json"),
-            "galar": load_regional_pool("galar_shiny.json"),
-        }
-        if not any(bot.forme_regionale_pools.values()):
+        total = activate_forme_regionale(bot)
+        if total == 0:
             await ctx.send("❌ Les json de formes régionales sont introuvables, vides ou invalides : event non activé.")
             return
-        total = sum(len(p) for p in bot.forme_regionale_pools.values())
         await ctx.send(
             f"🌺 Event Formes régionales activé : {int(FORME_REGIONALE_CHANCE * 100)} % de chances de spawn, "
             f"50/50 entre Alola et Galar, parmi {total} Pokémon."
@@ -66,5 +76,5 @@ def setup_forme_regionale(bot):
     @is_croco()
     async def forme_regionale_off(ctx):
         """Désactive l'event Formes régionales."""
-        bot.forme_regionale_pools = {"alola": [], "galar": []}
+        deactivate_forme_regionale(bot)
         await ctx.send("⛔ Event Formes régionales désactivé.")
